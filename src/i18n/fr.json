@@ -1,0 +1,15 @@
+{
+  "appTitle": "Assistant de domaine EVA",
+  "skipToMain": "Aller au contenu principal",
+  "project.canadaLife": "Canada Vie",
+  "project.jurisprudence": "Jurisprudence",
+  "project.admin": "Registre des projets",
+  "tagline.canadaLife": "Discutez avec votre assistant chez Canada Vie",
+  "tagline.jurisprudence": "Discutez avec votre assistant de recherche en jurisprudence",
+  "tagline.admin": "Console d’administration",
+  "input.label": "Votre message",
+  "input.placeholder": "Posez une question à EVA sur vos documents…",
+  "button.send": "Envoyer",
+  "language.english": "English",
+  "language.french": "Français"
+}

@@ -1,0 +1,15 @@
+{
+  "appTitle": "EVA Domain Assistant",
+  "skipToMain": "Skip to main content",
+  "project.canadaLife": "Canada Life",
+  "project.jurisprudence": "Jurisprudence",
+  "project.admin": "Project Registry",
+  "tagline.canadaLife": "Chat with your Canada Life Benefits Assistant",
+  "tagline.jurisprudence": "Chat with your Jurisprudence Research Assistant",
+  "tagline.admin": "Project Registry Admin console",
+  "input.label": "Your message",
+  "input.placeholder": "Ask EVA about your documents…",
+  "button.send": "Send",
+  "language.english": "English",
+  "language.french": "Français"
+}
