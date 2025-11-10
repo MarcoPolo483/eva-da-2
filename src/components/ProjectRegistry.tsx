@@ -37,6 +37,11 @@ interface GuardrailConfig {
   blockedTopicsSummary: string;
 }
 
+interface SuggestedQuestion {
+  en: string;
+  fr: string;
+}
+
 interface RegistryEntry {
   id: ProjectId;
   label: string;
@@ -50,7 +55,7 @@ interface RegistryEntry {
   ragIndex: RagIndexConfig;
   ragRetrieval: RagRetrievalConfig;
   guardrails: GuardrailConfig;
-  suggestedQuestions?: string[];
+  suggestedQuestions: SuggestedQuestion[];
   apim: ApimConfig;
 }
 
@@ -86,11 +91,19 @@ const REGISTRY: RegistryEntry[] = [
       piiRedaction: true,
       speculativeAnswers: false,
       blockedTopicsSummary: "Blocks medical diagnosis and personal financial advice."
-    },
-    suggestedQuestions: [
-      "suggestions.canadaLife.q1",
-      "suggestions.canadaLife.q2",
-      "suggestions.canadaLife.q3"
+    },    suggestedQuestions: [
+      {
+        en: "How do I onboard a new Canada Life case into EVA DA?",
+        fr: "Comment intégrer un nouveau dossier Canada Vie dans EVA DA ?"
+      },
+      {
+        en: "Where can I find the Canada Life escalation process?",
+        fr: "Où trouver le processus d'escalade Canada Vie ?"
+      },
+      {
+        en: "What are the eligibility rules for term employees?",
+        fr: "Quelles sont les règles d'éligibilité pour les employés temporaires ?"
+      }
     ],
     apim: {
       ...defaultLocalConfig,
@@ -131,11 +144,19 @@ const REGISTRY: RegistryEntry[] = [
       piiRedaction: true,
       speculativeAnswers: false,
       blockedTopicsSummary: "Disallows personal legal advice; forces citations to case law."
-    },
-    suggestedQuestions: [
-      "suggestions.jurisprudence.q1",
-      "suggestions.jurisprudence.q2",
-      "suggestions.jurisprudence.q3"
+    },    suggestedQuestions: [
+      {
+        en: "Summarize the leading CPP-D chronic pain decision.",
+        fr: "Résumez la décision phare CPP-D sur la douleur chronique."
+      },
+      {
+        en: "Which cases define a severe and prolonged disability?",
+        fr: "Quelles affaires définissent une invalidité grave et prolongée ?"
+      },
+      {
+        en: "List recent jurisprudence related to CPP-D appeals.",
+        fr: "Listez la jurisprudence récente liée aux appels CPP-D."
+      }
     ],
     apim: {
       ...defaultLocalConfig,
@@ -176,8 +197,7 @@ const REGISTRY: RegistryEntry[] = [
       piiRedaction: true,
       speculativeAnswers: false,
       blockedTopicsSummary: "Internal-only; logs prompts and answers for monitoring."
-    },
-    suggestedQuestions: [],
+    },    suggestedQuestions: [],
     apim: {
       ...defaultAzureConfig,
       apiEndpoint: "https://eva-da-admin.azure-api.net/eva/v1",
@@ -227,7 +247,6 @@ export function ProjectRegistry() {
   useEffect(() => {
     setDraftProject(null);
   }, [selectedProjectId]);
-
   // Get the active project data (draft or original)
   const activeProject = draftProject ?? project;
   const theme = activeProject?.theme ?? {
@@ -249,10 +268,10 @@ export function ProjectRegistry() {
     if (ok) {
       setEntries(updated);
       setDraftProject(null);
-      // eslint-disable-next-line no-alert
+      // Trigger a custom event to notify App.tsx of registry changes
+      window.dispatchEvent(new CustomEvent('registry-updated'));
       alert("Project registry saved to localStorage.");
     } else {
-      // eslint-disable-next-line no-alert
       alert("Failed to save registry. See console for details.");
     }
   }
@@ -272,8 +291,7 @@ export function ProjectRegistry() {
       // eslint-disable-next-line no-alert
       alert("A project with that id already exists.");
       return;
-    }
-    const newEntry: RegistryEntry = {
+    }    const newEntry: RegistryEntry = {
       id: normalized as ProjectId,
       label: `New project ${normalized}`,
       domain: "",
@@ -282,10 +300,13 @@ export function ProjectRegistry() {
       ragProfile: "",
       description: "",
       theme: { primary: "#0b74de", background: "#ffffff", surface: "#ffffff", baseFontPx: 16 },
-      ragIndex: { chunkingStrategy: "semantic", chunkSizeTokens: 500, overlapTokens: 80, indexName: `${normalized}-index` },
-      ragRetrieval: { rankingStrategy: "semantic", topK: 6, citationStyle: "inline" },
+      ragIndex: { chunkingStrategy: "semantic", chunkSizeTokens: 500, overlapTokens: 80, indexName: `${normalized}-index` },      ragRetrieval: { rankingStrategy: "semantic", topK: 6, citationStyle: "inline" },
       guardrails: { piiRedaction: true, speculativeAnswers: false, blockedTopicsSummary: "" },
-      suggestedQuestions: [],
+      suggestedQuestions: [
+        { en: `Sample question 1 for ${normalized}`, fr: `Question exemple 1 pour ${normalized}` },
+        { en: `Sample question 2 for ${normalized}`, fr: `Question exemple 2 pour ${normalized}` },
+        { en: `Sample question 3 for ${normalized}`, fr: `Question exemple 3 pour ${normalized}` }
+      ],
       apim: { ...defaultLocalConfig }
     };
     const updated = [...entries, newEntry];

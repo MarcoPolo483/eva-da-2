@@ -14,12 +14,16 @@ interface Props {
 
 
 export function ChatPanel({ projectId, messages, onSend, isSending }: Props) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [input, setInput] = useState("");
 
   const taglineKey = `tagline.${projectId}`;
-  const suggestedQuestionKeys = registryById[projectId]?.suggestedQuestions ?? [];
-  const suggestedQuestions = suggestedQuestionKeys.map((k) => t(k));
+  
+  // Load suggested questions from registry based on current language
+  const currentLanguage = i18n.language as 'en' | 'fr';
+  const project = registryById[projectId];
+  const suggestedQuestions = (project?.suggestedQuestions ?? [])
+    .map((q) => q[currentLanguage] || q.en); // Fallback to English if translation missing
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();

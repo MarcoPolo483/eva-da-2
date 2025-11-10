@@ -1,22 +1,14 @@
 {
   "appTitle": "EVA Domain Assistant",
   "skipToMain": "Skip to main content",
-
   "project.canadaLife": "Canada Life",
   "project.jurisprudence": "Jurisprudence",
   "project.admin": "Project Registry",
-
+  "project.AssistMe": "AssistMe",
   "tagline.canadaLife": "Chat with your Canada Life Benefits Assistant",
   "tagline.jurisprudence": "Chat with your Jurisprudence Research Assistant",
   "tagline.admin": "Admin console",
-
-  "suggestions.canadaLife.q1": "How do I onboard a new Canada Life case into EVA DA?",
-  "suggestions.canadaLife.q2": "Where can I find the Canada Life escalation process?",
-  "suggestions.canadaLife.q3": "What are the eligibility rules for term employees?",
-
-  "suggestions.jurisprudence.q1": "Summarize the leading CPP-D chronic pain decision.",
-  "suggestions.jurisprudence.q2": "Which cases define a severe and prolonged disability?",
-  "suggestions.jurisprudence.q3": "List recent jurisprudence related to CPP-D appeals.",
+  "tagline.AssistMe": "Chat with your AssistMe Assistant",
 
   "toolbar.clearChat": "Clear chat",
   "toolbar.adjust": "Adjust",
