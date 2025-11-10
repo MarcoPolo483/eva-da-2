@@ -1,6 +1,6 @@
 // src/components/ProjectShell.tsx
 import React from 'react';
-import type { Project } from '../types/project';
+import type { Project } from '../lib/types';
 
 interface Props {
   project: Project;
@@ -8,12 +8,23 @@ interface Props {
 }
 
 export const ProjectShell: React.FC<Props> = ({ project, onBackToRegistry }) => {
-  const theme = project.lookAndFeel;
+  const theme = project.lookAndFeel ?? {
+    headingScale: { h1: 1.6, h2: 1.3, h3: 1.1 },
+    logoUrl: "",
+    showLanguageToggle: false,
+    showHelpLink: false,
+    helpLinkUrl: ""
+  };
+
+  const ragIndex = project.ragIndexConfig ?? { chunkingStrategy: '', chunkSizeTokens: 0, chunkOverlapTokens: 0 };
+  const ragRetrieval = project.ragRetrievalConfig ?? { rankingStrategy: '', topK: 0 };
+  const ragGuardrail = project.ragGuardrailConfig ?? { piiRedactionEnabled: false, allowSpeculativeAnswers: false };
+  const goldenCount = project.goldenQuestionSet?.length ?? 0;
 
   // Title based on project slug / name – you can later move this into data
   let assistantTitle = 'Chat with your work data';
 
-  if (project.slug.includes('jurisprudence')) {
+  if (project.slug?.includes('jurisprudence')) {
     assistantTitle = 'Chat with your Jurisprudence Research Assistant';
   } else if (project.slug.includes('canada-life')) {
     assistantTitle = 'Chat with your Canada Life Benefits Assistant';
@@ -133,7 +144,7 @@ export const ProjectShell: React.FC<Props> = ({ project, onBackToRegistry }) => 
         <h1
           style={{
             margin: 0,
-            fontSize: `calc(var(--eva-font-size-base) * ${theme.headingScale.h1})`
+            fontSize: `calc(var(--eva-font-size-base) * ${theme.headingScale?.h1 ?? 1.6})`
           }}
         >
           {assistantTitle}
@@ -171,7 +182,7 @@ export const ProjectShell: React.FC<Props> = ({ project, onBackToRegistry }) => 
           <h2
             style={{
               marginTop: 0,
-              fontSize: `calc(var(--eva-font-size-base) * ${theme.headingScale.h2})`
+              fontSize: `calc(var(--eva-font-size-base) * ${theme.headingScale?.h2 ?? 1.3})`
             }}
           >
             Chat
@@ -241,7 +252,7 @@ export const ProjectShell: React.FC<Props> = ({ project, onBackToRegistry }) => 
           <h2
             style={{
               marginTop: 0,
-              fontSize: `calc(var(--eva-font-size-base) * ${theme.headingScale.h3})`
+              fontSize: `calc(var(--eva-font-size-base) * ${theme.headingScale?.h3 ?? 1.1})`
             }}
           >
             Project configuration
@@ -270,27 +281,27 @@ export const ProjectShell: React.FC<Props> = ({ project, onBackToRegistry }) => 
 
             <dt style={{ fontWeight: 600 }}>Chunking</dt>
             <dd>
-              {project.ragIndexConfig.chunkingStrategy} –{' '}
-              {project.ragIndexConfig.chunkSizeTokens} tokens, overlap{' '}
-              {project.ragIndexConfig.chunkOverlapTokens}
+              {ragIndex.chunkingStrategy} –{' '}
+              {ragIndex.chunkSizeTokens} tokens, overlap{' '}
+              {ragIndex.chunkOverlapTokens}
             </dd>
 
             <dt style={{ fontWeight: 600 }}>Retrieval</dt>
             <dd>
-              {project.ragRetrievalConfig.rankingStrategy} – topK{' '}
-              {project.ragRetrievalConfig.topK}
+              {ragRetrieval.rankingStrategy} – topK{' '}
+              {ragRetrieval.topK}
             </dd>
 
             <dt style={{ fontWeight: 600 }}>PII redaction</dt>
-            <dd>{project.ragGuardrailConfig.piiRedactionEnabled ? 'Enabled' : 'Disabled'}</dd>
+            <dd>{ragGuardrail.piiRedactionEnabled ? 'Enabled' : 'Disabled'}</dd>
 
             <dt style={{ fontWeight: 600 }}>Speculative answers</dt>
             <dd>
-              {project.ragGuardrailConfig.allowSpeculativeAnswers ? 'Allowed' : 'Disabled'}
+              {ragGuardrail.allowSpeculativeAnswers ? 'Allowed' : 'Disabled'}
             </dd>
 
             <dt style={{ fontWeight: 600 }}>Golden questions</dt>
-            <dd>{project.goldenQuestionSet.length}</dd>
+            <dd>{goldenCount}</dd>
           </dl>
         </aside>
       </main>

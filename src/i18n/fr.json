@@ -7,9 +7,21 @@
   "tagline.canadaLife": "Discutez avec votre assistant chez Canada Vie",
   "tagline.jurisprudence": "Discutez avec votre assistant de recherche en jurisprudence",
   "tagline.admin": "Console d’administration",
+  
+  "suggestions.canadaLife.q1": "Comment intégrer un nouveau dossier Canada Vie dans EVA DA ?",
+  "suggestions.canadaLife.q2": "Où trouver le processus d'escalade Canada Vie ?",
+  "suggestions.canadaLife.q3": "Quelles sont les règles d'éligibilité pour les employés temporaires ?",
+
+  "suggestions.jurisprudence.q1": "Résumez la décision phare CPP-D sur la douleur chronique.",
+  "suggestions.jurisprudence.q2": "Quelles affaires définissent une invalidité grave et prolongée ?",
+  "suggestions.jurisprudence.q3": "Listez la jurisprudence récente liée aux appels CPP-D.",
   "input.label": "Votre message",
   "input.placeholder": "Posez une question à EVA sur vos documents…",
   "button.send": "Envoyer",
   "language.english": "English",
-  "language.french": "Français"
+  "language.french": "Français",
+  "toolbar.clearChat": "Effacer la conversation",
+  "toolbar.adjust": "Ajuster",
+  "toolbar.info": "Infos",
+  "chat.emptyHint": "Commencez la conversation en posant une question ci-dessous."
 }

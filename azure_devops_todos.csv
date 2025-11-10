@@ -1,0 +1,10 @@
+Title,Description,WorkItemType,Tags
+"Create App Config Architecture","Design and implement the base configuration architecture: src/lib/config, interfaces, validation schemas, version tracking (v0.68).","Epic","config;admin"
+"Implement Config Stores","Create projectConfigStore.ts and appConfigStore.ts; persistence abstraction; export/import; migrations.","Feature","store;persistence"
+"Create Base Admin UI Components","AdminLayout, AdminCard, EditableField, inheritance indicator, validation UI.","Feature","ui;admin"
+"Implement Project Registry v2","Update ProjectRegistry to support identity, theming, prompts, search, data sources, access controls.","Feature","registry;project"
+"Create AI CoE Admin Portal","Global settings, lifecycle control, security & compliance, infra settings, cost controls.","Feature","admin;co-e"
+"Config Inheritance System","Override tracking, reset-to-default, diff viewer, change history.","Feature","config;inheritance"
+"Role-Based Access Control","Roles, permission checks, audit logging, role management UI.","Feature","security;rbac"
+"Validation & Governance","Field-level validation, approval workflows, compliance checks, audit trails.","Feature","governance;validation"
+"Testing & Documentation","Unit tests for stores, integration tests for admin flows, admin docs and guides.","Task","test;docs"
