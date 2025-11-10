@@ -351,6 +351,13 @@ export function ProjectRegistry() {
     alert("Registry imported and saved.");
   }
 
+  function handleReset() {
+    if (!confirm("Reset registry to defaults? This will clear all custom projects and cannot be undone.")) return;
+    localStorage.removeItem('eva:projectRegistry');
+    alert("Registry will reset to defaults. Page will reload.");
+    setTimeout(() => window.location.reload(), 500);
+  }
+
   return (
     <section aria-label="Project register administration">
       {/* Top heading + description */}
@@ -408,6 +415,9 @@ export function ProjectRegistry() {
           </button>
           <button onClick={handleImport} className="rounded border border-gray-300 bg-white px-3 py-1.5 text-xs font-medium text-gray-700">
             Import
+          </button>
+          <button onClick={handleReset} className="rounded border border-orange-300 bg-white px-3 py-1.5 text-xs font-medium text-orange-700">
+            Reset
           </button>
         </div>
       </div>
