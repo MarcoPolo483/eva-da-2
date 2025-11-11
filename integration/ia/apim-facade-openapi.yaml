@@ -1,0 +1,415 @@
+openapi: 3.0.3
+info:
+  title: Information Assistant Facade (EVA DA 2.0)
+  version: 0.1.0
+  description: >
+    APIM-facing facade for consuming IA backend capabilities. CONFIRMED endpoints
+    are guaranteed by current code references. INFERRED endpoints must be validated
+    against a running deployment.
+
+servers:
+  - url: https://{gatewayHost}/{basePath}
+    variables:
+      gatewayHost:
+        default: api.contoso.com
+      basePath:
+        default: ia
+
+tags:
+  - name: health
+  - name: chat
+  - name: corpus
+  - name: tutor
+  - name: tabular
+  - name: admin
+  - name: logging
+
+components:
+  securitySchemes:
+    azureAd:
+      type: oauth2
+      flows:
+        authorizationCode:
+          authorizationUrl: https://login.microsoftonline.com/{tenantId}/oauth2/v2.0/authorize
+          tokenUrl: https://login.microsoftonline.com/{tenantId}/oauth2/v2.0/token
+          scopes:
+            api://infoasst.default/user_impersonation: Access IA API
+      x-azure-ad-tenant: "{tenantId}"
+  schemas:
+    ChatTurn:
+      type: object
+      properties:
+        user: { type: string }
+        bot: { type: string }
+    CitationLookupEntry:
+      type: object
+      properties:
+        citation: { type: string }
+        source_path: { type: string }
+        page_number: { type: string }
+    ChatOverrides:
+      type: object
+      properties:
+        semantic_ranker: { type: boolean }
+        semantic_captions: { type: boolean }
+        top: { type: integer }
+        temperature: { type: number }
+        prompt_template: { type: string }
+        prompt_template_prefix: { type: string }
+        prompt_template_suffix: { type: string }
+        exclude_category: { type: string }
+        suggest_followup_questions: { type: boolean }
+        byPassRAG: { type: boolean }
+        user_persona: { type: string }
+        system_persona: { type: string }
+    ChatRequest:
+      type: object
+      required: [history, approach]
+      properties:
+        history:
+          type: array
+          items:
+            $ref: '#/components/schemas/ChatTurn'
+        approach:
+          type: integer
+          description: Enum Approaches (0..6)
+        overrides:
+          $ref: '#/components/schemas/ChatOverrides'
+        citation_lookup:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/CitationLookupEntry'
+        thought_chain:
+          type: object
+          additionalProperties:
+            type: string
+    ChatResponse:
+      type: object
+      properties:
+        answer: { type: string }
+        thoughts: { type: string }
+        data_points:
+          type: array
+          items: { type: string }
+        approach: { type: integer }
+        thought_chain:
+          type: object
+          additionalProperties:
+            type: string
+        work_citation_lookup:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/CitationLookupEntry'
+        web_citation_lookup:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/CitationLookupEntry'
+        error: { type: string }
+    StatusLogEntry:
+      type: object
+      properties:
+        path: { type: string }
+        status: { type: string }
+        status_classification: { type: string }
+        state: { type: string }
+    HealthResponse:
+      type: object
+      properties:
+        status: { type: string }
+        uptime_seconds: { type: number }
+        version: { type: string }
+
+security:
+  - azureAd: []
+
+paths:
+  /health:
+    get:
+      tags: [health]
+      summary: Health probe (CONFIRMED)
+      operationId: getHealth
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthResponse'
+
+  /chat:
+    post:
+      tags: [chat]
+      summary: Conversational RAG / LLM chat (CONFIRMED)
+      description: >
+        Streams NDJSON chunks. When proxied through APIM, ensure streaming enabled.
+      operationId: postChat
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChatRequest'
+      responses:
+        '200':
+          description: Streaming NDJSON response
+          content:
+            application/x-ndjson:
+              schema:
+                $ref: '#/components/schemas/ChatResponse'
+
+  /getalluploadstatus:
+    post:
+      tags: [corpus]
+      summary: Get all recent file upload statuses (CONFIRMED)
+      operationId: getAllUploadStatus
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                timeframe: { type: integer, description: 'Hours lookback' }
+                state: { type: string }
+                folder: { type: string }
+                tag: { type: string }
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { type: object }
+
+  /getfolders:
+    post:
+      tags: [corpus]
+      summary: List folders (CONFIRMED)
+      operationId: getFolders
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { type: string }
+
+  /gettags:
+    post:
+      tags: [corpus]
+      summary: List tags (INFERRED)
+      operationId: getTags
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { type: string }
+
+  /logstatus:
+    post:
+      tags: [logging]
+      summary: Log status entry (INFERRED)
+      operationId: logStatus
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StatusLogEntry'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status: { type: string }
+
+  /getInfoData:
+    get:
+      tags: [admin]
+      summary: Retrieve info/config metadata (INFERRED)
+      operationId: getInfoData
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+
+  /getHint:
+    get:
+      tags: [tutor]
+      summary: Get a hint for a math question (INFERRED)
+      operationId: getHint
+      parameters:
+        - in: query
+          name: question
+          required: true
+          schema: { type: string }
+      responses:
+        '200':
+          description: Hint
+          content:
+            application/json:
+              schema:
+                type: string
+
+  /stream:
+    get:
+      tags: [tutor]
+      summary: Math assistant reasoning stream (SSE, INFERRED)
+      operationId: streamMath
+      parameters:
+        - in: query
+          name: question
+          required: true
+          schema: { type: string }
+      responses:
+        '200':
+          description: SSE stream
+          content:
+            text/event-stream:
+              schema:
+                type: string
+
+  /process_agent_response:
+    get:
+      tags: [tutor]
+      summary: Final math assistant answer (INFERRED)
+      operationId: processAgentResponse
+      parameters:
+        - in: query
+          name: question
+          required: true
+          schema: { type: string }
+      responses:
+        '200':
+          description: Final answer
+          content:
+            application/json:
+              schema:
+                type: string
+
+  /posttd:
+    post:
+      tags: [tabular]
+      summary: Upload CSV for Tabular Data Assistant (INFERRED)
+      operationId: postTd
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                csv:
+                  type: string
+                  format: binary
+      responses:
+        '200':
+          description: Accepted
+          content:
+            text/plain:
+              schema:
+                type: string
+
+  /tdstream:
+    get:
+      tags: [tabular]
+      summary: Stream CSV analysis (SSE, INFERRED)
+      operationId: tdStream
+      parameters:
+        - in: query
+          name: question
+          required: true
+          schema: { type: string }
+      responses:
+        '200':
+          description: SSE stream
+          content:
+            text/event-stream:
+              schema:
+                type: string
+
+  /process_td_agent_response:
+    get:
+      tags: [tabular]
+      summary: Final CSV agent answer (INFERRED)
+      operationId: processTdAgentResponse
+      parameters:
+        - in: query
+          name: question
+          required: true
+          schema: { type: string }
+      responses:
+        '200':
+          description: Final answer
+          content:
+            application/json:
+              schema:
+                type: string
+
+  /refresh:
+    post:
+      tags: [tabular]
+      summary: Reset dataframe/agent state (INFERRED)
+      operationId: refreshTabularAgent
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { type: string }
+
+  /getTempImages:
+    get:
+      tags: [tabular]
+      summary: Retrieve generated chart images (INFERRED)
+      operationId: getTempImages
+      responses:
+        '200':
+          description: Images
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  images:
+                    type: array
+                    items: { type: string }
+
+  /getMaxCSVFileSize:
+    get:
+      tags: [tabular]
+      summary: Get max CSV size configuration (INFERRED)
+      operationId: getMaxCsvFileSize
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: string
+
+  /getMaxCSVFileSizeType:
+    get:
+      tags: [tabular]
+      summary: Get CSV size unit/type (INFERRED)
+      operationId: getMaxCsvFileSizeType
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: string

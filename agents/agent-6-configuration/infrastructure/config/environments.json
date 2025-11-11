@@ -1,0 +1,317 @@
+{
+  "environments": {
+    "dev": {
+      "displayName": "Development",
+      "description": "Development environment for EVA DA 2.0",
+      "azure": {
+        "subscriptionId": "c59ee575-eb2a-4b51-a865-4b618f9add0a",
+        "resourceGroup": "rg-eva-da-2-dev",
+        "location": "Canada Central",
+        "tags": {
+          "Environment": "dev",
+          "Application": "eva-da-2",
+          "ManagedBy": "Agent-6-Configuration",
+          "Project": "EVA-DA-2.0",
+          "CostCenter": "IT-AI-Services",
+          "DataClassification": "Internal",
+          "AutoShutdown": "true"
+        }
+      },
+      "cosmos": {
+        "consistencyLevel": "Session",
+        "multiRegion": false,
+        "throughput": {
+          "database": 1000,
+          "maxAutoScale": 4000
+        },
+        "backup": {
+          "intervalMinutes": 480,
+          "retentionHours": 168
+        }
+      },
+      "openai": {
+        "location": "Canada East",
+        "models": {
+          "gpt4": {
+            "name": "gpt-4",
+            "version": "1106-Preview",
+            "capacity": 10
+          },
+          "embedding": {
+            "name": "text-embedding-ada-002",
+            "version": "2",
+            "capacity": 20
+          }
+        }
+      },
+      "functions": {
+        "sku": "Y1",
+        "tier": "Dynamic",
+        "workerCount": 1,
+        "runtimeVersion": "~4",
+        "nodeVersion": "~18"
+      },
+      "keyVault": {
+        "sku": "standard",
+        "purgeProtection": false,
+        "softDeleteRetention": 7,
+        "enabledForTemplateDeployment": true
+      },
+      "monitoring": {
+        "logAnalytics": {
+          "sku": "Free",
+          "retentionDays": 30
+        },
+        "applicationInsights": {
+          "samplingPercentage": 100,
+          "disableTelemetry": false
+        }
+      },
+      "security": {
+        "allowPublicAccess": true,
+        "requireManagedIdentity": true,
+        "enableDiagnostics": true
+      },
+      "features": {
+        "autoShutdown": true,
+        "costOptimization": true,
+        "debugLogging": true
+      }
+    },
+    "staging": {
+      "displayName": "Staging",
+      "description": "Pre-production staging environment",
+      "azure": {
+        "subscriptionId": "c59ee575-eb2a-4b51-a865-4b618f9add0a",
+        "resourceGroup": "rg-eva-da-2-staging",
+        "location": "Canada Central",
+        "tags": {
+          "Environment": "staging",
+          "Application": "eva-da-2",
+          "ManagedBy": "Agent-6-Configuration",
+          "Project": "EVA-DA-2.0",
+          "CostCenter": "IT-AI-Services",
+          "DataClassification": "Internal"
+        }
+      },
+      "cosmos": {
+        "consistencyLevel": "Session",
+        "multiRegion": true,
+        "throughput": {
+          "database": 1500,
+          "maxAutoScale": 6000
+        },
+        "backup": {
+          "intervalMinutes": 240,
+          "retentionHours": 720
+        }
+      },
+      "openai": {
+        "location": "Canada East",
+        "models": {
+          "gpt4": {
+            "name": "gpt-4",
+            "version": "1106-Preview",
+            "capacity": 20
+          },
+          "embedding": {
+            "name": "text-embedding-ada-002",
+            "version": "2",
+            "capacity": 30
+          }
+        }
+      },
+      "functions": {
+        "sku": "EP1",
+        "tier": "ElasticPremium",
+        "workerCount": 2,
+        "runtimeVersion": "~4",
+        "nodeVersion": "~18"
+      },
+      "keyVault": {
+        "sku": "standard",
+        "purgeProtection": false,
+        "softDeleteRetention": 30,
+        "enabledForTemplateDeployment": true
+      },
+      "monitoring": {
+        "logAnalytics": {
+          "sku": "PerGB2018",
+          "retentionDays": 60
+        },
+        "applicationInsights": {
+          "samplingPercentage": 50,
+          "disableTelemetry": false
+        }
+      },
+      "security": {
+        "allowPublicAccess": true,
+        "requireManagedIdentity": true,
+        "enableDiagnostics": true
+      },
+      "features": {
+        "autoShutdown": false,
+        "costOptimization": true,
+        "debugLogging": false
+      }
+    },
+    "prod": {
+      "displayName": "Production",
+      "description": "Production environment for EVA DA 2.0",
+      "azure": {
+        "subscriptionId": "c59ee575-eb2a-4b51-a865-4b618f9add0a",
+        "resourceGroup": "rg-eva-da-2-prod",
+        "location": "Canada Central",
+        "tags": {
+          "Environment": "prod",
+          "Application": "eva-da-2",
+          "ManagedBy": "Agent-6-Configuration",
+          "Project": "EVA-DA-2.0",
+          "CostCenter": "IT-AI-Services",
+          "DataClassification": "Protected-B",
+          "BusinessCriticality": "High"
+        }
+      },
+      "cosmos": {
+        "consistencyLevel": "Session",
+        "multiRegion": true,
+        "throughput": {
+          "database": 2000,
+          "maxAutoScale": 10000
+        },
+        "backup": {
+          "intervalMinutes": 240,
+          "retentionHours": 2160
+        }
+      },
+      "openai": {
+        "location": "Canada East",
+        "models": {
+          "gpt4": {
+            "name": "gpt-4",
+            "version": "1106-Preview",
+            "capacity": 30
+          },
+          "embedding": {
+            "name": "text-embedding-ada-002",
+            "version": "2",
+            "capacity": 50
+          }
+        }
+      },
+      "functions": {
+        "sku": "EP2",
+        "tier": "ElasticPremium",
+        "workerCount": 3,
+        "runtimeVersion": "~4",
+        "nodeVersion": "~18"
+      },
+      "keyVault": {
+        "sku": "premium",
+        "purgeProtection": true,
+        "softDeleteRetention": 90,
+        "enabledForTemplateDeployment": true
+      },
+      "monitoring": {
+        "logAnalytics": {
+          "sku": "PerGB2018",
+          "retentionDays": 90
+        },
+        "applicationInsights": {
+          "samplingPercentage": 10,
+          "disableTelemetry": false
+        }
+      },
+      "security": {
+        "allowPublicAccess": true,
+        "requireManagedIdentity": true,
+        "enableDiagnostics": true,
+        "enableAdvancedThreatProtection": true
+      },
+      "features": {
+        "autoShutdown": false,
+        "costOptimization": false,
+        "debugLogging": false,
+        "highAvailability": true
+      }
+    }
+  },
+  "global": {
+    "appName": "eva-da-2",
+    "version": "2.0.0",
+    "defaultLocation": "Canada Central",
+    "openaiLocation": "Canada East",
+    "terraformVersion": "1.6.6",
+    "bicepVersion": "latest",
+    "nodeVersion": "18.x",
+    "dotnetVersion": "8.0.x"
+  },
+  "secrets": {
+    "keyVaultSecrets": {
+      "openai-api-key": {
+        "description": "Azure OpenAI API Key",
+        "contentType": "application/x-pkcs12"
+      },
+      "cosmos-connection-string": {
+        "description": "Cosmos DB Connection String",
+        "contentType": "application/x-pkcs12"
+      },
+      "storage-connection-string": {
+        "description": "Storage Account Connection String",
+        "contentType": "application/x-pkcs12"
+      },
+      "application-insights-instrumentation-key": {
+        "description": "Application Insights Instrumentation Key",
+        "contentType": "application/x-pkcs12"
+      }
+    }
+  },
+  "rbac": {
+    "assignments": [
+      {
+        "principalType": "ServicePrincipal",
+        "role": "Cosmos DB Data Contributor",
+        "scope": "cosmos",
+        "description": "Function App access to Cosmos DB"
+      },
+      {
+        "principalType": "ServicePrincipal", 
+        "role": "Cognitive Services OpenAI User",
+        "scope": "openai",
+        "description": "Function App access to Azure OpenAI"
+      },
+      {
+        "principalType": "ServicePrincipal",
+        "role": "Key Vault Secrets User",
+        "scope": "keyVault",
+        "description": "Function App access to Key Vault secrets"
+      },
+      {
+        "principalType": "ServicePrincipal",
+        "role": "Storage Blob Data Contributor",
+        "scope": "storage",
+        "description": "Function App access to storage"
+      }
+    ]
+  },
+  "compliance": {
+    "dataResidency": "Canada",
+    "classifications": {
+      "dev": "Internal",
+      "staging": "Internal", 
+      "prod": "Protected-B"
+    },
+    "retentionPolicies": {
+      "logs": {
+        "dev": 30,
+        "staging": 60,
+        "prod": 90
+      },
+      "backups": {
+        "dev": 7,
+        "staging": 30,
+        "prod": 90
+      }
+    }
+  }
+}

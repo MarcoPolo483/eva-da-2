@@ -1,0 +1,56 @@
+{
+  "name": "eva-da-2-monitoring",
+  "version": "1.0.0",
+  "description": "EVA DA 2.0 - Agent 3: Enterprise Monitoring and Performance Optimization System",
+  "main": "src/monitoring-system.js",
+  "scripts": {
+    "start": "node src/monitoring-system.js",
+    "dev": "nodemon src/monitoring-system.js",
+    "test": "jest",
+    "lint": "eslint src/",
+    "setup-monitoring": "node scripts/setup-monitoring.js",
+    "deploy": "az deployment group create --resource-group $AZURE_RESOURCE_GROUP --template-file infra/main.bicep",
+    "deploy-workbook": "az deployment group create --resource-group $AZURE_RESOURCE_GROUP --template-file infra/workbook.bicep"
+  },
+  "keywords": [
+    "azure",
+    "monitoring", 
+    "observability",
+    "performance",
+    "alerting",
+    "application-insights",
+    "log-analytics",
+    "cosmos-db",
+    "azure-functions",
+    "enterprise"
+  ],
+  "author": "Agent 3 - Monitoring Expert",
+  "license": "MIT",
+  "dependencies": {
+    "@azure/identity": "^4.0.1",
+    "@azure/monitor-query": "^1.2.0",
+    "@azure/arm-appinsights": "^5.0.0",
+    "@azure/cosmos": "^4.0.0",
+    "@azure/arm-monitor": "^8.0.0",
+    "@azure/logger": "^1.0.4",
+    "dotenv": "^16.3.1",
+    "winston": "^3.11.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.2",
+    "jest": "^29.7.0",
+    "eslint": "^8.55.0",
+    "@types/node": "^20.10.5"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/your-org/eva-da-2"
+  },
+  "bugs": {
+    "url": "https://github.com/your-org/eva-da-2/issues"
+  },
+  "homepage": "https://github.com/your-org/eva-da-2#readme"
+}

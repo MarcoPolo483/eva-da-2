@@ -1,0 +1,44 @@
+{
+  "dashboardName": "EVA DA 2.0 - Multi-Agent Performance Dashboard",
+  "version": "1.0.0",
+  "widgets": [
+    {
+      "id": "agent-health",
+      "type": "gauge",
+      "title": "Agent Health Status",
+      "query": "customEvents | where name == 'Agent_Activity' | summarize count() by bin(timestamp, 5m)",
+      "position": { "x": 0, "y": 0, "width": 4, "height": 2 }
+    },
+    {
+      "id": "cosmos-performance",
+      "type": "line-chart", 
+      "title": "Cosmos DB RU Consumption",
+      "query": "customEvents | where name == 'CosmosDB_Operation' | summarize avg(customMeasurements.requestCharge) by bin(timestamp, 1m)",
+      "position": { "x": 4, "y": 0, "width": 4, "height": 2 }
+    },
+    {
+      "id": "openai-costs",
+      "type": "bar-chart",
+      "title": "OpenAI Token Usage",
+      "query": "customEvents | where name == 'OpenAI_API_Call' | summarize sum(customMeasurements.tokensUsed) by model",
+      "position": { "x": 8, "y": 0, "width": 4, "height": 2 }
+    },
+    {
+      "id": "conversation-volume",
+      "type": "area-chart",
+      "title": "Conversation Volume",
+      "query": "customEvents | where name == 'User_Conversation' | summarize count() by bin(timestamp, 10m)",
+      "position": { "x": 0, "y": 2, "width": 6, "height": 2 }
+    },
+    {
+      "id": "error-rates",
+      "type": "table",
+      "title": "Error Analysis",
+      "query": "exceptions | summarize count() by problemId, outerMessage | top 10 by count_",
+      "position": { "x": 6, "y": 2, "width": 6, "height": 2 }
+    }
+  ],
+  "timeRange": "PT1H",
+  "autoRefresh": true,
+  "refreshInterval": "PT5M"
+}

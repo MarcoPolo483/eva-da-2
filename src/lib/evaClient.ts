@@ -1,4 +1,4 @@
-export type ProjectId = "canadaLife" | "jurisprudence" | "admin";
+export type ProjectId = "canadaLife" | "jurisprudence" | "admin" | "AssistMe" | "globalAdmin";
 
 export interface EvaAnswer {
   answer: string;
@@ -26,14 +26,28 @@ const projectConfig = {
       "Legal framework suggests: {answer}"
     ],
     latencyRange: { min: 500, max: 1200 }
-  },
-  admin: {
+  },  admin: {
     templates: [
       "System administration response: {answer}",
       "Platform configuration status: {answer}",
       "Administrative analysis: {answer}"
     ],
     latencyRange: { min: 100, max: 400 }
+  },  AssistMe: {
+    templates: [
+      "Based on Old Age Security policy: {answer}",
+      "According to Service Canada guidelines: {answer}",
+      "OAS benefits analysis indicates: {answer}"
+    ],
+    latencyRange: { min: 400, max: 900 }
+  },
+  globalAdmin: {
+    templates: [
+      "Global configuration updated: {answer}",
+      "System settings applied: {answer}",
+      "Platform management: {answer}"
+    ],
+    latencyRange: { min: 100, max: 300 }
   }
 };
 

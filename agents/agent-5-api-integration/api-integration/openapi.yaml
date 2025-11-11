@@ -1,0 +1,345 @@
+openapi: 3.1.0
+info:
+  title: EVA DA 2.0 API Integration
+  description: |
+    Enterprise Azure Functions API for EVA DA 2.0 platform.
+    
+    **Current Status**: Foundation Complete ✅
+    
+    This API provides the core infrastructure for multi-agent coordination, 
+    streaming chat responses, and enterprise performance monitoring.
+    
+    Currently implemented endpoints include health monitoring and test functionality.
+    Advanced features like OpenAI integration and multi-agent orchestration are planned.
+  version: 1.0.0
+  contact:
+    name: EVA DA 2.0 API Team
+    email: support@eva-da-2.example.gov.ca
+  license:
+    name: Government of Canada License
+
+servers:
+  - url: http://localhost:7071
+    description: Local Development Server
+  - url: https://eva-da-2-api-dev.azurewebsites.net
+    description: Development Environment
+  - url: https://eva-da-2-api.azurewebsites.net
+    description: Production Environment
+
+paths:
+  /api/health:
+    get:
+      summary: Basic Health Check
+      description: |
+        Returns basic health status of the API service.
+        
+        This endpoint is designed for load balancers and monitoring systems
+        to quickly verify that the service is operational.
+      operationId: getHealth
+      tags:
+        - Health & Monitoring
+      responses:
+        '200':
+          description: Service is healthy and operational
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthResponse'
+              example:
+                status: healthy
+                timestamp: '2024-01-20T15:30:00.000Z'
+                version: '1.0.0'
+                environment: development
+                message: 'EVA DA 2.0 API is running successfully!'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/echo:
+    post:
+      summary: Echo Test Endpoint
+      description: |
+        Echoes back the received JSON payload for testing purposes.
+        
+        This endpoint is useful for:
+        - Testing API connectivity
+        - Validating request/response format
+        - Debugging client implementations
+      operationId: postEcho
+      tags:
+        - Testing & Development
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              description: Any valid JSON object
+            examples:
+              simple:
+                summary: Simple echo test
+                value:
+                  message: "Hello World"
+                  testData: "Any JSON payload"
+              complex:
+                summary: Complex object test
+                value:
+                  user:
+                    id: "user-123"
+                    name: "John Doe"
+                  request:
+                    timestamp: "2024-01-20T15:30:00.000Z"
+                    action: "test-api"
+      responses:
+        '200':
+          description: Successfully echoed the request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EchoResponse'
+              example:
+                echo:
+                  message: "Hello World"
+                  testData: "Any JSON payload"
+                timestamp: '2024-01-20T15:30:00.000Z'
+                method: POST
+                path: echo
+        '400':
+          description: Invalid JSON payload
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  # Planned endpoints (not yet implemented)
+  /api/chat:
+    post:
+      summary: 🚧 Streaming Chat API (Planned)
+      description: |
+        **Status**: Not yet implemented - Coming in Phase 2
+        
+        Send chat messages with streaming responses using Server-Sent Events.
+        Will integrate with Azure OpenAI and support multi-turn conversations.
+      operationId: postChat
+      tags:
+        - Chat & AI
+        - 🚧 Planned Features
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChatRequest'
+      responses:
+        '501':
+          description: Not yet implemented
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotImplementedResponse'
+
+  /api/orchestrate:
+    post:
+      summary: 🚧 Multi-Agent Orchestration (Planned)
+      description: |
+        **Status**: Not yet implemented - Coming in Phase 3
+        
+        Coordinate multiple agents in a single workflow request.
+        Supports sequential, parallel, and complex workflow patterns.
+      operationId: postOrchestrate
+      tags:
+        - Multi-Agent Coordination
+        - 🚧 Planned Features
+      responses:
+        '501':
+          description: Not yet implemented
+
+  /api/metrics:
+    get:
+      summary: 🚧 Performance Metrics (Planned)
+      description: |
+        **Status**: Not yet implemented - Coming in Phase 4
+        
+        Real-time performance analytics including response times,
+        token usage, success rates, and custom metrics.
+      operationId: getMetrics
+      tags:
+        - Performance & Analytics
+        - 🚧 Planned Features
+      responses:
+        '501':
+          description: Not yet implemented
+
+components:
+  schemas:
+    HealthResponse:
+      type: object
+      required:
+        - status
+        - timestamp
+        - version
+        - environment
+        - message
+      properties:
+        status:
+          type: string
+          enum: [healthy, unhealthy, degraded]
+          description: Overall health status of the service
+        timestamp:
+          type: string
+          format: date-time
+          description: ISO 8601 timestamp of the health check
+        version:
+          type: string
+          description: Current API version
+          example: "1.0.0"
+        environment:
+          type: string
+          description: Current deployment environment
+          enum: [development, staging, production]
+        message:
+          type: string
+          description: Human-readable status message
+
+    EchoResponse:
+      type: object
+      required:
+        - echo
+        - timestamp
+        - method
+        - path
+      properties:
+        echo:
+          type: object
+          description: The original request body echoed back
+        timestamp:
+          type: string
+          format: date-time
+          description: ISO 8601 timestamp when the request was processed
+        method:
+          type: string
+          description: HTTP method used for the request
+          example: "POST"
+        path:
+          type: string
+          description: API path that was requested
+          example: "echo"
+
+    ChatRequest:
+      type: object
+      description: "🚧 Planned schema for chat requests"
+      required:
+        - message
+      properties:
+        message:
+          type: string
+          description: User message to send to the AI
+        tenantId:
+          type: string
+          description: Government tenant identifier
+        userId:
+          type: string
+          description: User identifier
+        stream:
+          type: boolean
+          default: false
+          description: Enable streaming responses via Server-Sent Events
+        agentId:
+          type: string
+          description: Specific agent to handle the request
+
+    ErrorResponse:
+      type: object
+      required:
+        - error
+        - message
+      properties:
+        error:
+          type: string
+          description: Error type or category
+        message:
+          type: string
+          description: Human-readable error message
+        timestamp:
+          type: string
+          format: date-time
+          description: When the error occurred
+        requestId:
+          type: string
+          description: Unique identifier for debugging
+
+    NotImplementedResponse:
+      type: object
+      required:
+        - error
+        - message
+        - status
+      properties:
+        error:
+          type: string
+          enum: ["NotImplemented"]
+        message:
+          type: string
+          example: "This endpoint is planned but not yet implemented"
+        status:
+          type: string
+          enum: ["planned"]
+        estimatedAvailability:
+          type: string
+          description: Expected implementation timeline
+        alternativeEndpoints:
+          type: array
+          items:
+            type: string
+          description: Currently available endpoints for testing
+
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: x-functions-key
+      description: |
+        Azure Functions API key for authentication.
+        
+        **Development**: Use 'anonymous' auth level for local testing
+        **Production**: Requires valid function key or Azure AD token
+
+    AzureAD:
+      type: oauth2
+      description: Azure Active Directory OAuth2 authentication
+      flows:
+        authorizationCode:
+          authorizationUrl: https://login.microsoftonline.com/{tenant}/oauth2/v2.0/authorize
+          tokenUrl: https://login.microsoftonline.com/{tenant}/oauth2/v2.0/token
+          scopes:
+            "https://graph.microsoft.com/.default": Default scope for Microsoft Graph
+
+security:
+  - ApiKeyAuth: []
+  - AzureAD: []
+
+tags:
+  - name: Health & Monitoring
+    description: Service health and operational status endpoints
+  - name: Testing & Development
+    description: Endpoints for testing and development purposes
+  - name: Chat & AI
+    description: AI-powered chat and conversation endpoints
+  - name: Multi-Agent Coordination
+    description: Multi-agent workflow orchestration
+  - name: Performance & Analytics
+    description: Performance monitoring and analytics
+  - name: 🚧 Planned Features
+    description: Endpoints that are planned but not yet implemented
+
+externalDocs:
+  description: EVA DA 2.0 API Integration Documentation
+  url: https://github.com/your-org/eva-da-2/blob/main/agents/agent-5-api-integration/README.md

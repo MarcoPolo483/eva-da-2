@@ -1,0 +1,545 @@
+{
+  "version": "Notebook/1.0",
+  "items": [
+    {
+      "type": 1,
+      "content": {
+        "json": "# 📊 EVA DA 2.0 - Enterprise Monitoring Dashboard\n\n## Agent 3 - Monitoring Expert | Real-Time Performance & Health Overview\n\n**🎯 Mission**: Enterprise Observability & Performance Optimization  \n**🔄 Last Updated**: {TimeRange:label}  \n**📈 Data Source**: Application Insights + Log Analytics  \n\n---"
+      },
+      "name": "title"
+    },
+    {
+      "type": 9,
+      "content": {
+        "version": "KqlParameterItem/1.0",
+        "parameters": [
+          {
+            "id": "timeRange",
+            "version": "KqlParameterItem/1.0",
+            "name": "TimeRange",
+            "type": 4,
+            "description": "Select time range for analysis",
+            "value": {
+              "durationMs": 3600000
+            },
+            "typeSettings": {
+              "selectableValues": [
+                {
+                  "durationMs": 300000
+                },
+                {
+                  "durationMs": 900000
+                },
+                {
+                  "durationMs": 1800000
+                },
+                {
+                  "durationMs": 3600000
+                },
+                {
+                  "durationMs": 14400000
+                },
+                {
+                  "durationMs": 86400000
+                },
+                {
+                  "durationMs": 604800000
+                }
+              ]
+            },
+            "timeContext": {
+              "durationMs": 86400000
+            }
+          }
+        ],
+        "style": "pills",
+        "queryType": 0,
+        "resourceType": "microsoft.insights/components"
+      },
+      "name": "parameters"
+    },
+    {
+      "type": 1,
+      "content": {
+        "json": "## 🚀 System Health Overview"
+      },
+      "name": "healthOverviewTitle"
+    },
+    {
+      "type": 10,
+      "content": {
+        "chartId": "workbook-health-metrics",
+        "version": "MetricsItem/2.0",
+        "size": 0,
+        "chartType": 0,
+        "resourceIds": [
+          "/subscriptions/{subscription}/resourceGroups/{resourceGroup}/providers/Microsoft.Insights/components/{appInsights}"
+        ],
+        "timeContext": {
+          "durationMs": 0,
+          "createdTime": "2025-01-01T00:00:00.000Z",
+          "isInitialTime": false,
+          "grain": 1,
+          "useDashboardTimeRange": false
+        },
+        "metrics": [
+          {
+            "namespace": "microsoft.insights/components",
+            "metric": "microsoft.insights/components--requests-count",
+            "aggregation": 7
+          },
+          {
+            "namespace": "microsoft.insights/components", 
+            "metric": "microsoft.insights/components--requests-duration",
+            "aggregation": 4
+          },
+          {
+            "namespace": "microsoft.insights/components",
+            "metric": "microsoft.insights/components--exceptions-count",
+            "aggregation": 7
+          }
+        ],
+        "title": "Key Performance Indicators",
+        "gridSettings": {
+          "rowLimit": 10000
+        }
+      },
+      "customWidth": "50",
+      "name": "healthMetrics"
+    },
+    {
+      "type": 3,
+      "content": {
+        "version": "KqlItem/1.0",
+        "query": "requests\n| where timestamp >= {TimeRange:start} and timestamp <= {TimeRange:end}\n| summarize \n    TotalRequests = count(),\n    SuccessfulRequests = countif(success == true),\n    FailedRequests = countif(success == false),\n    AvgResponseTime = round(avg(duration), 2),\n    P95ResponseTime = round(percentile(duration, 95), 2)\n| extend SuccessRate = round((SuccessfulRequests * 100.0) / TotalRequests, 2)\n| project \n    [\"📊 Metric\"] = \"System Health\",\n    [\"✅ Total Requests\"] = TotalRequests,\n    [\"🎯 Success Rate %\"] = SuccessRate,\n    [\"⏱️ Avg Response (ms)\"] = AvgResponseTime,\n    [\"📈 P95 Response (ms)\"] = P95ResponseTime,\n    [\"❌ Failed Requests\"] = FailedRequests",
+        "size": 3,
+        "title": "🎯 System Health Summary",
+        "timeContext": {
+          "durationMs": 0,
+          "createdTime": "2025-01-01T00:00:00.000Z",
+          "isInitialTime": false,
+          "grain": 1,
+          "useDashboardTimeRange": false
+        },
+        "queryType": 0,
+        "resourceType": "microsoft.insights/components",
+        "visualization": "table",
+        "gridSettings": {
+          "formatters": [
+            {
+              "columnMatch": "🎯 Success Rate %",
+              "formatter": 18,
+              "formatOptions": {
+                "thresholdsOptions": "colors",
+                "thresholdsGrid": [
+                  {
+                    "operator": ">=",
+                    "thresholdValue": "95",
+                    "representation": "green"
+                  },
+                  {
+                    "operator": ">=", 
+                    "thresholdValue": "90",
+                    "representation": "yellow"
+                  },
+                  {
+                    "operator": "Default",
+                    "thresholdValue": null,
+                    "representation": "red"
+                  }
+                ]
+              }
+            },
+            {
+              "columnMatch": "⏱️ Avg Response (ms)",
+              "formatter": 18,
+              "formatOptions": {
+                "thresholdsOptions": "colors",
+                "thresholdsGrid": [
+                  {
+                    "operator": "<=",
+                    "thresholdValue": "1000",
+                    "representation": "green"
+                  },
+                  {
+                    "operator": "<=",
+                    "thresholdValue": "3000", 
+                    "representation": "yellow"
+                  },
+                  {
+                    "operator": "Default",
+                    "thresholdValue": null,
+                    "representation": "red"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      "customWidth": "50",
+      "name": "healthSummary"
+    },
+    {
+      "type": 1,
+      "content": {
+        "json": "## 🗄️ Cosmos DB Performance Analytics"
+      },
+      "name": "cosmosDbTitle"
+    },
+    {
+      "type": 3,
+      "content": {
+        "version": "KqlItem/1.0",
+        "query": "AzureDiagnostics\n| where ResourceProvider == \"MICROSOFT.DOCUMENTDB\"\n| where Category == \"DataPlaneRequests\"\n| where TimeGenerated >= {TimeRange:start} and TimeGenerated <= {TimeRange:end}\n| extend RU = todouble(requestCharge_s)\n| extend OperationType = tostring(operationType_s)\n| extend StatusCode = toint(statusCode_s)\n| summarize \n    TotalRU = sum(RU),\n    AvgRU = round(avg(RU), 2),\n    MaxRU = max(RU),\n    RequestCount = count(),\n    ThrottledRequests = countif(StatusCode == 429),\n    SuccessRate = round(countif(StatusCode < 400) * 100.0 / count(), 2)\n    by bin(TimeGenerated, 5m), OperationType\n| order by TimeGenerated desc",
+        "size": 0,
+        "title": "📊 Cosmos DB RU Consumption by Operation",
+        "timeContext": {
+          "durationMs": 0,
+          "createdTime": "2025-01-01T00:00:00.000Z",
+          "isInitialTime": false,
+          "grain": 1,
+          "useDashboardTimeRange": false
+        },
+        "queryType": 0,
+        "resourceType": "microsoft.operationalinsights/workspaces",
+        "visualization": "timechart",
+        "chartSettings": {
+          "xAxis": "TimeGenerated",
+          "yAxis": [
+            "TotalRU"
+          ],
+          "group": "OperationType",
+          "createOtherGroup": 10,
+          "showLegend": true,
+          "showDataPoints": false
+        }
+      },
+      "customWidth": "50",
+      "name": "cosmosRuConsumption"
+    },
+    {
+      "type": 3,
+      "content": {
+        "version": "KqlItem/1.0",
+        "query": "AzureDiagnostics\n| where ResourceProvider == \"MICROSOFT.DOCUMENTDB\"\n| where Category == \"DataPlaneRequests\"\n| where TimeGenerated >= {TimeRange:start} and TimeGenerated <= {TimeRange:end}\n| where toint(statusCode_s) == 429\n| extend PartitionKey = tostring(partitionKey_s)\n| extend CollectionName = tostring(collectionName_s)\n| summarize \n    ThrottleCount = count(),\n    UniquePartitions = dcount(PartitionKey),\n    LastThrottle = max(TimeGenerated)\n    by CollectionName\n| where ThrottleCount > 0\n| project \n    [\"🗄️ Collection\"] = CollectionName,\n    [\"🚫 Throttle Count\"] = ThrottleCount,\n    [\"🔑 Affected Partitions\"] = UniquePartitions,\n    [\"⏰ Last Throttle\"] = LastThrottle\n| order by ThrottleCount desc",
+        "size": 3,
+        "title": "🚫 Cosmos DB Throttling Analysis",
+        "timeContext": {
+          "durationMs": 0,
+          "createdTime": "2025-01-01T00:00:00.000Z",
+          "isInitialTime": false,
+          "grain": 1,
+          "useDashboardTimeRange": false
+        },
+        "queryType": 0,
+        "resourceType": "microsoft.operationalinsights/workspaces",
+        "visualization": "table",
+        "gridSettings": {
+          "formatters": [
+            {
+              "columnMatch": "🚫 Throttle Count",
+              "formatter": 18,
+              "formatOptions": {
+                "thresholdsOptions": "colors",
+                "thresholdsGrid": [
+                  {
+                    "operator": "==",
+                    "thresholdValue": "0",
+                    "representation": "green"
+                  },
+                  {
+                    "operator": "<=",
+                    "thresholdValue": "10",
+                    "representation": "yellow"
+                  },
+                  {
+                    "operator": "Default",
+                    "thresholdValue": null,
+                    "representation": "red"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      "customWidth": "50",
+      "name": "cosmosThrottling"
+    },
+    {
+      "type": 1,
+      "content": {
+        "json": "## ⚡ Azure Functions Performance"
+      },
+      "name": "functionsTitle"
+    },
+    {
+      "type": 3,
+      "content": {
+        "version": "KqlItem/1.0",
+        "query": "traces\n| where timestamp >= {TimeRange:start} and timestamp <= {TimeRange:end}\n| where customDimensions has \"functionName\"\n| extend FunctionName = tostring(customDimensions.[\"prop__functionName\"])\n| extend ExecutionTimeMs = todouble(customDimensions.[\"prop__executionTimeInMs\"])\n| where isnotempty(FunctionName) and isnotempty(ExecutionTimeMs)\n| summarize \n    ExecutionCount = count(),\n    AvgExecutionTime = round(avg(ExecutionTimeMs), 2),\n    P95ExecutionTime = round(percentile(ExecutionTimeMs, 95), 2),\n    MaxExecutionTime = round(max(ExecutionTimeMs), 2),\n    SuccessfulExecutions = countif(severityLevel <= 1)\n    by FunctionName\n| extend SuccessRate = round((SuccessfulExecutions * 100.0) / ExecutionCount, 2)\n| project \n    [\"⚡ Function Name\"] = FunctionName,\n    [\"🔄 Executions\"] = ExecutionCount,\n    [\"✅ Success Rate %\"] = SuccessRate,\n    [\"⏱️ Avg Time (ms)\"] = AvgExecutionTime,\n    [\"📊 P95 Time (ms)\"] = P95ExecutionTime,\n    [\"⚠️ Max Time (ms)\"] = MaxExecutionTime\n| order by ExecutionCount desc",
+        "size": 0,
+        "title": "⚡ Function Performance Overview",
+        "timeContext": {
+          "durationMs": 0,
+          "createdTime": "2025-01-01T00:00:00.000Z",
+          "isInitialTime": false,
+          "grain": 1,
+          "useDashboardTimeRange": false
+        },
+        "queryType": 0,
+        "resourceType": "microsoft.insights/components",
+        "visualization": "table",
+        "gridSettings": {
+          "formatters": [
+            {
+              "columnMatch": "✅ Success Rate %",
+              "formatter": 18,
+              "formatOptions": {
+                "thresholdsOptions": "colors",
+                "thresholdsGrid": [
+                  {
+                    "operator": ">=",
+                    "thresholdValue": "95",
+                    "representation": "green"
+                  },
+                  {
+                    "operator": ">=",
+                    "thresholdValue": "85",
+                    "representation": "yellow"
+                  },
+                  {
+                    "operator": "Default",
+                    "thresholdValue": null,
+                    "representation": "red"
+                  }
+                ]
+              }
+            },
+            {
+              "columnMatch": "⏱️ Avg Time (ms)",
+              "formatter": 18,
+              "formatOptions": {
+                "thresholdsOptions": "colors",
+                "thresholdsGrid": [
+                  {
+                    "operator": "<=",
+                    "thresholdValue": "2000",
+                    "representation": "green"
+                  },
+                  {
+                    "operator": "<=",
+                    "thresholdValue": "5000",
+                    "representation": "yellow"
+                  },
+                  {
+                    "operator": "Default",
+                    "thresholdValue": null,
+                    "representation": "red"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      "customWidth": "50",
+      "name": "functionPerformance"
+    },
+    {
+      "type": 3,
+      "content": {
+        "version": "KqlItem/1.0",
+        "query": "traces\n| where timestamp >= {TimeRange:start} and timestamp <= {TimeRange:end}\n| where severityLevel >= 3\n| extend FunctionName = tostring(customDimensions.[\"prop__functionName\"])\n| where isnotempty(FunctionName)\n| summarize \n    ErrorCount = count(),\n    UniqueErrors = dcount(message),\n    LastError = max(timestamp),\n    SeverityDistribution = make_bag(pack(tostring(severityLevel), count()))\n    by FunctionName\n| where ErrorCount > 0\n| project \n    [\"⚡ Function Name\"] = FunctionName,\n    [\"❌ Error Count\"] = ErrorCount,\n    [\"🔍 Unique Errors\"] = UniqueErrors,\n    [\"⏰ Last Error\"] = LastError\n| order by ErrorCount desc",
+        "size": 3,
+        "title": "❌ Function Errors & Issues",
+        "timeContext": {
+          "durationMs": 0,
+          "createdTime": "2025-01-01T00:00:00.000Z",
+          "isInitialTime": false,
+          "grain": 1,
+          "useDashboardTimeRange": false
+        },
+        "queryType": 0,
+        "resourceType": "microsoft.insights/components",
+        "visualization": "table",
+        "gridSettings": {
+          "formatters": [
+            {
+              "columnMatch": "❌ Error Count",
+              "formatter": 18,
+              "formatOptions": {
+                "thresholdsOptions": "colors",
+                "thresholdsGrid": [
+                  {
+                    "operator": "==",
+                    "thresholdValue": "0",
+                    "representation": "green"
+                  },
+                  {
+                    "operator": "<=",
+                    "thresholdValue": "5",
+                    "representation": "yellow"
+                  },
+                  {
+                    "operator": "Default",
+                    "thresholdValue": null,
+                    "representation": "red"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      "customWidth": "50",
+      "name": "functionErrors"
+    },
+    {
+      "type": 1,
+      "content": {
+        "json": "## 🤖 Agent Coordination Health"
+      },
+      "name": "agentCoordinationTitle"
+    },
+    {
+      "type": 3,
+      "content": {
+        "version": "KqlItem/1.0",
+        "query": "customEvents\n| where timestamp >= {TimeRange:start} and timestamp <= {TimeRange:end}\n| where name startswith \"Agent\"\n| extend AgentId = tostring(customDimensions.[\"AgentId\"])\n| extend HealthStatus = tostring(customDimensions.[\"HealthStatus\"])\n| extend AgentType = tostring(customDimensions.[\"AgentType\"])\n| where isnotempty(AgentId)\n| summarize \n    HealthCheckCount = count(),\n    LastHealthCheck = max(timestamp),\n    HealthyChecks = countif(HealthStatus == \"Healthy\"),\n    WarningChecks = countif(HealthStatus == \"Warning\"),\n    CriticalChecks = countif(HealthStatus == \"Critical\")\n    by AgentId, AgentType\n| extend HealthScore = round((HealthyChecks * 100.0) / HealthCheckCount, 2)\n| project \n    [\"🤖 Agent ID\"] = AgentId,\n    [\"🎯 Agent Type\"] = AgentType,\n    [\"💚 Health Score %\"] = HealthScore,\n    [\"✅ Healthy\"] = HealthyChecks,\n    [\"⚠️ Warnings\"] = WarningChecks,\n    [\"🚨 Critical\"] = CriticalChecks,\n    [\"⏰ Last Check\"] = LastHealthCheck\n| order by HealthScore asc",
+        "size": 0,
+        "title": "🤖 Agent Health Monitoring",
+        "timeContext": {
+          "durationMs": 0,
+          "createdTime": "2025-01-01T00:00:00.000Z",
+          "isInitialTime": false,
+          "grain": 1,
+          "useDashboardTimeRange": false
+        },
+        "queryType": 0,
+        "resourceType": "microsoft.insights/components",
+        "visualization": "table",
+        "gridSettings": {
+          "formatters": [
+            {
+              "columnMatch": "💚 Health Score %",
+              "formatter": 18,
+              "formatOptions": {
+                "thresholdsOptions": "colors",
+                "thresholdsGrid": [
+                  {
+                    "operator": ">=",
+                    "thresholdValue": "90",
+                    "representation": "green"
+                  },
+                  {
+                    "operator": ">=",
+                    "thresholdValue": "70",
+                    "representation": "yellow"
+                  },
+                  {
+                    "operator": "Default",
+                    "thresholdValue": null,
+                    "representation": "red"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      "name": "agentHealth"
+    },
+    {
+      "type": 1,
+      "content": {
+        "json": "## 🔗 API Integration Performance"
+      },
+      "name": "apiIntegrationTitle"
+    },
+    {
+      "type": 3,
+      "content": {
+        "version": "KqlItem/1.0",
+        "query": "dependencies\n| where timestamp >= {TimeRange:start} and timestamp <= {TimeRange:end}\n| extend ServiceName = tostring(target)\n| extend DependencyType = tostring(type)\n| summarize \n    CallCount = count(),\n    AvgDuration = round(avg(duration), 2),\n    P95Duration = round(percentile(duration, 95), 2),\n    MaxDuration = round(max(duration), 2),\n    SuccessRate = round(countif(success) * 100.0 / count(), 2),\n    FailureCount = countif(success == false)\n    by ServiceName, DependencyType\n| where CallCount > 0\n| project \n    [\"🔗 Service Name\"] = ServiceName,\n    [\"📡 Type\"] = DependencyType,\n    [\"🔄 Call Count\"] = CallCount,\n    [\"✅ Success Rate %\"] = SuccessRate,\n    [\"⏱️ Avg Duration (ms)\"] = AvgDuration,\n    [\"📊 P95 Duration (ms)\"] = P95Duration,\n    [\"❌ Failures\"] = FailureCount\n| order by CallCount desc",
+        "size": 0,
+        "title": "🔗 External Dependencies Performance",
+        "timeContext": {
+          "durationMs": 0,
+          "createdTime": "2025-01-01T00:00:00.000Z",
+          "isInitialTime": false,
+          "grain": 1,
+          "useDashboardTimeRange": false
+        },
+        "queryType": 0,
+        "resourceType": "microsoft.insights/components",
+        "visualization": "table",
+        "gridSettings": {
+          "formatters": [
+            {
+              "columnMatch": "✅ Success Rate %",
+              "formatter": 18,
+              "formatOptions": {
+                "thresholdsOptions": "colors",
+                "thresholdsGrid": [
+                  {
+                    "operator": ">=",
+                    "thresholdValue": "95",
+                    "representation": "green"
+                  },
+                  {
+                    "operator": ">=",
+                    "thresholdValue": "85",
+                    "representation": "yellow"
+                  },
+                  {
+                    "operator": "Default",
+                    "thresholdValue": null,
+                    "representation": "red"
+                  }
+                ]
+              }
+            },
+            {
+              "columnMatch": "⏱️ Avg Duration (ms)",
+              "formatter": 18,
+              "formatOptions": {
+                "thresholdsOptions": "colors",
+                "thresholdsGrid": [
+                  {
+                    "operator": "<=",
+                    "thresholdValue": "2000",
+                    "representation": "green"
+                  },
+                  {
+                    "operator": "<=",
+                    "thresholdValue": "5000",
+                    "representation": "yellow"
+                  },
+                  {
+                    "operator": "Default",
+                    "thresholdValue": null,
+                    "representation": "red"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      "name": "apiDependencies"
+    },
+    {
+      "type": 1,
+      "content": {
+        "json": "## 🚨 Real-Time Alerts & Recommendations\n\n### 📋 Current Status\n- **System Health**: All systems operational\n- **Performance**: Within acceptable limits\n- **Security**: No threats detected\n- **Agent Coordination**: All agents responsive\n\n### 💡 Optimization Recommendations\n1. **Cosmos DB**: Monitor RU consumption during peak hours\n2. **Functions**: Consider increasing timeout for long-running operations\n3. **Monitoring**: Review alert thresholds based on current patterns\n4. **Performance**: Enable Application Insights profiler for detailed insights\n\n---\n\n*Dashboard automatically refreshes every 5 minutes | Next update: {TimeRange:end}*"
+      },
+      "name": "alertsRecommendations"
+    }
+  ],
+  "styleSettings": {
+    "spacingStyle": "narrow"
+  },
+  "$schema": "https://github.com/Microsoft/Application-Insights-Workbooks/blob/master/schema/workbook.json"
+}

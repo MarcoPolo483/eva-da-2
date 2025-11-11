@@ -1,0 +1,1655 @@
+openapi: 3.0.3
+info:
+  title: EVA Platform API - Unified Government AI Assistant
+  description: |
+    **EVA Platform API** provides unified access to multiple government AI assistants:
+    - **EVA Chat**: General conversational AI (migrated from OpenWebUI)
+    - **AssistMe**: OAS and EI eligibility assistance  
+    - **Jurisprudence**: Legal research and case law analysis
+    
+    **API Gateway**: Deployed on Apigee for enterprise-grade API management
+    **Authentication**: Azure AD integration with department-level authorization
+    **Rate Limiting**: Domain-specific quotas and spike protection
+  version: 2.0.0
+  contact:
+    name: EVA Platform Team
+    email: eva-platform@esdc-edsc.gc.ca
+  license:
+    name: Government of Canada
+    url: https://open.canada.ca/en/open-government-licence-canada
+
+servers:
+  - url: https://api.eva-platform.esdc-edsc.gc.ca
+    description: Production API (Apigee Gateway)
+  - url: https://api-dev.eva-platform.esdc-edsc.gc.ca  
+    description: Development API (Apigee Gateway)
+
+security:
+  - BearerAuth: []
+  - ApiKeyAuth: []
+
+paths:
+  # ===== EVA CHAT APIs (OpenWebUI Migration) =====
+  /api/chat/conversations:
+    get:
+      tags: [EVA Chat]
+      summary: Get user's conversation history
+      description: |
+        Retrieve organized conversation history (migrated from OpenWebUI).
+        Returns conversations grouped by time periods (Today, Previous 30 days, etc.)
+      parameters:
+        - $ref: '#/components/parameters/TenantId'
+        - $ref: '#/components/parameters/UserId'
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 50
+            maximum: 200
+        - name: domain
+          in: query
+          schema:
+            type: string
+            enum: [all, assistme, jurisprudence, general]
+            default: all
+      responses:
+        '200':
+          description: Conversation history successfully retrieved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConversationHistoryResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+
+    post:
+      tags: [EVA Chat]
+      summary: Create new conversation
+      description: Start a new conversation with automatic title generation
+      parameters:
+        - $ref: '#/components/parameters/TenantId'
+        - $ref: '#/components/parameters/UserId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                domain:
+                  type: string
+                  enum: [assistme, jurisprudence, general]
+                  description: Domain-specific conversation context
+                mode:
+                  type: string
+                  enum: [work, generative]
+                  description: Work (RAG-grounded) vs Generative (ungrounded)
+                initialMessage:
+                  type: string
+                  description: First message to start conversation
+              required: [domain, mode]
+      responses:
+        '201':
+          description: Conversation created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConversationResponse'
+
+  /api/chat/conversations/{conversationId}/messages:
+    get:
+      tags: [EVA Chat]  
+      summary: Get conversation messages
+      description: Retrieve all messages in a specific conversation with pagination
+      parameters:
+        - $ref: '#/components/parameters/ConversationId'
+        - $ref: '#/components/parameters/TenantId'
+        - $ref: '#/components/parameters/UserId'
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 1
+        - name: pageSize
+          in: query
+          schema:
+            type: integer
+            default: 50
+            maximum: 100
+      responses:
+        '200':
+          description: Messages retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessagesResponse'
+
+    post:
+      tags: [EVA Chat]
+      summary: Send message in conversation
+      description: |
+        Send a message and receive AI response. Supports both streaming and non-streaming responses.
+        Automatically routes to appropriate domain (AssistMe, Jurisprudence, or General AI).
+      parameters:
+        - $ref: '#/components/parameters/ConversationId'
+        - $ref: '#/components/parameters/TenantId'
+        - $ref: '#/components/parameters/UserId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+                  description: User's message
+                  maxLength: 4000
+                stream:
+                  type: boolean
+                  default: false
+                  description: Enable server-sent events streaming
+                context:
+                  type: object
+                  description: Additional context for domain-specific processing
+                  properties:
+                    filters:
+                      $ref: '#/components/schemas/DomainFilters'
+                    attachments:
+                      type: array
+                      items:
+                        $ref: '#/components/schemas/FileAttachment'
+              required: [message]
+      responses:
+        '200':
+          description: AI response generated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+            text/event-stream:
+              schema:
+                type: string
+                description: Server-sent events for streaming responses
+
+  /api/chat/terms-of-use:
+    get:
+      tags: [EVA Chat]
+      summary: Get current Terms of Use
+      description: Retrieve current Terms of Use version and content
+      responses:
+        '200':
+          description: Terms of Use retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TermsOfUseResponse'
+
+    post:
+      tags: [EVA Chat]
+      summary: Accept Terms of Use
+      description: Record user acceptance of Terms of Use (required for Generative mode)
+      parameters:
+        - $ref: '#/components/parameters/UserId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TermsAcceptanceRequest'
+      responses:
+        '201':
+          description: Terms acceptance recorded successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TermsAcceptanceResponse'
+
+  # ===== ASSISTME APIS (OAS Production System) =====
+  /api/assistme/eligibility/oas:
+    post:
+      tags: [AssistMe - OAS]
+      summary: Check Old Age Security eligibility
+      description: |
+        Determine OAS eligibility based on user circumstances.
+        Supports complex scenarios including international agreements.
+      parameters:
+        - $ref: '#/components/parameters/TenantId'
+        - $ref: '#/components/parameters/UserId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                age:
+                  type: integer
+                  minimum: 50
+                  maximum: 120
+                residenceYears:
+                  type: integer
+                  minimum: 0
+                  maximum: 80
+                  description: Years of residence in Canada
+                province:
+                  type: string
+                  enum: [AB, BC, MB, NB, NL, NS, NT, NU, ON, PE, QC, SK, YT]
+                maritalStatus:
+                  type: string
+                  enum: [single, married, widowed, divorced, separated]
+                incomeLevel:
+                  type: string
+                  enum: [low, medium, high, not_disclosed]
+                internationalAgreements:
+                  type: array
+                  items:
+                    type: string
+                  description: Countries with social security agreements
+              required: [age, residenceYears, province]
+      responses:
+        '200':
+          description: Eligibility assessment completed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OASEligibilityResponse'
+
+  /api/assistme/eligibility/ei:
+    post:
+      tags: [AssistMe - EI]
+      summary: Check Employment Insurance eligibility
+      description: |
+        Assess EI eligibility based on work history and circumstances.
+        Includes special benefits (maternity, parental, sickness, etc.)
+      parameters:
+        - $ref: '#/components/parameters/TenantId'
+        - $ref: '#/components/parameters/UserId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                hoursWorked:
+                  type: integer
+                  minimum: 0
+                  description: Insurable hours in qualifying period
+                regionUnemploymentRate:
+                  type: number
+                  minimum: 0
+                  maximum: 100
+                  description: Regional unemployment rate percentage
+                reasonForSeparation:
+                  type: string
+                  enum: [layoff, quit_just_cause, quit_no_just_cause, fired_misconduct, fired_no_misconduct]
+                benefitType:
+                  type: string
+                  enum: [regular, maternity, parental, sickness, compassionate, family_caregiver]
+                  default: regular
+                previousClaims:
+                  type: integer
+                  minimum: 0
+                  description: Number of previous EI claims
+              required: [hoursWorked, regionUnemploymentRate, reasonForSeparation]
+      responses:
+        '200':
+          description: EI eligibility assessment completed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EIEligibilityResponse'
+
+  /api/assistme/passport:
+    post:
+      tags: [AssistMe - Passport]
+      summary: Passport application guidance
+      description: |
+        Provide guidance for passport applications, renewals, and special circumstances.
+        Supports emergency travel documents and child passport requirements.
+      parameters:
+        - $ref: '#/components/parameters/TenantId'
+        - $ref: '#/components/parameters/UserId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                applicationType:
+                  type: string
+                  enum: [new_adult, new_child, renewal, replacement, emergency]
+                urgency:
+                  type: string
+                  enum: [standard, express, urgent]
+                applicantAge:
+                  type: integer
+                  minimum: 0
+                  maximum: 120
+                hasCanadianCitizenship:
+                  type: boolean
+                travelDate:
+                  type: string
+                  format: date
+                  description: Planned travel date
+                specialCircumstances:
+                  type: array
+                  items:
+                    type: string
+                    enum: [name_change, lost_passport, damaged_passport, stolen_passport]
+              required: [applicationType, urgency, applicantAge, hasCanadianCitizenship]
+      responses:
+        '200':
+          description: Passport guidance provided
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PassportGuidanceResponse'
+
+  # ===== JURISPRUDENCE APIS (Legal Research POC) =====
+  /api/jurisprudence/search:
+    post:
+      tags: [Jurisprudence - Search]
+      summary: Search legal cases and precedents
+      description: |
+        Advanced legal search with court hierarchy filtering, date ranges, and topic classification.
+        Supports complex legal queries with citation grounding.
+      parameters:
+        - $ref: '#/components/parameters/TenantId'
+        - $ref: '#/components/parameters/UserId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                query:
+                  type: string
+                  description: Legal search query
+                  maxLength: 1000
+                filters:
+                  type: object
+                  properties:
+                    courtHierarchy:
+                      type: array
+                      items:
+                        type: string
+                        enum: [SCC, FCA, FC, SST]
+                      description: Court levels to search
+                    dateRange:
+                      type: object
+                      properties:
+                        from:
+                          type: string
+                          format: date
+                        to:
+                          type: string
+                          format: date
+                    caseCategories:
+                      type: array
+                      items:
+                        type: string
+                        enum: [EI, CPP, Immigration, Other]
+                    language:
+                      type: string
+                      enum: [EN, FR, both]
+                      default: both
+                    approvalStatus:
+                      type: array
+                      items:
+                        type: string
+                        enum: [Approval, Denial]
+                maxResults:
+                  type: integer
+                  minimum: 1
+                  maximum: 100
+                  default: 20
+                includeSnippets:
+                  type: boolean
+                  default: true
+                  description: Include relevant text snippets in results
+              required: [query]
+      responses:
+        '200':
+          description: Legal search completed successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LegalSearchResponse'
+
+  /api/jurisprudence/cases/{caseId}:
+    get:
+      tags: [Jurisprudence - Cases]
+      summary: Get full case details
+      description: Retrieve complete case information including full text, metadata, and citations
+      parameters:
+        - name: caseId
+          in: path
+          required: true
+          schema:
+            type: string
+            pattern: '^[A-Z]{2,3}-\d{4}-\d{3,4}$'
+            example: 'SCC-2024-001'
+        - $ref: '#/components/parameters/TenantId'
+        - $ref: '#/components/parameters/UserId'
+        - name: includeFullText
+          in: query
+          schema:
+            type: boolean
+            default: false
+          description: Include full case text (large response)
+        - name: language
+          in: query
+          schema:
+            type: string
+            enum: [EN, FR]
+          description: Preferred language for multilingual cases
+      responses:
+        '200':
+          description: Case details retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LegalCaseResponse'
+        '404':
+          description: Case not found
+
+  /api/jurisprudence/analyze:
+    post:
+      tags: [Jurisprudence - Analysis]
+      summary: Analyze legal document or question
+      description: |
+        AI-powered legal analysis with citation grounding and precedent identification.
+        Supports document upload for comparative analysis.
+      parameters:
+        - $ref: '#/components/parameters/TenantId'
+        - $ref: '#/components/parameters/UserId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                analysisType:
+                  type: string
+                  enum: [precedent_search, document_analysis, case_comparison, legal_question]
+                content:
+                  type: string
+                  description: Text to analyze or legal question
+                  maxLength: 10000
+                documentId:
+                  type: string
+                  description: Reference to uploaded document
+                comparisonCases:
+                  type: array
+                  items:
+                    type: string
+                  description: Case IDs for comparative analysis
+                focus:
+                  type: array
+                  items:
+                    type: string
+                    enum: [EI_eligibility, CPP_disability, immigration_law, court_procedure]
+                  description: Areas of legal focus
+                language:
+                  type: string
+                  enum: [EN, FR, both]
+                  default: both
+              required: [analysisType, content]
+      responses:
+        '200':
+          description: Legal analysis completed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LegalAnalysisResponse'
+
+  # ===== DOCUMENT INGESTION APIS =====
+  /api/ingest/documents:
+    post:
+      tags: [Document Ingestion]
+      summary: Upload and process documents
+      description: |
+        Upload documents for processing into domain-specific knowledge bases.
+        Supports PDF, Word, and plain text with automatic classification.
+      parameters:
+        - $ref: '#/components/parameters/TenantId'
+        - name: domain
+          in: query
+          required: true
+          schema:
+            type: string
+            enum: [assistme, jurisprudence, general]
+        - name: documentType
+          in: query
+          schema:
+            type: string
+            enum: [policy, case_law, regulation, guideline, faq]
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+                  description: Document file (PDF, DOCX, TXT)
+                metadata:
+                  type: string
+                  description: JSON metadata for the document
+                classification:
+                  type: string
+                  enum: [public, internal, protected_a, protected_b]
+                  default: internal
+                language:
+                  type: string
+                  enum: [EN, FR, bilingual]
+              required: [file]
+      responses:
+        '202':
+          description: Document upload accepted for processing
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DocumentIngestionResponse'
+
+  /api/ingest/status/{jobId}:
+    get:
+      tags: [Document Ingestion]
+      summary: Check ingestion job status
+      description: Monitor the progress of document processing jobs
+      parameters:
+        - name: jobId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - $ref: '#/components/parameters/TenantId'
+      responses:
+        '200':
+          description: Job status retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IngestionJobStatus'
+
+  # ===== FEEDBACK & ANALYTICS APIS =====
+  /api/feedback:
+    post:
+      tags: [Feedback]
+      summary: Submit user feedback
+      description: |
+        Submit feedback on AI responses (thumbs up/down + qualitative feedback).
+        Used for model improvement and quality monitoring.
+      parameters:
+        - $ref: '#/components/parameters/TenantId'
+        - $ref: '#/components/parameters/UserId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                conversationId:
+                  type: string
+                  format: uuid
+                messageId:
+                  type: string
+                  format: uuid
+                rating:
+                  type: string
+                  enum: [thumbs_up, thumbs_down]
+                category:
+                  type: string
+                  enum: [accuracy, helpfulness, relevance, safety, other]
+                comment:
+                  type: string
+                  maxLength: 1000
+                  description: Optional qualitative feedback
+                domain:
+                  type: string
+                  enum: [assistme, jurisprudence, evachat]
+              required: [conversationId, messageId, rating]
+      responses:
+        '201':
+          description: Feedback submitted successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  feedbackId:
+                    type: string
+                    format: uuid
+                  message:
+                    type: string
+                    example: "Feedback submitted successfully"
+
+  # ===== ANALYTICS & MONITORING =====
+  /api/analytics/usage:
+    get:
+      tags: [Analytics]
+      summary: Get usage analytics
+      description: |
+        Retrieve usage statistics for cost attribution and monitoring.
+        Department admins can view their organization's usage.
+      parameters:
+        - $ref: '#/components/parameters/TenantId'
+        - name: timeRange
+          in: query
+          required: true
+          schema:
+            type: string
+            enum: [24h, 7d, 30d, 90d]
+        - name: domain
+          in: query
+          schema:
+            type: string
+            enum: [all, assistme, jurisprudence, evachat]
+            default: all
+        - name: granularity
+          in: query
+          schema:
+            type: string
+            enum: [hour, day, week]
+            default: day
+      security:
+        - BearerAuth: [analytics:read]
+      responses:
+        '200':
+          description: Usage analytics retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UsageAnalyticsResponse'
+        '403':
+          description: Insufficient permissions for analytics data
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Azure AD JWT token
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key
+      description: Apigee API Key for application identification
+
+  parameters:
+    TenantId:
+      name: X-Tenant-Id
+      in: header
+      required: true
+      schema:
+        type: string
+        enum: [esdc, ircc, cra, cbsa]
+      description: Department/agency identifier for multi-tenancy
+    
+    UserId:
+      name: X-User-Id
+      in: header
+      required: true
+      schema:
+        type: string
+        format: uuid
+      description: Anonymized user identifier (GDPR compliant)
+    
+    ConversationId:
+      name: conversationId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+      description: Unique conversation identifier
+
+  schemas:
+    # EVA Chat Schemas
+    ConversationHistoryResponse:
+      type: object
+      properties:
+        conversations:
+          type: object
+          properties:
+            today:
+              type: array
+              items:
+                $ref: '#/components/schemas/ConversationSummary'
+            previous30Days:
+              type: array
+              items:
+                $ref: '#/components/schemas/ConversationSummary'
+            older:
+              type: object
+              additionalProperties:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ConversationSummary'
+        metadata:
+          type: object
+          properties:
+            totalConversations:
+              type: integer
+            activeUsers:
+              type: integer
+              description: Current active users across platform
+        pagination:
+          $ref: '#/components/schemas/PaginationInfo'
+
+    ConversationSummary:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        title:
+          type: string
+          description: Auto-generated or user-provided title
+        domain:
+          type: string
+          enum: [assistme, jurisprudence, evachat]
+        mode:
+          type: string
+          enum: [work, generative]
+        lastMessageAt:
+          type: string
+          format: date-time
+        messageCount:
+          type: integer
+        preview:
+          type: string
+          description: First message or summary
+          maxLength: 200
+
+    ConversationResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        title:
+          type: string
+        domain:
+          type: string
+          enum: [assistme, jurisprudence, evachat]
+        mode:
+          type: string
+          enum: [work, generative]
+        createdAt:
+          type: string
+          format: date-time
+        messages:
+          type: array
+          items:
+            $ref: '#/components/schemas/ChatMessage'
+
+    MessagesResponse:
+      type: object
+      properties:
+        messages:
+          type: array
+          items:
+            $ref: '#/components/schemas/ChatMessage'
+        pagination:
+          $ref: '#/components/schemas/PaginationInfo'
+
+    ChatMessage:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        role:
+          type: string
+          enum: [user, assistant, system]
+        content:
+          type: string
+        timestamp:
+          type: string
+          format: date-time
+        metadata:
+          type: object
+          properties:
+            domain:
+              type: string
+            tokenUsage:
+              $ref: '#/components/schemas/TokenUsage'
+            citations:
+              type: array
+              items:
+                $ref: '#/components/schemas/Citation'
+            confidence:
+              type: number
+              minimum: 0
+              maximum: 1
+
+    MessageResponse:
+      type: object
+      properties:
+        messageId:
+          type: string
+          format: uuid
+        content:
+          type: string
+        domain:
+          type: string
+          enum: [assistme, jurisprudence, evachat]
+        metadata:
+          type: object
+          properties:
+            responseTime:
+              type: number
+              description: Response time in milliseconds
+            tokenUsage:
+              $ref: '#/components/schemas/TokenUsage'
+            citations:
+              type: array
+              items:
+                $ref: '#/components/schemas/Citation'
+            suggestedFollowUps:
+              type: array
+              items:
+                type: string
+              maxItems: 3
+
+    # Terms of Use Schemas
+    TermsOfUseResponse:
+      type: object
+      properties:
+        version:
+          type: string
+          example: "2024.1"
+        content:
+          type: object
+          properties:
+            title:
+              type: string
+            sections:
+              type: array
+              items:
+                type: object
+                properties:
+                  title:
+                    type: string
+                  content:
+                    type: string
+        links:
+          type: object
+          properties:
+            fullTerms:
+              type: string
+              format: uri
+            dosAndDonts:
+              type: string
+              format: uri
+            tbsPolicy:
+              type: string
+              format: uri
+            training:
+              type: string
+              format: uri
+        updatedAt:
+          type: string
+          format: date-time
+
+    TermsAcceptanceRequest:
+      type: object
+      properties:
+        version:
+          type: string
+          example: "2024.1"
+        checkboxes:
+          type: object
+          properties:
+            protectedBCompliance:
+              type: boolean
+            dataCollection:
+              type: boolean
+            termsAcceptance:
+              type: boolean
+            courseRegistration:
+              type: boolean
+          required: [protectedBCompliance, dataCollection, termsAcceptance, courseRegistration]
+        ipAddress:
+          type: string
+          description: User's IP address for audit trail
+      required: [version, checkboxes]
+
+    TermsAcceptanceResponse:
+      type: object
+      properties:
+        acceptanceId:
+          type: string
+          format: uuid
+        version:
+          type: string
+        acceptedAt:
+          type: string
+          format: date-time
+        expiresAt:
+          type: string
+          format: date-time
+          description: When re-acceptance is required
+
+    # AssistMe Schemas
+    OASEligibilityResponse:
+      type: object
+      properties:
+        eligible:
+          type: boolean
+        eligibilityLevel:
+          type: string
+          enum: [full, partial, none]
+        estimatedBenefit:
+          type: object
+          properties:
+            monthly:
+              type: number
+              format: currency
+            currency:
+              type: string
+              default: CAD
+        requirements:
+          type: object
+          properties:
+            ageRequirement:
+              type: boolean
+            residenceRequirement:
+              type: boolean
+            yearsRequired:
+              type: integer
+            yearsHave:
+              type: integer
+        nextSteps:
+          type: array
+          items:
+            type: string
+        additionalBenefits:
+          type: array
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+              eligible:
+                type: boolean
+              description:
+                type: string
+        explanation:
+          type: string
+          description: Natural language explanation of decision
+        confidence:
+          type: number
+          minimum: 0
+          maximum: 1
+
+    EIEligibilityResponse:
+      type: object
+      properties:
+        eligible:
+          type: boolean
+        benefitType:
+          type: string
+          enum: [regular, maternity, parental, sickness, compassionate, family_caregiver]
+        hoursRequired:
+          type: integer
+        hoursWorked:
+          type: integer
+        estimatedBenefit:
+          type: object
+          properties:
+            weeklyAmount:
+              type: number
+              format: currency
+            duration:
+              type: integer
+              description: Weeks of benefits
+            totalAmount:
+              type: number
+              format: currency
+        waitingPeriod:
+          type: integer
+          description: Days before benefits begin
+        nextSteps:
+          type: array
+          items:
+            type: string
+        explanation:
+          type: string
+        confidence:
+          type: number
+          minimum: 0
+          maximum: 1
+
+    PassportGuidanceResponse:
+      type: object
+      properties:
+        applicationForm:
+          type: string
+          description: Required form number
+        processingTime:
+          type: object
+          properties:
+            standard:
+              type: string
+            express:
+              type: string
+            urgent:
+              type: string
+        fees:
+          type: object
+          properties:
+            adult:
+              type: number
+            child:
+              type: number
+            additional:
+              type: array
+              items:
+                type: object
+                properties:
+                  service:
+                    type: string
+                  fee:
+                    type: number
+        requiredDocuments:
+          type: array
+          items:
+            type: object
+            properties:
+              document:
+                type: string
+              required:
+                type: boolean
+              alternatives:
+                type: array
+                items:
+                  type: string
+        locations:
+          type: array
+          items:
+            type: object
+            properties:
+              type:
+                type: string
+                enum: [passport_office, service_canada, receiving_agent]
+              address:
+                type: string
+              hours:
+                type: string
+        specialInstructions:
+          type: array
+          items:
+            type: string
+        confidence:
+          type: number
+          minimum: 0
+          maximum: 1
+
+    # Jurisprudence Schemas
+    LegalSearchResponse:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/LegalSearchResult'
+        totalResults:
+          type: integer
+        facets:
+          type: object
+          properties:
+            courts:
+              type: array
+              items:
+                type: object
+                properties:
+                  court:
+                    type: string
+                  count:
+                    type: integer
+            years:
+              type: array
+              items:
+                type: object
+                properties:
+                  year:
+                    type: integer
+                  count:
+                    type: integer
+            categories:
+              type: array
+              items:
+                type: object
+                properties:
+                  category:
+                    type: string
+                  count:
+                    type: integer
+        searchMetadata:
+          type: object
+          properties:
+            query:
+              type: string
+            searchTime:
+              type: number
+              description: Search time in milliseconds
+            indexVersion:
+              type: string
+
+    LegalSearchResult:
+      type: object
+      properties:
+        caseId:
+          type: string
+        title:
+          type: string
+        court:
+          type: string
+          enum: [SCC, FCA, FC, SST]
+        decisionDate:
+          type: string
+          format: date
+        judges:
+          type: array
+          items:
+            type: string
+        category:
+          type: string
+          enum: [EI, CPP, Immigration, Other]
+        language:
+          type: string
+          enum: [EN, FR]
+        outcome:
+          type: string
+          enum: [Approval, Denial, Mixed]
+        relevanceScore:
+          type: number
+          minimum: 0
+          maximum: 1
+        snippets:
+          type: array
+          items:
+            type: object
+            properties:
+              text:
+                type: string
+              highlights:
+                type: array
+                items:
+                  type: string
+        citations:
+          type: array
+          items:
+            $ref: '#/components/schemas/Citation'
+
+    LegalCaseResponse:
+      type: object
+      properties:
+        caseId:
+          type: string
+        metadata:
+          type: object
+          properties:
+            title:
+              type: string
+            court:
+              type: string
+            decisionDate:
+              type: string
+              format: date
+            judges:
+              type: array
+              items:
+                type: string
+            parties:
+              type: object
+              properties:
+                appellant:
+                  type: string
+                respondent:
+                  type: string
+            docketNumber:
+              type: string
+            category:
+              type: string
+            language:
+              type: string
+        summary:
+          type: string
+          description: AI-generated case summary
+        keyPoints:
+          type: array
+          items:
+            type: string
+        fullText:
+          type: string
+          description: Complete case text (if requested)
+        relatedCases:
+          type: array
+          items:
+            type: object
+            properties:
+              caseId:
+                type: string
+              title:
+                type: string
+              relevance:
+                type: string
+                enum: [highly_relevant, relevant, somewhat_relevant]
+        citations:
+          type: array
+          items:
+            $ref: '#/components/schemas/Citation'
+
+    LegalAnalysisResponse:
+      type: object
+      properties:
+        analysisId:
+          type: string
+          format: uuid
+        analysisType:
+          type: string
+          enum: [precedent_search, document_analysis, case_comparison, legal_question]
+        summary:
+          type: string
+          description: Executive summary of analysis
+        keyFindings:
+          type: array
+          items:
+            type: object
+            properties:
+              finding:
+                type: string
+              importance:
+                type: string
+                enum: [high, medium, low]
+              supportingCases:
+                type: array
+                items:
+                  type: string
+        precedents:
+          type: array
+          items:
+            type: object
+            properties:
+              caseId:
+                type: string
+              relevance:
+                type: string
+                enum: [directly_applicable, analogous, distinguishable]
+              reasoning:
+                type: string
+        recommendations:
+          type: array
+          items:
+            type: string
+        confidence:
+          type: number
+          minimum: 0
+          maximum: 1
+        citations:
+          type: array
+          items:
+            $ref: '#/components/schemas/Citation'
+        generatedAt:
+          type: string
+          format: date-time
+
+    # Document Ingestion Schemas
+    DocumentIngestionResponse:
+      type: object
+      properties:
+        jobId:
+          type: string
+          format: uuid
+        documentId:
+          type: string
+          format: uuid
+        status:
+          type: string
+          enum: [queued, processing, completed, failed]
+        estimatedCompletionTime:
+          type: string
+          format: date-time
+        statusUrl:
+          type: string
+          format: uri
+
+    IngestionJobStatus:
+      type: object
+      properties:
+        jobId:
+          type: string
+          format: uuid
+        status:
+          type: string
+          enum: [queued, processing, completed, failed]
+        progress:
+          type: object
+          properties:
+            currentStep:
+              type: string
+            stepsCompleted:
+              type: integer
+            totalSteps:
+              type: integer
+            percentComplete:
+              type: number
+              minimum: 0
+              maximum: 100
+        results:
+          type: object
+          properties:
+            documentsProcessed:
+              type: integer
+            pagesProcessed:
+              type: integer
+            vectorsCreated:
+              type: integer
+            errors:
+              type: array
+              items:
+                type: object
+                properties:
+                  error:
+                    type: string
+                  page:
+                    type: integer
+        completedAt:
+          type: string
+          format: date-time
+        errorMessage:
+          type: string
+
+    # Analytics Schemas
+    UsageAnalyticsResponse:
+      type: object
+      properties:
+        timeRange:
+          type: object
+          properties:
+            from:
+              type: string
+              format: date-time
+            to:
+              type: string
+              format: date-time
+        summary:
+          type: object
+          properties:
+            totalRequests:
+              type: integer
+            uniqueUsers:
+              type: integer
+            totalCost:
+              type: number
+              format: currency
+            avgResponseTime:
+              type: number
+        domainBreakdown:
+          type: array
+          items:
+            type: object
+            properties:
+              domain:
+                type: string
+              requests:
+                type: integer
+              users:
+                type: integer
+              cost:
+                type: number
+        timeSeriesData:
+          type: array
+          items:
+            type: object
+            properties:
+              timestamp:
+                type: string
+                format: date-time
+              requests:
+                type: integer
+              users:
+                type: integer
+              cost:
+                type: number
+        topQueries:
+          type: array
+          items:
+            type: object
+            properties:
+              query:
+                type: string
+              count:
+                type: integer
+              domain:
+                type: string
+
+    # Common Schemas
+    Citation:
+      type: object
+      properties:
+        id:
+          type: string
+        title:
+          type: string
+        source:
+          type: string
+        url:
+          type: string
+          format: uri
+        relevanceScore:
+          type: number
+          minimum: 0
+          maximum: 1
+        snippet:
+          type: string
+        metadata:
+          type: object
+          additionalProperties: true
+
+    TokenUsage:
+      type: object
+      properties:
+        promptTokens:
+          type: integer
+        completionTokens:
+          type: integer
+        totalTokens:
+          type: integer
+        cost:
+          type: number
+          format: currency
+
+    DomainFilters:
+      type: object
+      properties:
+        assistme:
+          type: object
+          properties:
+            benefitType:
+              type: array
+              items:
+                type: string
+                enum: [OAS, EI, CPP, passport]
+            province:
+              type: string
+        jurisprudence:
+          type: object
+          properties:
+            courts:
+              type: array
+              items:
+                type: string
+                enum: [SCC, FCA, FC, SST]
+            dateRange:
+              type: object
+              properties:
+                from:
+                  type: string
+                  format: date
+                to:
+                  type: string
+                  format: date
+            categories:
+              type: array
+              items:
+                type: string
+                enum: [EI, CPP, Immigration]
+
+    FileAttachment:
+      type: object
+      properties:
+        filename:
+          type: string
+        mimeType:
+          type: string
+        size:
+          type: integer
+        content:
+          type: string
+          format: base64
+        description:
+          type: string
+
+    PaginationInfo:
+      type: object
+      properties:
+        page:
+          type: integer
+        pageSize:
+          type: integer
+        totalPages:
+          type: integer
+        totalItems:
+          type: integer
+        hasNext:
+          type: boolean
+        hasPrevious:
+          type: boolean
+
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            code:
+              type: string
+            message:
+              type: string
+            details:
+              type: string
+            requestId:
+              type: string
+              format: uuid
+            timestamp:
+              type: string
+              format: date-time
+
+  responses:
+    Unauthorized:
+      description: Authentication required or invalid token
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+
+    Forbidden:
+      description: Insufficient permissions for requested resource
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+
+    RateLimited:
+      description: Rate limit exceeded
+      headers:
+        X-RateLimit-Limit:
+          schema:
+            type: integer
+          description: Request limit per hour
+        X-RateLimit-Remaining:
+          schema:
+            type: integer
+          description: Remaining requests in current window
+        X-RateLimit-Reset:
+          schema:
+            type: integer
+          description: Time when rate limit resets (Unix timestamp)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+
+# Apigee-specific extensions
+x-google-management:
+  metrics:
+    - name: eva_requests_total
+      displayName: "Total EVA Requests"
+      description: "Total number of requests to EVA Platform APIs"
+      valueType: INT64
+      metricKind: CUMULATIVE
+    - name: eva_response_time
+      displayName: "EVA Response Time"
+      description: "Response time for EVA Platform APIs"
+      valueType: DOUBLE
+      metricKind: GAUGE
+    - name: eva_tokens_used
+      displayName: "OpenAI Tokens Used"
+      description: "Total OpenAI tokens consumed"
+      valueType: INT64
+      metricKind: CUMULATIVE
+  
+  quotas:
+    - name: eva_chat_quota
+      displayName: "EVA Chat Request Quota"
+      description: "Request quota for EVA Chat APIs"
+      default: 1000
+      maxValue: 10000
+    - name: assistme_quota
+      displayName: "AssistMe Request Quota"
+      description: "Request quota for AssistMe APIs"
+      default: 500
+      maxValue: 5000
+    - name: jurisprudence_quota
+      displayName: "Jurisprudence Request Quota"
+      description: "Request quota for Jurisprudence APIs"
+      default: 200
+      maxValue: 2000
+
+tags:
+  - name: EVA Chat
+    description: General conversational AI (migrated from OpenWebUI)
+  - name: AssistMe - OAS
+    description: Old Age Security eligibility and guidance
+  - name: AssistMe - EI
+    description: Employment Insurance eligibility and calculations
+  - name: AssistMe - Passport
+    description: Passport application guidance and requirements
+  - name: Jurisprudence - Search
+    description: Legal case search and discovery
+  - name: Jurisprudence - Cases
+    description: Individual case details and analysis
+  - name: Jurisprudence - Analysis
+    description: AI-powered legal analysis and precedent research
+  - name: Document Ingestion
+    description: Document upload and processing for knowledge bases
+  - name: Feedback
+    description: User feedback collection and quality monitoring
+  - name: Analytics
+    description: Usage analytics and cost attribution

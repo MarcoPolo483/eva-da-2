@@ -1,0 +1,232 @@
+// EVA DA 2.0 - Kusto Queries for Advanced Monitoring
+// Agent 3 - Monitoring Expert - Performance Optimization Queries
+
+// === COSMOS DB MONITORING QUERIES ===
+
+// 1. Cosmos DB RU Consumption Analysis
+let CosmosRUAnalysis = AzureDiagnostics
+| where ResourceProvider == "MICROSOFT.DOCUMENTDB"
+| where Category == "DataPlaneRequests"
+| where TimeGenerated >= ago(1h)
+| extend RU = todouble(requestCharge_s)
+| extend OperationType = tostring(operationType_s)
+| extend StatusCode = toint(statusCode_s)
+| summarize 
+    TotalRU = sum(RU),
+    AvgRU = avg(RU),
+    MaxRU = max(RU),
+    RequestCount = count(),
+    SuccessRate = countif(StatusCode < 400) * 100.0 / count()
+    by bin(TimeGenerated, 5m), OperationType
+| order by TimeGenerated desc;
+
+// 2. Cosmos DB Throttling Detection
+let CosmosThrottling = AzureDiagnostics
+| where ResourceProvider == "MICROSOFT.DOCUMENTDB"
+| where Category == "DataPlaneRequests"
+| where TimeGenerated >= ago(1h)
+| where toint(statusCode_s) == 429  // Too Many Requests
+| extend ActivityId = tostring(activityId_g)
+| extend PartitionKey = tostring(partitionKey_s)
+| extend CollectionName = tostring(collectionName_s)
+| summarize 
+    ThrottleCount = count(),
+    UniquePartitions = dcount(PartitionKey)
+    by bin(TimeGenerated, 1m), CollectionName
+| where ThrottleCount > 0
+| order by TimeGenerated desc;
+
+// 3. Cosmos DB Query Performance
+let CosmosQueryPerf = AzureDiagnostics
+| where ResourceProvider == "MICROSOFT.DOCUMENTDB"
+| where Category == "QueryRuntimeStatistics"
+| where TimeGenerated >= ago(1h)
+| extend QueryText = tostring(querytext_s)
+| extend Duration = todouble(totalExecutionTimeInMs_s)
+| extend RU = todouble(requestCharge_s)
+| extend IndexUtilization = todouble(indexUtilizationRatio_s) * 100
+| summarize 
+    AvgDuration = avg(Duration),
+    MaxDuration = max(Duration),
+    AvgRU = avg(RU),
+    MaxRU = max(RU),
+    AvgIndexUtil = avg(IndexUtilization),
+    QueryCount = count()
+    by tostring(QueryText)
+| where QueryCount > 10  // Focus on frequently executed queries
+| order by AvgDuration desc;
+
+// === AZURE FUNCTIONS MONITORING QUERIES ===
+
+// 4. Function App Performance Analysis
+let FunctionPerformance = AzureDiagnostics
+| where ResourceProvider == "MICROSOFT.WEB"
+| where Category == "FunctionAppLogs"
+| where TimeGenerated >= ago(1h)
+| extend FunctionName = tostring(functionName_s)
+| extend Duration = todouble(duration_s)
+| extend Success = tobool(success_s)
+| summarize 
+    AvgDuration = avg(Duration),
+    P95Duration = percentile(Duration, 95),
+    MaxDuration = max(Duration),
+    SuccessRate = countif(Success) * 100.0 / count(),
+    ExecutionCount = count()
+    by bin(TimeGenerated, 5m), FunctionName
+| order by TimeGenerated desc;
+
+// 5. Function App Error Analysis
+let FunctionErrors = traces
+| where timestamp >= ago(1h)
+| where severityLevel >= 3  // Warning and above
+| extend FunctionName = tostring(customDimensions.["prop__functionName"])
+| extend ErrorMessage = message
+| extend Category = tostring(customDimensions.["Category"])
+| summarize 
+    ErrorCount = count(),
+    UniqueErrors = dcount(ErrorMessage),
+    LastError = max(timestamp)
+    by FunctionName, Category
+| where ErrorCount > 0
+| order by ErrorCount desc;
+
+// === APPLICATION INSIGHTS MONITORING QUERIES ===
+
+// 6. API Response Time Analysis
+let APIPerformance = requests
+| where timestamp >= ago(1h)
+| extend APIEndpoint = tostring(name)
+| extend ResponseTime = duration
+| extend Success = success
+| summarize 
+    AvgResponseTime = avg(ResponseTime),
+    P95ResponseTime = percentile(ResponseTime, 95),
+    P99ResponseTime = percentile(ResponseTime, 99),
+    SuccessRate = countif(Success) * 100.0 / count(),
+    RequestCount = count()
+    by bin(timestamp, 5m), APIEndpoint
+| order by timestamp desc;
+
+// 7. Dependency Performance Monitoring
+let DependencyPerf = dependencies
+| where timestamp >= ago(1h)
+| extend ServiceName = tostring(target)
+| extend DependencyType = tostring(type)
+| extend Duration = duration
+| extend Success = success
+| summarize 
+    AvgDuration = avg(Duration),
+    P95Duration = percentile(Duration, 95),
+    MaxDuration = max(Duration),
+    SuccessRate = countif(Success) * 100.0 / count(),
+    CallCount = count()
+    by bin(timestamp, 5m), ServiceName, DependencyType
+| order by timestamp desc;
+
+// === AGENT COORDINATION MONITORING ===
+
+// 8. Multi-Agent System Health
+let AgentHealth = customEvents
+| where timestamp >= ago(1h)
+| where name startswith "Agent"
+| extend AgentId = tostring(customDimensions.["AgentId"])
+| extend HealthStatus = tostring(customDimensions.["HealthStatus"])
+| extend AgentType = tostring(customDimensions.["AgentType"])
+| summarize 
+    HealthCheckCount = count(),
+    LastHealthCheck = max(timestamp),
+    HealthyChecks = countif(HealthStatus == "Healthy"),
+    HealthScore = countif(HealthStatus == "Healthy") * 100.0 / count()
+    by AgentId, AgentType
+| order by HealthScore asc;
+
+// 9. Inter-Agent Communication Metrics
+let InterAgentComms = customEvents
+| where timestamp >= ago(1h)
+| where name == "AgentCommunication"
+| extend FromAgent = tostring(customDimensions.["FromAgent"])
+| extend ToAgent = tostring(customDimensions.["ToAgent"])
+| extend MessageType = tostring(customDimensions.["MessageType"])
+| extend Success = tobool(customDimensions.["Success"])
+| summarize 
+    MessageCount = count(),
+    SuccessRate = countif(Success) * 100.0 / count(),
+    LastCommunication = max(timestamp)
+    by FromAgent, ToAgent, MessageType
+| order by MessageCount desc;
+
+// === SECURITY MONITORING QUERIES ===
+
+// 10. Authentication Failure Detection
+let AuthFailures = SigninLogs
+| where TimeGenerated >= ago(1h)
+| where ResultType != 0  // Failed sign-ins
+| extend UserPrincipalName = tostring(UserPrincipalName)
+| extend ClientApp = tostring(ClientAppUsed)
+| extend Location = tostring(LocationDetails.city)
+| extend IPAddress = tostring(IPAddress)
+| summarize 
+    FailureCount = count(),
+    UniqueIPs = dcount(IPAddress),
+    LastFailure = max(TimeGenerated)
+    by UserPrincipalName, ClientApp
+| where FailureCount >= 3  // Multiple failures indicate potential issues
+| order by FailureCount desc;
+
+// === PERFORMANCE OPTIMIZATION QUERIES ===
+
+// 11. Resource Utilization Trends
+let ResourceUtilization = Perf
+| where TimeGenerated >= ago(24h)
+| where ObjectName == "Processor" and CounterName == "% Processor Time" and InstanceName == "_Total"
+| extend CPUUtilization = CounterValue
+| summarize 
+    AvgCPU = avg(CPUUtilization),
+    MaxCPU = max(CPUUtilization),
+    P95CPU = percentile(CPUUtilization, 95)
+    by bin(TimeGenerated, 1h), Computer
+| order by TimeGenerated desc;
+
+// 12. Memory Usage Analysis
+let MemoryAnalysis = Perf
+| where TimeGenerated >= ago(24h)
+| where ObjectName == "Memory" and CounterName == "Available MBytes"
+| extend AvailableMemoryMB = CounterValue
+| summarize 
+    AvgAvailableMemory = avg(AvailableMemoryMB),
+    MinAvailableMemory = min(AvailableMemoryMB)
+    by bin(TimeGenerated, 1h), Computer
+| order by TimeGenerated desc;
+
+// === ALERTING QUERIES FOR CUSTOM ALERTS ===
+
+// 13. High RU Consumption Alert
+let HighRUAlert = AzureDiagnostics
+| where ResourceProvider == "MICROSOFT.DOCUMENTDB"
+| where Category == "DataPlaneRequests"
+| where TimeGenerated >= ago(5m)
+| extend RU = todouble(requestCharge_s)
+| summarize TotalRU = sum(RU) by bin(TimeGenerated, 1m)
+| where TotalRU > 1000  // Threshold for high RU consumption
+| project TimeGenerated, TotalRU, AlertLevel = "High";
+
+// 14. Function App Cold Start Detection
+let ColdStartAlert = traces
+| where timestamp >= ago(10m)
+| where message contains "cold start" or message contains "function host"
+| extend FunctionName = tostring(customDimensions.["prop__functionName"])
+| summarize ColdStartCount = count() by FunctionName
+| where ColdStartCount > 2  // Multiple cold starts in short period
+| project FunctionName, ColdStartCount, AlertLevel = "Warning";
+
+// === DASHBOARD QUERIES FOR REAL-TIME MONITORING ===
+
+// 15. Real-Time System Overview
+let SystemOverview = union 
+    (requests | where timestamp >= ago(1h) | summarize RequestCount = count(), AvgDuration = avg(duration) | extend MetricType = "Requests"),
+    (dependencies | where timestamp >= ago(1h) | summarize DependencyCount = count(), AvgDuration = avg(duration) | extend MetricType = "Dependencies"),
+    (exceptions | where timestamp >= ago(1h) | summarize ExceptionCount = count() | extend MetricType = "Exceptions", AvgDuration = 0.0)
+| project MetricType, Value = coalesce(RequestCount, DependencyCount, ExceptionCount), AvgDuration;
+
+// Use these queries in your Log Analytics workspace for comprehensive monitoring
+// Each query can be saved as a function for reuse in dashboards and alerts

@@ -1,0 +1,1238 @@
+openapi: 3.0.3
+info:
+  title: EVA Configuration & Platform API
+  version: 0.1.0
+  description: >
+    EVA Foundation Configuration API - manages projects, translations, RBAC, 
+    feature flags, and chat services. This is the "faceless platform" that powers
+    EVA DA 2.0, EVA Chat, Jurisprudence, AssistMe, and external consumers.
+
+servers:
+  - url: https://{gatewayHost}/{basePath}
+    variables:
+      gatewayHost:
+        default: api.eva.esdc.gc.ca
+      basePath:
+        default: eva/v1
+
+tags:
+  - name: rag
+    description: Retrieval-Augmented Generation services
+  - name: doc
+    description: Document Intelligence services
+  - name: chat
+    description: General chat services (EVA Chat replacement)
+  - name: agents
+    description: Multi-step workflow orchestration and agent services
+  - name: config
+    description: Configuration management (projects, translations)
+  - name: rbac
+    description: Role-Based Access Control
+  - name: featureflags
+    description: Feature flag management
+  - name: guardrails
+    description: Safety and policy enforcement
+  - name: ingest
+    description: Document ingestion and knowledge management
+  - name: agents
+    description: Agent workflows and orchestration
+
+components:
+  securitySchemes:
+    azureAd:
+      type: oauth2
+      flows:
+        authorizationCode:
+          authorizationUrl: https://login.microsoftonline.com/{tenantId}/oauth2/v2.0/authorize
+          tokenUrl: https://login.microsoftonline.com/{tenantId}/oauth2/v2.0/token
+          scopes:
+            api://eva.default/user_impersonation: Access EVA Platform API
+
+  parameters:
+    ProjectIdHeader:
+      name: x-project
+      in: header
+      required: true
+      schema:
+        type: string
+      description: Project identifier (e.g., jurisprudence, eva-chat, assistme)
+      example: jurisprudence
+
+    AppIdHeader:
+      name: x-app
+      in: header
+      required: true
+      schema:
+        type: string
+      description: Client application identifier (e.g., eva-da-web, curam-widget)
+      example: eva-da-web
+
+    FeatureHeader:
+      name: x-feature
+      in: header
+      required: true
+      schema:
+        type: string
+      description: Feature/endpoint family (e.g., rag-answer, chat-completion)
+      example: rag-answer
+
+    EnvironmentHeader:
+      name: x-environment
+      in: header
+      required: true
+      schema:
+        type: string
+        enum: [dev, test, prod]
+      description: Environment for cost segregation
+      example: prod
+
+    CostCenterHeader:
+      name: x-cost-center
+      in: header
+      required: false
+      schema:
+        type: string
+      description: Financial code for chargeback/showback
+      example: JUR-9001
+
+    UserIdHeader:
+      name: x-user
+      in: header
+      required: true
+      schema:
+        type: string
+      description: Pseudonymous user ID (hashed, not PII)
+      example: hashed-abc123def456
+
+  schemas:
+    # RAG Schemas
+    RagRetrieveRequest:
+      type: object
+      required: [projectId, query]
+      properties:
+        projectId:
+          type: string
+          example: jurisprudence
+        query:
+          type: string
+          example: What are CPP-D chronic pain eligibility rules?
+        filters:
+          type: object
+          additionalProperties: true
+          example: { documentType: 'policy' }
+        topK:
+          type: integer
+          default: 5
+          example: 10
+
+    RagRetrieveResponse:
+      type: object
+      properties:
+        chunks:
+          type: array
+          items:
+            type: object
+            properties:
+              content:
+                type: string
+              score:
+                type: number
+              metadata:
+                type: object
+              citation:
+                type: string
+
+    RagAnswerRequest:
+      type: object
+      required: [projectId, query]
+      properties:
+        projectId:
+          type: string
+        query:
+          type: string
+        history:
+          type: array
+          items:
+            type: object
+            properties:
+              role:
+                type: string
+                enum: [user, assistant]
+              content:
+                type: string
+        overrides:
+          type: object
+          properties:
+            temperature:
+              type: number
+            topK:
+              type: integer
+            semanticRanker:
+              type: boolean
+
+    RagAnswerResponse:
+      type: object
+      properties:
+        answer:
+          type: string
+        citations:
+          type: array
+          items:
+            type: string
+        thoughts:
+          type: string
+        metadata:
+          type: object
+
+    # Chat Schemas (EVA Chat)
+    ChatCompletionRequest:
+      type: object
+      required: [message]
+      properties:
+        message:
+          type: string
+          example: Explain Azure Cosmos DB partitioning
+        conversationId:
+          type: string
+          format: uuid
+          example: 550e8400-e29b-41d4-a716-446655440000
+        systemPrompt:
+          type: string
+          example: You are a helpful AI assistant for ESDC employees.
+        temperature:
+          type: number
+          default: 0.7
+          minimum: 0
+          maximum: 2
+        maxTokens:
+          type: integer
+          default: 1000
+
+    ChatCompletionResponse:
+      type: object
+      properties:
+        answer:
+          type: string
+        conversationId:
+          type: string
+          format: uuid
+        tokens:
+          type: object
+          properties:
+            prompt:
+              type: integer
+            completion:
+              type: integer
+            total:
+              type: integer
+        model:
+          type: string
+          example: gpt-4
+
+    ConversationHistoryItem:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        title:
+          type: string
+        lastMessage:
+          type: string
+        timestamp:
+          type: string
+          format: date-time
+        messageCount:
+          type: integer
+
+    # Project Configuration Schemas
+    ProjectConfig:
+      type: object
+      required: [id, label, domain, owner]
+      properties:
+        id:
+          type: string
+          example: jurisprudence
+        label:
+          type: string
+          example: Jurisprudence Research Assistant
+        domain:
+          type: string
+          example: Legal / Case Law
+        owner:
+          type: string
+          example: Legal Services
+        costCentre:
+          type: string
+          example: JUR-9001
+        description:
+          type: string
+        theme:
+          type: object
+          properties:
+            primary:
+              type: string
+              example: '#0055a4'
+            background:
+              type: string
+            surface:
+              type: string
+            baseFontPx:
+              type: integer
+        ragIndex:
+          type: object
+        ragRetrieval:
+          type: object
+        guardrails:
+          type: object
+        suggestedQuestions:
+          type: array
+          items:
+            type: object
+            properties:
+              en:
+                type: string
+              fr:
+                type: string
+
+    # RBAC Schemas
+    User:
+      type: object
+      required: [email, globalRole]
+      properties:
+        id:
+          type: string
+        email:
+          type: string
+          format: email
+        displayName:
+          type: string
+        globalRole:
+          type: string
+          enum: [user, projectAdmin, systemAdmin]
+        projectAccess:
+          type: array
+          items:
+            type: object
+            properties:
+              projectId:
+                type: string
+              role:
+                type: string
+                enum: [reader, contributor, admin]    # Feature Flag Schemas
+    FeatureFlag:
+      type: object
+      properties:
+        key:
+          type: string
+          example: enableMultitenancy
+        enabled:
+          type: boolean
+        description:
+          type: string
+        rolloutPercentage:
+          type: integer
+          minimum: 0
+          maximum: 100
+
+    # Agent Schemas
+    AgentExecutionMetadata:
+      type: object
+      properties:
+        duration:
+          type: number
+          description: Execution time in milliseconds
+        tokensUsed:
+          type: object
+          properties:
+            prompt:
+              type: integer
+            completion:
+              type: integer
+            total:
+              type: integer
+        toolsInvoked:
+          type: array
+          items:
+            type: string
+        cost:
+          type: object
+          properties:
+            openaiTokens:
+              type: number
+            searchRequests:
+              type: number
+            computeTime:
+              type: number
+            total:
+              type: number
+        model:
+          type: string
+          example: gpt-4
+        workflowVersion:
+          type: string
+          example: v1.2.0
+
+    WorkflowStep:
+      type: object
+      properties:
+        stepId:
+          type: string
+        stepName:
+          type: string
+        status:
+          type: string
+          enum: [pending, running, completed, failed, skipped]
+        startedAt:
+          type: string
+          format: date-time
+        completedAt:
+          type: string
+          format: date-time
+        duration:
+          type: number
+        input:
+          type: object
+        output:
+          type: object
+        error:
+          type: string
+        toolsUsed:
+          type: array
+          items:
+            type: string
+
+    AgentTool:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        version:
+          type: string
+        parameters:
+          type: object
+        capabilities:
+          type: array
+          items:
+            type: string
+
+    # Agent Execution Metadata Schema
+    AgentExecutionMetadata:
+      type: object
+      properties:
+        executionId:
+          type: string
+          format: uuid
+        initiatedBy:
+          type: string
+        initiatedAt:
+          type: string
+          format: date-time
+        completedAt:
+          type: string
+          format: date-time
+        duration:
+          type: number
+        status:
+          type: string
+          enum: [pending, running, completed, failed, cancelled]
+
+    # Agent Schemas
+    AgentExecutionMetadata:
+      type: object
+      properties:
+        duration:
+          type: number
+          description: Execution time in milliseconds
+        tokensUsed:
+          type: object
+          properties:
+            prompt:
+              type: integer
+            completion:
+              type: integer
+            total:
+              type: integer
+        toolsInvoked:
+          type: array
+          items:
+            type: string
+        cost:
+          type: object
+          properties:
+            openaiTokens:
+              type: number
+            searchRequests:
+              type: number
+            computeTime:
+              type: number
+            total:
+              type: number
+        model:
+          type: string
+          example: gpt-4
+        workflowVersion:
+          type: string
+          example: v1.2.0
+
+    WorkflowStep:
+      type: object
+      properties:
+        stepId:
+          type: string
+        stepName:
+          type: string
+        status:
+          type: string
+          enum: [pending, running, completed, failed, skipped]
+        startedAt:
+          type: string
+          format: date-time
+        completedAt:
+          type: string
+          format: date-time
+        duration:
+          type: number
+        input:
+          type: object
+        output:
+          type: object
+        error:
+          type: string
+        toolsUsed:
+          type: array
+          items:
+            type: string
+
+    AgentTool:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        version:
+          type: string
+        parameters:
+          type: object
+        capabilities:
+          type: array
+          items:
+            type: string
+
+security:
+  - azureAd: []
+
+paths:
+  # ===== RAG SERVICES =====
+  /rag/retrieve:
+    post:
+      tags: [rag]
+      summary: Retrieve relevant chunks from project corpus
+      operationId: ragRetrieve
+      parameters:
+        - $ref: '#/components/parameters/ProjectIdHeader'
+        - $ref: '#/components/parameters/AppIdHeader'
+        - $ref: '#/components/parameters/FeatureHeader'
+        - $ref: '#/components/parameters/EnvironmentHeader'
+        - $ref: '#/components/parameters/UserIdHeader'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RagRetrieveRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RagRetrieveResponse'
+
+  /rag/answer:
+    post:
+      tags: [rag]
+      summary: RAG answer with citations and reasoning
+      operationId: ragAnswer
+      parameters:
+        - $ref: '#/components/parameters/ProjectIdHeader'
+        - $ref: '#/components/parameters/AppIdHeader'
+        - $ref: '#/components/parameters/FeatureHeader'
+        - $ref: '#/components/parameters/EnvironmentHeader'
+        - $ref: '#/components/parameters/UserIdHeader'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RagAnswerRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RagAnswerResponse'
+
+  # ===== CHAT SERVICES (EVA Chat) =====
+  /chat/completion:
+    post:
+      tags: [chat]
+      summary: General GPT-4 chat completion
+      description: EVA Chat replacement - general purpose AI without RAG
+      operationId: chatCompletion
+      parameters:
+        - $ref: '#/components/parameters/ProjectIdHeader'
+        - $ref: '#/components/parameters/AppIdHeader'
+        - $ref: '#/components/parameters/FeatureHeader'
+        - $ref: '#/components/parameters/EnvironmentHeader'
+        - $ref: '#/components/parameters/UserIdHeader'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChatCompletionRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChatCompletionResponse'
+
+  /chat/stream:
+    post:
+      tags: [chat]
+      summary: Streaming chat completion (SSE)
+      operationId: chatStream
+      parameters:
+        - $ref: '#/components/parameters/ProjectIdHeader'
+        - $ref: '#/components/parameters/AppIdHeader'
+        - $ref: '#/components/parameters/FeatureHeader'
+        - $ref: '#/components/parameters/EnvironmentHeader'
+        - $ref: '#/components/parameters/UserIdHeader'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChatCompletionRequest'
+      responses:
+        '200':
+          description: Server-Sent Events stream
+          content:
+            text/event-stream:
+              schema:
+                type: string
+
+  /chat/history:
+    get:
+      tags: [chat]
+      summary: Get user's conversation history
+      operationId: getChatHistory
+      parameters:
+        - $ref: '#/components/parameters/UserIdHeader'
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 20
+        - name: offset
+          in: query
+          schema:
+            type: integer
+            default: 0
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  conversations:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ConversationHistoryItem'
+                  total:
+                    type: integer
+
+  /chat/history/{conversationId}:
+    delete:
+      tags: [chat]
+      summary: Delete conversation (GDPR compliance)
+      operationId: deleteChatConversation
+      parameters:
+        - name: conversationId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - $ref: '#/components/parameters/UserIdHeader'
+      responses:
+        '204':
+          description: No Content
+
+  # ===== CONFIGURATION APIs =====
+  /config/projects:
+    get:
+      tags: [config]
+      summary: List all projects
+      operationId: getProjects
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  projects:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ProjectConfig'
+
+    post:
+      tags: [config]
+      summary: Create new project
+      operationId: createProject
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProjectConfig'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  created:
+                    type: boolean
+                  projectId:
+                    type: string
+
+  /config/projects/{projectId}:
+    get:
+      tags: [config]
+      summary: Get project by ID
+      operationId: getProject
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectConfig'
+
+    put:
+      tags: [config]
+      summary: Update project configuration
+      operationId: updateProject
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProjectConfig'
+      responses:
+        '200':
+          description: OK
+
+    delete:
+      tags: [config]
+      summary: Delete project (except admin)
+      operationId: deleteProject
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: No Content
+        '403':
+          description: Forbidden (cannot delete admin project)
+
+  /config/translations/{language}:
+    get:
+      tags: [config]
+      summary: Get translations for language
+      operationId: getTranslations
+      parameters:
+        - name: language
+          in: path
+          required: true
+          schema:
+            type: string
+            enum: [en, fr]
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: string
+
+    put:
+      tags: [config]
+      summary: Update translations
+      operationId: updateTranslations
+      parameters:
+        - name: language
+          in: path
+          required: true
+          schema:
+            type: string
+            enum: [en, fr]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties:
+                type: string
+      responses:
+        '200':
+          description: OK
+
+  # ===== RBAC APIs =====
+  /rbac/users:
+    get:
+      tags: [rbac]
+      summary: List all users
+      operationId: getUsers
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  users:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/User'
+
+    post:
+      tags: [rbac]
+      summary: Create or update user
+      operationId: upsertUser
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        '201':
+          description: Created or Updated
+
+  /rbac/users/{email}:
+    get:
+      tags: [rbac]
+      summary: Get user by email
+      operationId: getUser
+      parameters:
+        - name: email
+          in: path
+          required: true
+          schema:
+            type: string
+            format: email
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+
+    delete:
+      tags: [rbac]
+      summary: Delete user
+      operationId: deleteUser
+      parameters:
+        - name: email
+          in: path
+          required: true
+          schema:
+            type: string
+            format: email
+      responses:
+        '204':
+          description: No Content
+
+  # ===== FEATURE FLAGS APIs =====
+  /featureflags:
+    get:
+      tags: [featureflags]
+      summary: Get all feature flags
+      operationId: getFeatureFlags
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  flags:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/FeatureFlag'
+
+  /featureflags/{key}:
+    put:
+      tags: [featureflags]
+      summary: Update feature flag
+      operationId: updateFeatureFlag
+      parameters:
+        - name: key
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                enabled:
+                  type: boolean
+                rolloutPercentage:
+                  type: integer
+      responses:
+        '200':
+          description: OK
+
+  # ===== AGENT & WORKFLOW APIs (NEW) =====
+  /agents/research:
+    post:
+      tags: [agents]
+      summary: Execute multi-step research workflow
+      description: Orchestrate complex research across multiple sources and document types
+      operationId: executeResearchWorkflow
+      parameters:
+        - $ref: '#/components/parameters/ProjectIdHeader'
+        - $ref: '#/components/parameters/AppIdHeader'
+        - $ref: '#/components/parameters/FeatureHeader'
+        - $ref: '#/components/parameters/EnvironmentHeader'
+        - $ref: '#/components/parameters/UserIdHeader'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [query]
+              properties:
+                query:
+                  type: string
+                  example: Recent CPP-D chronic pain eligibility decisions
+                scope:
+                  type: array
+                  items:
+                    type: string
+                  example: [case-law, policies, guidelines]
+                timeRange:
+                  type: object
+                  properties:
+                    start:
+                      type: string
+                      format: date
+                    end:
+                      type: string
+                      format: date
+                maxSources:
+                  type: integer
+                  default: 10
+                jurisdiction:
+                  type: string
+                  example: federal
+      responses:
+        '200':
+          description: Research workflow completed
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  executionId:
+                    type: string
+                    format: uuid
+                  summary:
+                    type: string
+                  sources:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        type:
+                          type: string
+                          enum: [case-law, policy, guideline, precedent]
+                        title:
+                          type: string
+                        citation:
+                          type: string
+                        relevanceScore:
+                          type: number
+                        summary:
+                          type: string
+                  recommendations:
+                    type: array
+                    items:
+                      type: string
+                  workflowTrace:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        step:
+                          type: string
+                        duration:
+                          type: number
+                        toolsUsed:
+                          type: array
+                          items:
+                            type: string
+                  metadata:
+                    $ref: '#/components/schemas/AgentExecutionMetadata'
+
+  /agents/review:
+    post:
+      tags: [agents]
+      summary: Execute document review workflow
+      description: Multi-step document analysis, policy checking, and recommendation generation
+      operationId: executeReviewWorkflow
+      parameters:
+        - $ref: '#/components/parameters/ProjectIdHeader'
+        - $ref: '#/components/parameters/AppIdHeader'
+        - $ref: '#/components/parameters/FeatureHeader'
+        - $ref: '#/components/parameters/EnvironmentHeader'
+        - $ref: '#/components/parameters/UserIdHeader'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [documentId]
+              properties:
+                documentId:
+                  type: string
+                  example: case-12345
+                reviewType:
+                  type: string
+                  enum: [cppd-eligibility, oas-benefits, policy-compliance]
+                  example: cppd-eligibility
+                context:
+                  type: object
+                  properties:
+                    previousDecisionId:
+                      type: string
+                    riskFactors:
+                      type: array
+                      items:
+                        type: string
+                    urgencyLevel:
+                      type: string
+                      enum: [low, medium, high, urgent]
+      responses:
+        '200':
+          description: Review workflow completed
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  executionId:
+                    type: string
+                    format: uuid
+                  recommendation:
+                    type: string
+                    enum: [approve, deny, review, escalate]
+                  confidence:
+                    type: number
+                    minimum: 0
+                    maximum: 1
+                  reasoning:
+                    type: string
+                  citations:
+                    type: array
+                    items:
+                      type: string
+                  riskFlags:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        type:
+                          type: string
+                        severity:
+                          type: string
+                          enum: [low, medium, high, critical]
+                        description:
+                          type: string
+                  nextSteps:
+                    type: array
+                    items:
+                      type: string
+                  workflowTrace:
+                    type: array
+                    items:
+                      type: object
+                  metadata:
+                    $ref: '#/components/schemas/AgentExecutionMetadata'
+
+  /agents/synthesis:
+    post:
+      tags: [agents]
+      summary: Cross-source synthesis workflow
+      description: Synthesize information from multiple sources into coherent analysis
+      operationId: executeSynthesisWorkflow
+      parameters:
+        - $ref: '#/components/parameters/ProjectIdHeader'
+        - $ref: '#/components/parameters/AppIdHeader'
+        - $ref: '#/components/parameters/FeatureHeader'
+        - $ref: '#/components/parameters/EnvironmentHeader'
+        - $ref: '#/components/parameters/UserIdHeader'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [sources, synthesisType]
+              properties:
+                sources:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                      type:
+                        type: string
+                      weight:
+                        type: number
+                synthesisType:
+                  type: string
+                  enum: [comparative-analysis, trend-analysis, gap-analysis, impact-assessment]
+                outputFormat:
+                  type: string
+                  enum: [executive-summary, detailed-report, bullet-points, timeline]
+                  default: executive-summary
+      responses:
+        '200':
+          description: Synthesis workflow completed
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  executionId:
+                    type: string
+                    format: uuid
+                  synthesis:
+                    type: string
+                  keyFindings:
+                    type: array
+                    items:
+                      type: string
+                  sourcesAnalyzed:
+                    type: array
+                    items:
+                      type: object
+                  conflictsIdentified:
+                    type: array
+                    items:
+                      type: object
+                  recommendations:
+                    type: array
+                    items:
+                      type: string
+                  metadata:
+                    $ref: '#/components/schemas/AgentExecutionMetadata'
+
+  /agents/status/{executionId}:
+    get:
+      tags: [agents]
+      summary: Get agent workflow execution status
+      operationId: getAgentExecutionStatus
+      parameters:
+        - name: executionId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - $ref: '#/components/parameters/UserIdHeader'
+      responses:
+        '200':
+          description: Execution status retrieved
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  executionId:
+                    type: string
+                    format: uuid
+                  status:
+                    type: string
+                    enum: [pending, running, completed, failed, cancelled]
+                  progress:
+                    type: object
+                    properties:
+                      currentStep:
+                        type: string
+                      completedSteps:
+                        type: integer
+                      totalSteps:
+                        type: integer
+                      percentage:
+                        type: integer
+                  startedAt:
+                    type: string
+                    format: date-time
+                  completedAt:
+                    type: string
+                    format: date-time
+                  result:
+                    type: object
+                  error:
+                    type: string
+                  metadata:
+                    $ref: '#/components/schemas/AgentExecutionMetadata'

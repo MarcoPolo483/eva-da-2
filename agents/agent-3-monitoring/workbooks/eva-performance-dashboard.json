@@ -1,0 +1,128 @@
+{
+  "version": "Notebook/1.0",
+  "items": [
+    {
+      "type": 1,
+      "content": {
+        "json": "# EVA DA 2.0 - Performance Dashboard\n\n🎯 **Real-time monitoring for multi-agent platform**\n\n- **Agent Coordination**: Multi-agent orchestration metrics\n- **Cosmos DB Performance**: RU consumption and latency\n- **API Performance**: Response times and throughput\n- **System Health**: Resource utilization and availability"
+      }
+    },
+    {
+      "type": 3,
+      "content": {
+        "version": "KqlItem/1.0",
+        "query": "customEvents\n| where name == \"AgentCoordination\"\n| where timestamp > ago(1h)\n| summarize Count = count(), AvgDuration = avg(todouble(customMeasurements.duration)) by bin(timestamp, 5m), tostring(customDimensions.agentId)\n| render timechart",
+        "size": 0,
+        "title": "Agent Coordination Performance",
+        "timeContext": {
+          "durationMs": 3600000
+        },
+        "queryType": 0,
+        "resourceType": "microsoft.insights/components"
+      }
+    },
+    {
+      "type": 3,
+      "content": {
+        "version": "KqlItem/1.0",
+        "query": "customEvents\n| where name == \"CosmosDBOperation\"\n| where timestamp > ago(1h)\n| summarize RequestUnits = sum(todouble(customMeasurements.requestUnits)), AvgDuration = avg(todouble(customMeasurements.duration)) by bin(timestamp, 5m), tostring(customDimensions.operation)\n| render timechart",
+        "size": 0,
+        "title": "Cosmos DB Request Units & Performance",
+        "timeContext": {
+          "durationMs": 3600000
+        },
+        "queryType": 0,
+        "resourceType": "microsoft.insights/components"
+      }
+    },
+    {
+      "type": 3,
+      "content": {
+        "version": "KqlItem/1.0",
+        "query": "customEvents\n| where name == \"APICall\"\n| where timestamp > ago(1h)\n| summarize Count = count(), AvgResponseTime = avg(todouble(customMeasurements.duration)) by bin(timestamp, 5m), tostring(customDimensions.endpoint)\n| render timechart",
+        "size": 0,
+        "title": "API Response Times",
+        "timeContext": {
+          "durationMs": 3600000
+        },
+        "queryType": 0,
+        "resourceType": "microsoft.insights/components"
+      }
+    },
+    {
+      "type": 3,
+      "content": {
+        "version": "KqlItem/1.0",
+        "query": "customMetrics\n| where name startswith \"Performance.\"\n| where timestamp > ago(1h)\n| summarize AvgValue = avg(value) by bin(timestamp, 5m), name\n| render timechart",
+        "size": 0,
+        "title": "System Performance Metrics",
+        "timeContext": {
+          "durationMs": 3600000
+        },
+        "queryType": 0,
+        "resourceType": "microsoft.insights/components"
+      }
+    },
+    {
+      "type": 3,
+      "content": {
+        "version": "KqlItem/1.0",
+        "query": "customEvents\n| where name == \"HealthCheck\"\n| where timestamp > ago(1h)\n| summarize HealthyCount = countif(customDimensions.healthy == \"true\"), UnhealthyCount = countif(customDimensions.healthy == \"false\") by bin(timestamp, 5m), tostring(customDimensions.checkName)\n| extend HealthPercentage = todouble(HealthyCount) / todouble(HealthyCount + UnhealthyCount) * 100\n| render timechart",
+        "size": 0,
+        "title": "Health Check Status",
+        "timeContext": {
+          "durationMs": 3600000
+        },
+        "queryType": 0,
+        "resourceType": "microsoft.insights/components"
+      }
+    },
+    {
+      "type": 3,
+      "content": {
+        "version": "KqlItem/1.0",
+        "query": "exceptions\n| where timestamp > ago(1h)\n| summarize Count = count() by bin(timestamp, 5m), type\n| render areachart",
+        "size": 0,
+        "title": "Exception Trends",
+        "timeContext": {
+          "durationMs": 3600000
+        },
+        "queryType": 0,
+        "resourceType": "microsoft.insights/components"
+      }
+    },
+    {
+      "type": 3,
+      "content": {
+        "version": "KqlItem/1.0",
+        "query": "customEvents\n| where name in (\"PerformanceAlert\", \"HealthAlert\")\n| where timestamp > ago(24h)\n| project timestamp, AlertType = customDimensions.type, Details = customDimensions\n| order by timestamp desc\n| take 50",
+        "size": 0,
+        "title": "Recent Alerts",
+        "timeContext": {
+          "durationMs": 86400000
+        },
+        "queryType": 0,
+        "resourceType": "microsoft.insights/components"
+      }
+    },
+    {
+      "type": 3,
+      "content": {
+        "version": "KqlItem/1.0",
+        "query": "customEvents\n| where name == \"UserInteraction\"\n| where timestamp > ago(1h)\n| summarize Count = count() by bin(timestamp, 5m), tostring(customDimensions.action)\n| render columnchart",
+        "size": 0,
+        "title": "User Activity",
+        "timeContext": {
+          "durationMs": 3600000
+        },
+        "queryType": 0,
+        "resourceType": "microsoft.insights/components"
+      }
+    }
+  ],
+  "fallbackResourceIds": [
+    "/subscriptions/{subscription-id}/resourceGroups/{resource-group}/providers/microsoft.insights/components/{app-insights-name}"
+  ],
+  "fromTemplateId": "sentinel-UserWorkbook",
+  "$schema": "https://github.com/Microsoft/Application-Insights-Workbooks/blob/master/schema/workbook.json"
+}

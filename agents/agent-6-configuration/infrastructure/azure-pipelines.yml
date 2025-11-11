@@ -1,0 +1,263 @@
+# Azure DevOps Pipeline for EVA DA 2.0
+# Multi-environment deployment with infrastructure as code
+
+trigger:
+  branches:
+    include:
+      - main
+      - develop
+  paths:
+    include:
+      - agents/agent-6-configuration/infrastructure/**
+      - agents/agent-1-data-architecture/**
+      - agents/agent-5-api-integration/**
+
+pr:
+  branches:
+    include:
+      - main
+  paths:
+    include:
+      - agents/agent-6-configuration/infrastructure/**
+
+variables:
+  - group: eva-da-2-shared
+  - name: 'vmImageName'
+    value: 'windows-latest'
+  - name: 'terraformVersion'
+    value: '1.6.6'
+  - name: 'workingDirectory'
+    value: '$(System.DefaultWorkingDirectory)/agents/agent-6-configuration/infrastructure'
+
+stages:
+  # Validation Stage
+  - stage: Validate
+    displayName: 'Validate Infrastructure'
+    jobs:
+      - job: ValidateInfrastructure
+        displayName: 'Validate Terraform and Bicep'
+        pool:
+          vmImage: $(vmImageName)
+        
+        steps:
+          - checkout: self
+            displayName: 'Checkout source code'
+          
+          - task: TerraformInstaller@0
+            displayName: 'Install Terraform'
+            inputs:
+              terraformVersion: $(terraformVersion)
+          
+          - task: AzureCLI@2
+            displayName: 'Validate Terraform Configuration'
+            inputs:
+              azureSubscription: 'eva-da-2-service-connection'
+              scriptType: 'pscore'
+              scriptLocation: 'inlineScript'
+              workingDirectory: '$(workingDirectory)/infra/terraform'
+              inlineScript: |
+                # Initialize and validate Terraform
+                terraform init -backend=false
+                terraform validate
+                terraform fmt -check=true
+          
+          - task: AzureCLI@2
+            displayName: 'Validate Bicep Template'
+            inputs:
+              azureSubscription: 'eva-da-2-service-connection'
+              scriptType: 'pscore'
+              scriptLocation: 'inlineScript'
+              workingDirectory: '$(workingDirectory)/infra'
+              inlineScript: |
+                # Validate Bicep template
+                az bicep build --file main.bicep --stdout
+                Write-Host "✅ Bicep template validation successful"
+
+  # Development Deployment
+  - stage: DeployDev
+    displayName: 'Deploy to Development'
+    dependsOn: Validate
+    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/develop'))
+    variables:
+      - name: 'environment'
+        value: 'dev'
+      - name: 'resourceGroupName'
+        value: 'rg-eva-da-2-dev'
+    
+    jobs:
+      - deployment: DeployInfrastructureDev
+        displayName: 'Deploy Infrastructure to Dev'
+        environment: 'eva-da-2-dev'
+        pool:
+          vmImage: $(vmImageName)
+        
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - checkout: self
+                  displayName: 'Checkout source code'
+                
+                - task: TerraformInstaller@0
+                  displayName: 'Install Terraform'
+                  inputs:
+                    terraformVersion: $(terraformVersion)
+                
+                - task: AzureCLI@2
+                  displayName: 'Deploy Infrastructure'
+                  inputs:
+                    azureSubscription: 'eva-da-2-service-connection'
+                    scriptType: 'pscore'
+                    scriptLocation: 'scriptPath'
+                    scriptPath: '$(workingDirectory)/scripts/deployment/deploy-infrastructure.ps1'
+                    arguments: '-Environment $(environment) -IacTool terraform -SkipPreChecks'
+                    workingDirectory: '$(workingDirectory)'
+                
+                - task: PowerShell@2
+                  displayName: 'Store Terraform Outputs'
+                  inputs:
+                    targetType: 'inline'
+                    workingDirectory: '$(workingDirectory)/infra/terraform'
+                    script: |
+                      # Extract Terraform outputs for later stages
+                      $outputs = terraform output -json | ConvertFrom-Json
+                      
+                      Write-Host "##vso[task.setvariable variable=cosmosEndpoint;isOutput=true]$($outputs.cosmos_endpoint.value)"
+                      Write-Host "##vso[task.setvariable variable=functionAppName;isOutput=true]$($outputs.function_app_name.value)"
+                      Write-Host "##vso[task.setvariable variable=keyVaultUri;isOutput=true]$($outputs.key_vault_uri.value)"
+
+  # Staging Deployment
+  - stage: DeployStaging
+    displayName: 'Deploy to Staging'
+    dependsOn: Validate
+    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'))
+    variables:
+      - name: 'environment'
+        value: 'staging'
+      - name: 'resourceGroupName'
+        value: 'rg-eva-da-2-staging'
+    
+    jobs:
+      - deployment: DeployInfrastructureStaging
+        displayName: 'Deploy Infrastructure to Staging'
+        environment: 'eva-da-2-staging'
+        pool:
+          vmImage: $(vmImageName)
+        
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - checkout: self
+                  displayName: 'Checkout source code'
+                
+                - task: TerraformInstaller@0
+                  displayName: 'Install Terraform'
+                  inputs:
+                    terraformVersion: $(terraformVersion)
+                
+                - task: AzureCLI@2
+                  displayName: 'Deploy Infrastructure'
+                  inputs:
+                    azureSubscription: 'eva-da-2-service-connection'
+                    scriptType: 'pscore'
+                    scriptLocation: 'scriptPath'
+                    scriptPath: '$(workingDirectory)/scripts/deployment/deploy-infrastructure.ps1'
+                    arguments: '-Environment $(environment) -IacTool terraform -SkipPreChecks'
+                    workingDirectory: '$(workingDirectory)'
+
+  # Production Deployment (Manual Approval Required)
+  - stage: DeployProd
+    displayName: 'Deploy to Production'
+    dependsOn: 
+      - Validate
+      - DeployStaging
+    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'))
+    variables:
+      - name: 'environment'
+        value: 'prod'
+      - name: 'resourceGroupName'
+        value: 'rg-eva-da-2-prod'
+    
+    jobs:
+      - deployment: DeployInfrastructureProd
+        displayName: 'Deploy Infrastructure to Production'
+        environment: 'eva-da-2-prod'
+        pool:
+          vmImage: $(vmImageName)
+        
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - checkout: self
+                  displayName: 'Checkout source code'
+                
+                - task: TerraformInstaller@0
+                  displayName: 'Install Terraform'
+                  inputs:
+                    terraformVersion: $(terraformVersion)
+                
+                - task: AzureCLI@2
+                  displayName: 'What-If Analysis'
+                  inputs:
+                    azureSubscription: 'eva-da-2-service-connection'
+                    scriptType: 'pscore'
+                    scriptLocation: 'scriptPath'
+                    scriptPath: '$(workingDirectory)/scripts/deployment/deploy-infrastructure.ps1'
+                    arguments: '-Environment $(environment) -IacTool terraform -WhatIf -SkipPreChecks'
+                    workingDirectory: '$(workingDirectory)'
+                
+                - task: ManualValidation@0
+                  displayName: 'Manual Approval for Production'
+                  inputs:
+                    notifyUsers: '$(Build.RequestedForEmail)'
+                    instructions: 'Review the what-if analysis above and approve production deployment'
+                    timeoutInMinutes: 60
+                
+                - task: AzureCLI@2
+                  displayName: 'Deploy to Production'
+                  inputs:
+                    azureSubscription: 'eva-da-2-service-connection'
+                    scriptType: 'pscore'
+                    scriptLocation: 'scriptPath'
+                    scriptPath: '$(workingDirectory)/scripts/deployment/deploy-infrastructure.ps1'
+                    arguments: '-Environment $(environment) -IacTool terraform -SkipPreChecks'
+                    workingDirectory: '$(workingDirectory)'
+
+  # Post-Deployment Validation
+  - stage: PostDeploymentTests
+    displayName: 'Post-Deployment Validation'
+    dependsOn: 
+      - DeployDev
+      - DeployStaging
+      - DeployProd
+    condition: succeededOrFailed()
+    
+    jobs:
+      - job: ValidationTests
+        displayName: 'Run Post-Deployment Tests'
+        pool:
+          vmImage: $(vmImageName)
+        
+        steps:
+          - checkout: self
+            displayName: 'Checkout source code'
+          
+          - task: AzureCLI@2
+            displayName: 'Test Azure Resources'
+            inputs:
+              azureSubscription: 'eva-da-2-service-connection'
+              scriptType: 'pscore'
+              scriptLocation: 'scriptPath'
+              scriptPath: '$(workingDirectory)/scripts/test-azure-connectivity.js'
+              workingDirectory: '$(workingDirectory)'
+          
+          - task: PublishTestResults@2
+            displayName: 'Publish Test Results'
+            condition: succeededOrFailed()
+            inputs:
+              testResultsFormat: 'JUnit'
+              testResultsFiles: '**/*-results.xml'
+              searchFolder: '$(workingDirectory)'
+              failTaskOnFailedTests: true

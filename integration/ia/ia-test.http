@@ -1,0 +1,64 @@
+### HEALTH (CONFIRMED)
+GET https://api.contoso.com/ia/health
+Authorization: Bearer {{token}}
+
+### CHAT (CONFIRMED)
+POST https://api.contoso.com/ia/chat
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "history": [
+    { "user": "What documents describe renewable energy policy?" }
+  ],
+  "approach": 1,
+  "overrides": {
+    "top": 5,
+    "semantic_ranker": true,
+    "temperature": 0.2
+  },
+  "citation_lookup": {},
+  "thought_chain": {}
+}
+
+### FOLDERS (CONFIRMED)
+POST https://api.contoso.com/ia/getfolders
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{}
+
+### TAGS (INFERRED)
+POST https://api.contoso.com/ia/gettags
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{}
+
+### MATH HINT (INFERRED)
+GET https://api.contoso.com/ia/getHint?question=Integrate%20x^2
+Authorization: Bearer {{token}}
+
+### MATH STREAM (SSE, INFERRED)
+GET https://api.contoso.com/ia/stream?question=Solve%202x%20%2B%203%20%3D%2011
+Authorization: Bearer {{token}}
+Accept: text/event-stream
+
+### TABULAR CSV UPLOAD (INFERRED)
+POST https://api.contoso.com/ia/posttd
+Authorization: Bearer {{token}}
+Content-Type: multipart/form-data; boundary=boundary
+
+--boundary
+Content-Disposition: form-data; name="csv"; filename="data.csv"
+Content-Type: text/csv
+
+id,value
+1,100
+2,200
+--boundary--
+
+### TABULAR STREAM (SSE, INFERRED)
+GET https://api.contoso.com/ia/tdstream?question=What%20is%20the%20average%20value%3F
+Authorization: Bearer {{token}}
+Accept: text/event-stream

@@ -1,0 +1,51 @@
+{
+  "managedIdentityConfiguration": {
+    "version": "1.0.0",
+    "environment": "development",
+    "services": {
+      "cosmosDB": {
+        "authMethod": "managedIdentity",
+        "roles": ["Cosmos DB Data Contributor"],
+        "scope": "account-level"
+      },
+      "keyVault": {
+        "authMethod": "managedIdentity", 
+        "roles": ["Key Vault Secrets User"],
+        "scope": "vault-level"
+      },
+      "openAI": {
+        "authMethod": "managedIdentity",
+        "roles": ["Cognitive Services OpenAI User"],
+        "scope": "service-level"
+      },
+      "storage": {
+        "authMethod": "managedIdentity",
+        "roles": ["Storage Blob Data Contributor"],
+        "scope": "account-level"
+      }
+    },
+    "rbacValidation": {
+      "enabled": true,
+      "checkInterval": "PT1H",
+      "alertOnMisconfiguration": true
+    },
+    "complianceRequirements": {
+      "dataClassification": "Internal",
+      "encryptionAtRest": true,
+      "encryptionInTransit": true,
+      "auditLogging": true,
+      "accessReviews": "monthly"
+    }
+  },
+  "lastValidated": "2025-11-10T22:45:17Z",
+  "validationResults": {
+    "managedIdentityConfigured": true,
+    "rbacOptimal": true,
+    "complianceScore": 85,
+    "recommendations": [
+      "Enable private endpoints for production",
+      "Implement customer-managed keys for sensitive data",
+      "Configure conditional access policies"
+    ]
+  }
+}

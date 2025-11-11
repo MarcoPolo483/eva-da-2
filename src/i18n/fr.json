@@ -6,15 +6,29 @@
   "project.jurisprudence": "Jurisprudence",
   "project.admin": "Registre des projets",
   "project.AssistMe": "AssistMe",
-    "tagline.canadaLife": "Discutez avec votre assistant chez Canada Vie",
+  "project.globalAdmin": "Admin global",
+  "tagline.canadaLife": "Discutez avec votre assistant chez Canada Vie",
   "tagline.jurisprudence": "Discutez avec votre assistant de recherche en jurisprudence",
   "tagline.admin": "Console d'administration",
   "tagline.AssistMe": "Discutez avec votre assistant AssistMe",
-  
   "toolbar.clearChat": "Effacer la conversation",
   "toolbar.adjust": "Ajuster",
   "toolbar.info": "Infos",
   
+  "registry.title": "Administration du registre des projets",
+  "registry.subtitle": "Configurer les assistants de domaine EVA adaptés aux projets",
+  "registry.project": "Projet",
+  "registry.save": "Enregistrer",
+  "registry.new": "Nouveau",
+  "registry.delete": "Supprimer",
+  "registry.export": "Exporter",
+  "registry.import": "Importer",  
+  "registry.reset": "Réinitialiser",
+
+  "suggestions.AssistMe.q1": "Résumez la décision phare SV.",
+  "suggestions.AssistMe.q2": "Quelles affaires définissent une invalidité ?",
+  "suggestions.AssistMe.q3": "Listez la jurisprudence récente.",
+
   "chat.emptyHint": "Commencez la conversation en posant une question ci-dessous.",
   
   "input.label": "Votre message",

@@ -5,14 +5,28 @@
   "project.jurisprudence": "Jurisprudence",
   "project.admin": "Project Registry",
   "project.AssistMe": "AssistMe",
+  "project.globalAdmin": "Global App Admin",
   "tagline.canadaLife": "Chat with your Canada Life Benefits Assistant",
   "tagline.jurisprudence": "Chat with your Jurisprudence Research Assistant",
   "tagline.admin": "Admin console",
   "tagline.AssistMe": "Chat with your AssistMe Assistant",
-
   "toolbar.clearChat": "Clear chat",
   "toolbar.adjust": "Adjust",
   "toolbar.info": "Info",
+
+  "registry.title": "Project Register Administration",
+  "registry.subtitle": "Configure project-aware assistants for EVA Domain Assistant",
+  "registry.project": "Project",
+  "registry.save": "Save",
+  "registry.new": "New",
+  "registry.delete": "Delete",
+  "registry.export": "Export",
+  "registry.import": "Import",
+  "registry.reset": "Reset",
+
+  "suggestions.AssistMe.q1": "Summarize the leading OAS decision.",
+  "suggestions.AssistMe.q2": "Which cases define disability?",
+  "suggestions.AssistMe.q3": "List recent OAS appeals.",
 
   "chat.emptyHint": "Start a conversation by asking a question below.",
 

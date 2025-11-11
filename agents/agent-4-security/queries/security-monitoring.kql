@@ -1,0 +1,221 @@
+// EVA DA 2.0 Security Monitoring & Alerting Rules
+// Agent 4: Security Expert - Kusto Query Language (KQL) Rules
+// Government compliance monitoring for Protected B environments
+
+//==============================================================================
+// SECURITY ALERT QUERIES FOR AZURE MONITOR
+//==============================================================================
+
+// 1. UNAUTHORIZED ACCESS ATTEMPTS
+// Detects multiple failed authentication attempts (potential brute force)
+let FailedAuthThreshold = 10;
+let TimeWindow = 5m;
+AppTraces
+| where TimeGenerated > ago(TimeWindow)
+| where Message contains "authentication" and Message contains "failed"
+| extend UserId = tostring(customDimensions.UserId)
+| extend SourceIP = tostring(customDimensions.SourceIP)
+| summarize FailedAttempts = count() by UserId, SourceIP, bin(TimeGenerated, 1m)
+| where FailedAttempts >= FailedAuthThreshold
+| project TimeGenerated, UserId, SourceIP, FailedAttempts, 
+          AlertSeverity = "High", 
+          AlertType = "Potential Brute Force Attack",
+          ComplianceControl = "AC-2, IA-2"
+
+//==============================================================================
+// 2. PRIVILEGED OPERATION MONITORING
+// Monitors high-privilege operations for government compliance
+AppTraces
+| where TimeGenerated > ago(15m)
+| where Message contains "role assignment" or Message contains "key vault" or Message contains "admin"
+| extend Operation = tostring(customDimensions.Operation)
+| extend Principal = tostring(customDimensions.Principal)
+| extend Resource = tostring(customDimensions.Resource)
+| where Operation in ("RoleAssignmentCreate", "RoleAssignmentDelete", "KeyVaultAccess", "SecretRead", "ConfigurationChange")
+| project TimeGenerated, Operation, Principal, Resource,
+          AlertSeverity = "Medium",
+          AlertType = "Privileged Operation",
+          ComplianceControl = "AC-6, AU-2"
+
+//==============================================================================
+// 3. DATA ACCESS ANOMALY DETECTION
+// Detects unusual data access patterns for PII protection
+AppRequests
+| where TimeGenerated > ago(30m)
+| where Url contains "/api/conversations" or Url contains "/api/users"
+| extend UserId = tostring(customDimensions["x-user"])
+| extend ProjectId = tostring(customDimensions["x-project"])
+| summarize RequestCount = count(), UniqueProjects = dcount(ProjectId) by UserId, bin(TimeGenerated, 5m)
+| where RequestCount > 100 or UniqueProjects > 5  // Threshold for anomaly
+| project TimeGenerated, UserId, RequestCount, UniqueProjects,
+          AlertSeverity = "High",
+          AlertType = "Data Access Anomaly", 
+          ComplianceControl = "AC-3, SI-4"
+
+//==============================================================================
+// 4. ENCRYPTION COMPLIANCE MONITORING  
+// Ensures all data transmissions use proper encryption
+AppDependencies
+| where TimeGenerated > ago(10m)
+| where Type == "HTTP" and Data !startswith "https://"
+| project TimeGenerated, Name, Data, Success,
+          AlertSeverity = "Critical",
+          AlertType = "Unencrypted Data Transmission",
+          ComplianceControl = "SC-8"
+
+//==============================================================================
+// 5. AUDIT LOG INTEGRITY MONITORING
+// Monitors for gaps or tampering in audit logs
+let ExpectedLogRate = 50; // logs per minute baseline
+AppTraces
+| where TimeGenerated > ago(1h)
+| summarize LogCount = count() by bin(TimeGenerated, 1m)
+| where LogCount < ExpectedLogRate * 0.5  // 50% below baseline
+| project TimeGenerated, LogCount, ExpectedMinimum = ExpectedLogRate * 0.5,
+          AlertSeverity = "High",
+          AlertType = "Audit Log Gap",
+          ComplianceControl = "AU-3, AU-6"
+
+//==============================================================================
+// 6. GOVERNMENT CLASSIFICATION VIOLATION DETECTION
+// Detects potential PII or classified data exposure
+AppTraces
+| where TimeGenerated > ago(15m)
+| where Message matches regex @"\b\d{3}-\d{3}-\d{4}\b|SIN|SSN|\b[A-Z]\d{2}\s?\d{3}\s?\d{3}\b"  // SIN patterns
+| extend PIIType = case(
+    Message matches regex @"\b\d{3}-\d{3}-\d{4}\b", "Potential SIN",
+    Message matches regex @"\b[A-Z]\d{2}\s?\d{3}\s?\d{3}\b", "Potential Government ID", 
+    "Unknown PII"
+)
+| project TimeGenerated, PIIType, OperationName,
+          AlertSeverity = "Critical",
+          AlertType = "PII Exposure Risk",
+          ComplianceControl = "SC-28, Privacy Act"
+
+//==============================================================================
+// 7. NETWORK SECURITY MONITORING
+// Monitors for suspicious network activity
+AppDependencies  
+| where TimeGenerated > ago(20m)
+| where Type in ("HTTP", "SQL", "Azure blob")
+| extend TargetHost = tostring(parse_url(Target).Host)
+| where TargetHost !endswith ".azure.com" and TargetHost !endswith ".microsoft.com"
+| summarize ExternalCallsCount = count() by TargetHost, bin(TimeGenerated, 5m)
+| where ExternalCallsCount > 10
+| project TimeGenerated, TargetHost, ExternalCallsCount,
+          AlertSeverity = "Medium", 
+          AlertType = "Suspicious External Connectivity",
+          ComplianceControl = "SC-7, SI-4"
+
+//==============================================================================
+// 8. CONFIGURATION DRIFT DETECTION
+// Monitors for unauthorized configuration changes
+AppEvents
+| where TimeGenerated > ago(1h)
+| where Name == "ConfigurationChanged"
+| extend Component = tostring(customDimensions.Component)
+| extend ChangedBy = tostring(customDimensions.ChangedBy)
+| extend OldValue = tostring(customDimensions.OldValue)
+| extend NewValue = tostring(customDimensions.NewValue)
+| where Component in ("RBAC", "KeyVault", "NetworkSecurity", "DataClassification")
+| project TimeGenerated, Component, ChangedBy, OldValue, NewValue,
+          AlertSeverity = "High",
+          AlertType = "Security Configuration Change",
+          ComplianceControl = "CM-2, CM-6"
+
+//==============================================================================
+// 9. SESSION MONITORING FOR GOVERNMENT USERS
+// Enhanced monitoring for government user sessions
+AppPageViews
+| where TimeGenerated > ago(30m)  
+| extend UserId = tostring(customDimensions["x-user"])
+| extend UserAgent = tostring(customDimensions.UserAgent) 
+| where UserId contains "@gc.ca" or UserId contains "@canada.ca"  // Government emails
+| summarize SessionDuration = max(TimeGenerated) - min(TimeGenerated), 
+           PageCount = count() by UserId, bin(TimeGenerated, 15m)
+| where SessionDuration > time(4h) or PageCount > 200  // Unusual session patterns
+| project TimeGenerated, UserId, SessionDuration, PageCount,
+          AlertSeverity = "Medium",
+          AlertType = "Unusual Government User Activity", 
+          ComplianceControl = "AC-2, AU-2"
+
+//==============================================================================
+// 10. THREAT INTELLIGENCE INTEGRATION
+// Correlates with known threat indicators
+let ThreatIPs = dynamic(["192.168.1.100", "10.0.0.50"]);  // Example threat IPs
+AppRequests
+| where TimeGenerated > ago(1h)
+| extend ClientIP = tostring(customDimensions.ClientIP)
+| where ClientIP in (ThreatIPs)
+| project TimeGenerated, ClientIP, Url, ResultCode,
+          AlertSeverity = "Critical", 
+          AlertType = "Known Threat IP Access",
+          ComplianceControl = "SI-4"
+
+//==============================================================================
+// COMPLIANCE DASHBOARD QUERIES
+//==============================================================================
+
+// Daily Security Metrics Summary
+AppTraces
+| where TimeGenerated > ago(1d)
+| summarize 
+    TotalSecurityEvents = count(),
+    AuthenticationEvents = countif(Message contains "authentication"),
+    AccessControlEvents = countif(Message contains "rbac" or Message contains "permission"),
+    EncryptionEvents = countif(Message contains "encryption" or Message contains "tls"),
+    AuditEvents = countif(Message contains "audit"),
+    ConfigEvents = countif(Message contains "config")
+| extend ComplianceScore = round((AuthenticationEvents + AccessControlEvents + EncryptionEvents + AuditEvents) * 100.0 / TotalSecurityEvents, 2)
+| project TotalSecurityEvents, AuthenticationEvents, AccessControlEvents, 
+          EncryptionEvents, AuditEvents, ConfigEvents, ComplianceScore
+
+// Protected B Data Access Tracking  
+AppRequests
+| where TimeGenerated > ago(7d)
+| where Url contains "/api/" 
+| extend DataClassification = case(
+    Url contains "/protected-b/", "Protected-B",
+    Url contains "/protected-a/", "Protected-A", 
+    Url contains "/internal/", "Internal",
+    "Unclassified"
+)
+| where DataClassification != "Unclassified"
+| summarize AccessCount = count() by DataClassification, bin(TimeGenerated, 1d)
+| render timechart
+
+// Government User Activity Summary
+AppRequests  
+| where TimeGenerated > ago(30d)
+| extend UserId = tostring(customDimensions["x-user"])
+| where UserId contains "@gc.ca" or UserId contains "@canada.ca"
+| summarize 
+    UniqueUsers = dcount(UserId),
+    TotalRequests = count(),
+    AvgDailyRequests = count() / 30
+    by bin(TimeGenerated, 1d)
+| render areachart
+
+//==============================================================================
+// AUTOMATED RESPONSE QUERIES  
+//==============================================================================
+
+// Auto-disable suspicious accounts (for alerting logic)
+AppTraces
+| where TimeGenerated > ago(5m)
+| where Message contains "suspicious activity detected"
+| extend UserId = tostring(customDimensions.UserId)
+| extend Severity = tostring(customDimensions.Severity)
+| where Severity == "Critical"
+| project UserId, TimeGenerated, 
+          Action = "DisableAccount",
+          Reason = "Automated security response - suspicious activity"
+
+// Emergency incident escalation
+AppExceptions
+| where TimeGenerated > ago(1m)
+| where ProblemId contains "security" or ProblemId contains "breach"
+| extend IncidentId = strcat("INC-", format_datetime(TimeGenerated, "yyyyMMdd-HHmmss"))
+| project IncidentId, TimeGenerated, ProblemId, Message,
+          EscalationLevel = "Immediate",
+          NotificationList = "security-team@yourorg.gc.ca,incident-response@yourorg.gc.ca"

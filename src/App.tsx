@@ -1,9 +1,10 @@
 // src/App.tsx
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { Header } from "./components/Header";
 import { ChatPanel } from "./components/ChatPanel";
 import { ProjectRegistry } from "./components/ProjectRegistry";
+import { GlobalAppAdmin } from "./components/GlobalAppAdmin";
 import { AdjustModal } from "./components/AdjustModal";
 import { InfoPanel } from "./components/InfoPanel";
 import type { ProjectId } from "./lib/evaClient";
@@ -11,12 +12,34 @@ import { ragAnswer } from "./lib/apimClient";
 import { getApimHeaders } from "./lib/apimContext";
 import type { Message, RagTemplate } from "./lib/types";
 import { useLocalStorage } from "./lib/useLocalStorage";
+import { loadRegistry } from "./lib/projectRegistryStore";
 
 const projectThemeClass: Record<ProjectId, string> = {
   canadaLife: "theme-canada-life",
   jurisprudence: "theme-jurisprudence",
   admin: "theme-admin"
 };
+
+// Helper to apply theme CSS variables dynamically
+function applyThemeVariables(projectId: ProjectId) {
+  try {
+    const registry = loadRegistry<any>([]);
+    const project = registry.find((p: any) => p.id === projectId);
+    
+    if (project && project.theme) {
+      const root = document.documentElement;
+      root.style.setProperty('--color-primary', project.theme.primary || '#000000');
+      root.style.setProperty('--color-accent', project.theme.primary || '#000000');
+      root.style.setProperty('--color-background', project.theme.background || '#ffffff');
+      root.style.setProperty('--color-surface', project.theme.surface || '#ffffff');
+      root.style.setProperty('--base-font-size', `${project.theme.baseFontPx || 16}px`);
+      
+      console.log('[App] Applied theme for', projectId, project.theme);
+    }
+  } catch (error) {
+    console.error('[App] Failed to apply theme:', error);
+  }
+}
 
 function App() {
   const { t } = useTranslation();
@@ -36,6 +59,24 @@ function App() {
   const [adjustOpen, setAdjustOpen] = useState(false);
   const [infoOpen, setInfoOpen] = useState(false);
   const [lastMetadata, setLastMetadata] = useState<any | undefined>(undefined);
+  // Listen for registry updates to refresh available projects
+  const [registryVersion, setRegistryVersion] = useState(0);
+  
+  useEffect(() => {
+    const handleRegistryUpdate = () => {
+      setRegistryVersion(v => v + 1);
+      // Re-apply theme when registry changes (e.g., theme colors updated)
+      applyThemeVariables(projectId);
+    };
+    
+    window.addEventListener('registry-updated', handleRegistryUpdate);
+    return () => window.removeEventListener('registry-updated', handleRegistryUpdate);
+  }, [projectId]);
+
+  // Apply theme variables when project changes
+  useEffect(() => {
+    applyThemeVariables(projectId);
+  }, [projectId]);
 
   const handleSend = async (text: string) => {
     const userMsg: Message = { id: counter, role: "user", text };
@@ -74,12 +115,14 @@ function App() {
         onClearChat={handleClear}
         onOpenAdjust={() => setAdjustOpen(true)}
         onOpenInfo={() => setInfoOpen(true)}
-      />
-
-      <main id="main" className="flex-1 flex justify-center px-4 py-6" aria-label="EVA DA 2.0 main content">
+      />      <main id="main" className="flex-1 flex justify-center px-4 py-6" aria-label="EVA DA 2.0 main content">
         {projectId === "admin" ? (
-          <div className="w-full max-w-5xl">
+          <div className="w-full max-w-7xl">
             <ProjectRegistry />
+          </div>
+        ) : projectId === "globalAdmin" ? (
+          <div className="w-full max-w-7xl">
+            <GlobalAppAdmin />
           </div>
         ) : (
           <div className="w-full max-w-3xl">

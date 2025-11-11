@@ -9,9 +9,37 @@ export type StorePayload<T> = {
 export function loadRegistry<T>(defaults: T[]): T[] {
   try {
     const raw = localStorage.getItem(STORE_KEY);
-    if (!raw) return defaults;
+    
+    // If nothing in localStorage, return defaults
+    if (!raw) {
+      console.log('[Registry] No data in localStorage, using defaults');
+      return defaults;
+    }
+    
     const parsed: StorePayload<T> = JSON.parse(raw);
-    if (!parsed || !Array.isArray(parsed.items)) return defaults;
+    
+    // If parsed data is invalid or empty, return defaults
+    if (!parsed || !Array.isArray(parsed.items)) {
+      console.warn('[Registry] Invalid data structure, using defaults');
+      return defaults;
+    }
+    
+    // If items array is empty, return defaults
+    if (parsed.items.length === 0) {
+      console.warn('[Registry] Empty items array, using defaults');
+      return defaults;
+    }
+    
+    // CRITICAL: Ensure 'admin' project always exists
+    const hasAdmin = parsed.items.some((entry: any) => entry.id === 'admin');
+    if (!hasAdmin) {
+      console.warn('[Registry] Admin project missing! Adding from defaults...');
+      const adminProject = defaults.find((entry: any) => entry.id === 'admin');
+      if (adminProject) {
+        parsed.items.push(adminProject);
+      }
+    }
+    
     return parsed.items;
   } catch (err) {
     // Corrupt storage or parse error — fall back to defaults
@@ -23,6 +51,13 @@ export function loadRegistry<T>(defaults: T[]): T[] {
 
 export function saveRegistry<T>(items: T[]) {
   try {
+    // CRITICAL: Ensure 'admin' project is always included
+    const hasAdmin = items.some((entry: any) => entry.id === 'admin');
+    if (!hasAdmin) {
+      console.error('[Registry] Attempted to save registry without admin project! Operation blocked.');
+      return false;
+    }
+    
     const payload: StorePayload<T> = { version: "0.68", items };
     localStorage.setItem(STORE_KEY, JSON.stringify(payload));
     return true;
