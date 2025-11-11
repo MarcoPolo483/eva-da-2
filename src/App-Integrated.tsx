@@ -1,18 +1,31 @@
-// src/App.tsx
+// src/App-Integrated.tsx
 import { useState, useEffect } from "react";
-import { EVAIntegratedApp } from "./components/EVAIntegratedAppSimple";
+import { useTranslation } from "react-i18next";
+import { EVAIntegratedApp } from "./components/EVAIntegratedApp";
+import { configManager } from "./lib/configurationManager";
+import { migrateToConfigurationSystem } from "./lib/configurationMigration";
 import "./App.css";
 
 // Import integrated app styles
 import "./components/integrated/EVAIntegratedApp.css";
 
 function App() {
+  const { t } = useTranslation();
   const [isInitialized, setIsInitialized] = useState(false);
 
   useEffect(() => {
-    // Initialize configuration system
+    // Initialize configuration system and migration
     const initializeApp = async () => {
       try {
+        // Run migration to ensure configuration system is set up
+        migrateToConfigurationSystem();
+        
+        // Apply initial global theme
+        const globalConfig = configManager.getGlobalConfig();
+        if (globalConfig.theme) {
+          configManager.applyTheme(globalConfig.theme);
+        }
+
         setIsInitialized(true);
         console.log('[App] EVA DA 2.0 Integrated App initialized successfully');
       } catch (error) {

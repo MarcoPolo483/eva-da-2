@@ -6,7 +6,12 @@
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "mock-apim": "node ./scripts/mock-apim.cjs"
+    "mock-apim": "node ./scripts/mock-apim.cjs",
+    "demo": "concurrently \"npm run demo:server\" \"npm run demo:client\"",
+    "demo:server": "node demo-server.js",
+    "demo:client": "vite --host",
+    "demo:full": "concurrently \"npm run demo:server\" \"npm run demo:client\" \"npm run demo:agents\"",
+    "demo:agents": "node scripts/demo-multi-agent.js"
   },
   "dependencies": {
     "@azure/cosmos": "^4.7.0",
@@ -33,6 +38,8 @@
     "@vitejs/plugin-react": "^5.0.4",
     "autoprefixer": "^10.4.21",
     "body-parser": "^2.2.0",
+    "concurrently": "^9.2.1",
+    "cors": "^2.8.5",
     "eslint": "^9.36.0",
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-react-refresh": "^0.4.22",
