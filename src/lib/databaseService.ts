@@ -1,5 +1,8 @@
 // src/lib/databaseService.ts
-// Database service layer for EVA DA 2.0 - Mock implementation with real API patterns
+// Database service layer for EVA DA 2.0 - Supports both Cosmos DB and mock data
+// Uses Cosmos DB in production, falls back to mock data for development
+
+import { cosmosDbClient } from './cosmosDbClient';
 
 export interface DatabaseProject {
   id: string;
@@ -151,6 +154,52 @@ export interface GlobalSettings {
 
 class DatabaseService {
   private apiBaseUrl = '/api/v1';
+  private useMockData: boolean;
+  private isCosmosInitialized = false;
+  
+  constructor() {
+    // Check if mock data is enabled via environment variable
+    this.useMockData = import.meta.env.VITE_ENABLE_MOCK_DATA === 'true';
+    
+    if (!this.useMockData) {
+      // Initialize Cosmos DB client in background
+      this.initializeCosmosDb();
+    } else {
+      console.log('[DatabaseService] Using mock data (VITE_ENABLE_MOCK_DATA=true)');
+    }
+  }
+
+  /**
+   * Initialize Cosmos DB client
+   */
+  private async initializeCosmosDb(): Promise<void> {
+    try {
+      await cosmosDbClient.initialize();
+      this.isCosmosInitialized = true;
+      console.log('[DatabaseService] Cosmos DB initialized successfully');
+    } catch (error) {
+      console.error('[DatabaseService] Failed to initialize Cosmos DB, falling back to mock data:', error);
+      this.useMockData = true;
+      this.isCosmosInitialized = false;
+    }
+  }
+
+  /**
+   * Ensure Cosmos DB is ready
+   */
+  private async ensureCosmosDb(): Promise<void> {
+    if (this.useMockData) {
+      return;
+    }
+
+    if (!this.isCosmosInitialized) {
+      await this.initializeCosmosDb();
+    }
+
+    if (!this.isCosmosInitialized) {
+      throw new Error('Cosmos DB not available. Set VITE_ENABLE_MOCK_DATA=true to use mock data.');
+    }
+  }
   
   // Mock data for development
   private mockProjects: DatabaseProject[] = [
@@ -390,13 +439,35 @@ class DatabaseService {
       }
     }
   ];
-
   // Projects API
   async getProjects(userRoles: string[]): Promise<DatabaseProject[]> {
-    // Simulate API delay
-    await this.delay(300);
+    if (!this.useMockData) {
+      try {
+        await this.ensureCosmosDb();
+        
+        // Query all active projects (in production, filter by user access)
+        const projects = await cosmosDbClient.queryItems<DatabaseProject>(
+          'projects',
+          'SELECT * FROM c WHERE c.status = "active"'
+        );
+        
+        // Filter projects based on user roles
+        return projects.filter(project => {
+          if (userRoles.includes('aicoe_admin')) return true;
+          if (userRoles.includes('aicoe_owner')) return true;
+          if (userRoles.includes('project_admin')) return project.status === 'active';
+          if (userRoles.includes('project_contributor')) return project.status === 'active';
+          if (userRoles.includes('project_reader')) return project.status === 'active';
+          return false;
+        });
+      } catch (error) {
+        console.error('[DatabaseService] Error fetching projects from Cosmos DB:', error);
+        // Fall through to mock data
+      }
+    }
     
-    // Filter projects based on user roles
+    // Mock data fallback
+    await this.delay(300);
     return this.mockProjects.filter(project => {
       if (userRoles.includes('aicoe_admin')) return true;
       if (userRoles.includes('aicoe_project_owner')) return true;
@@ -406,12 +477,56 @@ class DatabaseService {
       return false;
     });
   }
+  
   async getProject(projectId: string): Promise<DatabaseProject | null> {
+    if (!this.useMockData) {
+      try {
+        await this.ensureCosmosDb();
+        return await cosmosDbClient.readItem<DatabaseProject>('projects', projectId, projectId);
+      } catch (error) {
+        console.error('[DatabaseService] Error fetching project from Cosmos DB:', error);
+        // Fall through to mock data
+      }
+    }
+    
+    // Mock data fallback
     await this.delay(200);
     return this.mockProjects.find(p => p.id === projectId) || null;
   }
-
-  async getQuickQuestions(projectId: string): Promise<any[]> {
+  async getQuickQuestions(projectId: string): Promise<Array<{
+    id: string;
+    title: string;
+    description: string;
+    category: string;
+    usage: number;
+    question: string;
+  }>> {
+    if (!this.useMockData) {
+      try {
+        await this.ensureCosmosDb();
+        
+        // Query quick questions for this project
+        const questions = await cosmosDbClient.queryItems(
+          'quickQuestions',
+          'SELECT * FROM c WHERE c.projectId = @projectId ORDER BY c.priority',
+          [{ name: '@projectId', value: projectId }]
+        );
+        
+        return questions.map((q: Record<string, unknown>) => ({
+          id: q.id,
+          title: q.questionEn,
+          description: `${q.category} - Click to ask this question`,
+          category: q.category,
+          usage: Math.floor(Math.random() * 50) + 1, // Mock usage count
+          question: q.questionEn
+        }));
+      } catch (error) {
+        console.error('[DatabaseService] Error fetching quick questions from Cosmos DB:', error);
+        // Fall through to mock data
+      }
+    }
+    
+    // Mock data fallback
     await this.delay(150);
     const project = this.mockProjects.find(p => p.id === projectId);
     if (!project) return [];
@@ -518,29 +633,75 @@ class DatabaseService {
       updatedAt: new Date()
     } as UserModelParameters;
   }
-
   // User Personalization API (for accessibility and theme preferences)
-  async getUserPersonalization(userId: string): Promise<any> {
-    await this.delay(200);
+  async getUserPersonalization(userId: string): Promise<Record<string, unknown>> {
+    if (!this.useMockData) {
+      try {
+        await this.ensureCosmosDb();
+        const user = await cosmosDbClient.readItem<DatabaseUser>('users', userId, userId);
+        
+        if (user) {
+          return {
+            userId: user.id,
+            displayName: user.name,
+            preferences: user.preferences,
+            quickActions: ['chat', 'recent-files', 'quick-questions'],
+            favoriteProjects: user.projectAccess.map(pa => pa.projectId),
+            recentActivity: [],
+            customShortcuts: {}
+          };
+        }
+      } catch (error) {
+        console.error('[DatabaseService] Error fetching user personalization from Cosmos DB:', error);
+        // Fall through to mock data
+      }
+    }
     
-    // Mock user personalization data
-    // In real implementation, this would fetch from Cosmos DB
+    // Mock data fallback
+    await this.delay(200);
     return {
       userId,
       displayName: 'John Doe',
       preferences: null, // Will use defaults from accessibilityService
       quickActions: ['chat', 'recent-files', 'quick-questions'],
-      favoriteProjects: ['canadaLife', 'jurisprudence'],
+      favoriteProjects: ['canadalife', 'jurisprudence'],
       recentActivity: [],
       customShortcuts: {}
     };
   }
 
-  async updateUserPersonalization(userId: string, updates: any): Promise<void> {
-    await this.delay(300);
+  async updateUserPersonalization(userId: string, updates: Record<string, unknown>): Promise<void> {
+    if (!this.useMockData) {
+      try {
+        await this.ensureCosmosDb();
+        
+        // Fetch existing user
+        const existingUser = await cosmosDbClient.readItem<DatabaseUser>('users', userId, userId);
+        
+        if (existingUser) {
+          // Merge updates with existing user data
+          const updatedUser: DatabaseUser = {
+            ...existingUser,
+            preferences: {
+              ...existingUser.preferences,
+              ...(updates.preferences as DatabaseUser['preferences'])
+            },
+            lastLoginAt: new Date()
+          };
+          
+          await cosmosDbClient.updateItem('users', userId, updatedUser, userId);
+          console.log(`[DatabaseService] Updated personalization in Cosmos DB for user ${userId}`);
+          return;
+        }
+      } catch (error) {
+        console.error('[DatabaseService] Error updating user personalization in Cosmos DB:', error);
+        // Fall through to mock
+      }
+    }
     
-    // Mock update - in real app, this would save to Cosmos DB
-    console.log(`[DatabaseService] Updated personalization for user ${userId}:`, updates);
+    // Mock update fallback
+    await this.delay(300);
+    console.log(`[DatabaseService] Updated personalization (mock) for user ${userId}:`, updates);
   }
 
   // Global Settings API
