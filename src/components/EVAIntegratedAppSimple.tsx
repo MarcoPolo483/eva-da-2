@@ -4,6 +4,7 @@ import { rbacManager, type User } from '../lib/rbacManager';
 import { databaseService, type DatabaseProject } from '../lib/databaseService';
 import { EnhancedChatInterface } from './enhanced/EnhancedChatInterface';
 import { ManageContentInterface } from './enhanced/ManageContentInterface';
+import { SettingsModal } from './accessibility/SettingsModal';
 import './integrated/EVAIntegratedApp.css';
 
 interface QuickQuestion {
@@ -24,9 +25,11 @@ export function EVAIntegratedApp() {
   const [selectedProject, setSelectedProject] = useState<string>('canadaLife');
   const [viewMode, setViewMode] = useState<ViewMode>('business_project');
   const [businessProjectTab, setBusinessProjectTab] = useState<BusinessProjectTab>('chat');
-  const [showRoleSelection, setShowRoleSelection] = useState(false);  const [project, setProject] = useState<DatabaseProject | null>(null);
+  const [showRoleSelection, setShowRoleSelection] = useState(false);
+  const [showSettings, setShowSettings] = useState(false);
+  const [project, setProject] = useState<DatabaseProject | null>(null);
   const [quickQuestions, setQuickQuestions] = useState<QuickQuestion[]>([]);
-  const [selectedQuestion, setSelectedQuestion] = useState<string>('');  useEffect(() => {
+  const [selectedQuestion, setSelectedQuestion] = useState<string>('');useEffect(() => {
     // Check for existing user session
     const existingUser = rbacManager.getCurrentUser();
     if (existingUser) {
@@ -143,9 +146,15 @@ export function EVAIntegratedApp() {
       </div>
     );
   }
-
   return (
     <div className="eva-integrated-app">
+      {/* Settings Modal */}
+      <SettingsModal
+        isOpen={showSettings}
+        onClose={() => setShowSettings(false)}
+        userId={currentUser?.id}
+      />
+
       {/* Simplified Navigation */}
       <header className="eva-main-header">
         <div className="header-content">
@@ -157,6 +166,15 @@ export function EVAIntegratedApp() {
           <div className="user-info">
             <span>Welcome, {currentUser.name}</span>
             <span className="user-role">({currentUser.roles.join(', ')})</span>
+            <button 
+              className="settings-btn"
+              onClick={() => setShowSettings(true)}
+              title="Open Settings"
+              aria-label="Open accessibility and personalization settings"
+            >
+              <span className="settings-icon">⚙️</span>
+              Settings
+            </button>
             <button 
               className="sign-out-btn"
               onClick={() => {

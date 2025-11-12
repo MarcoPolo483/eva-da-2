@@ -1,0 +1,3963 @@
+{
+  "meta": {
+    "project": "EVA Platform 2.0",
+    "version": "draft",
+    "source": "KMTool_Requirements_Apr2025_FINAL.xlsx",
+    "generated_on": "2025-11-12"
+  },
+  "functional_requirements": [
+    {
+      "id": "W1",
+      "area": "Workflow",
+      "description": "Create",
+      "high_level_requirement": "Ability for the System to CRUD  tasks for the System and Users according to configured parameters.",
+      "detailed_requirement": "nan",
+      "comments": "nan"
+    },
+    {
+      "id": "W1.1",
+      "area": "Workflow",
+      "description": "Create",
+      "high_level_requirement": "nan",
+      "detailed_requirement": "Ability for the System to CRUD  tasks for the System according to configured parameters.",
+      "comments": "nan"
+    },
+    {
+      "id": "W1.2",
+      "area": "Workflow",
+      "description": "Create",
+      "high_level_requirement": "nan",
+      "detailed_requirement": "Ability for the System to CRUD tasks for Users according to configured parameters.",
+      "comments": "nan"
+    },
+    {
+      "id": "W2",
+      "area": "Workflow",
+      "description": "Create",
+      "high_level_requirement": "Ability for a User to CRUD tasks for the System and Users according to configured parameters.",
+      "detailed_requirement": "nan",
+      "comments": "nan"
+    },
+    {
+      "id": "W2.1",
+      "area": "Workflow",
+      "description": "Create",
+      "high_level_requirement": "nan",
+      "detailed_requirement": "Ability for a User to CRUD tasks for the System according to configured parameters.",
+      "comments": "Note: This would a task is automated (e.g. publishing)"
+    },
+    {
+      "id": "W2.2",
+      "area": "Workflow",
+      "description": "Create",
+      "high_level_requirement": "nan",
+      "detailed_requirement": "Ability for a User to CRUD tasks for Users according to configured parameters.",
+      "comments": "nan"
+    },
+    {
+      "id": "W3",
+      "area": "Workflow",
+      "description": "Create",
+      "high_level_requirement": "Ability for the Administrative User to configure the parameters of task CRUDing.",
+      "detailed_requirement": "nan",
+      "comments": "E.G- Types of task, who can create, flow, format"
+    },
+    {
+      "id": "W4",
+      "area": "Workflow",
+      "description": "Create",
+      "high_level_requirement": "Ability for the User to save tasks as drafts.",
+      "detailed_requirement": "nan",
+      "comments": "nan"
+    },
+    {
+      "id": "W5",
+      "area": "Workflow",
+      "description": "Create",
+      "high_level_requirement": "Ability for the User to create a task from outside the KMT",
+      "detailed_requirement": "nan",
+      "comments": "E.G. Create an enquiry task viewing a client case in CURAM\nNOTE: Task refers to a task in the KM system, not a CURAM task."
+    },
+    {
+      "id": "W6",
+      "area": "Workflow",
+      "description": "Create",
+      "high_level_requirement": "Ability for the User to attach files to tasks.",
+      "detailed_requirement": "nan",
+      "comments": "Example:  Ability for the User to attach the following file formats: doc, docx, xls, xlsx, ppt, pptx, pdf, html, htm, txt, rtf, jpeg, jpg, gif, png, tiff, tif, mp4, avi, mov, m4a, mp3, wav, flv, eps, svg."
+    },
+    {
+      "id": "W6.1",
+      "area": "Workflow",
+      "description": "Create",
+      "high_level_requirement": "nan",
+      "detailed_requirement": "Ability for the Administrative User to configure which file formats can be attached.",
+      "comments": "Example: The admin can blacklist or whitelist what file a user can attach"
+    },
+    {
+      "id": "W7",
+      "area": "Workflow",
+      "description": "Create",
+      "high_level_requirement": "Ability for the System to record the User information of the User that CRUDs tasks.",
+      "detailed_requirement": "nan",
+      "comments": "nan"
+    },
+    {
+      "id": "W7.1",
+      "area": "Workflow",
+      "description": "Create",
+      "high_level_requirement": "nan",
+      "detailed_requirement": "Ability for the System to populate  a task with User information according to configured parameters",
+      "comments": "nan"
+    },
+    {
+      "id": "W8",
+      "area": "Workflow",
+      "description": "Create",
+      "high_level_requirement": "Ability for the User to associate tasks.",
+      "detailed_requirement": "nan",
+      "comments": ""
+    },
+    {
+      "id": "W8.1",
+      "area": "Workflow",
+      "description": "Create",
+      "high_level_requirement": "nan",
+      "detailed_requirement": "Ability for the User to associate a Client case to a task.",
+      "comments": "E.G If a User is creating an enquiry task from a client case in CURAM, the System needs to create an association between that case and the task. So when another User reviews the task they will know what client case it relates to. And conversely, the task has to be associated with the case so when someone views the case they can access the task (this may be a CURAM functionality)"
+    },
+    {
+      "id": "W8.2",
+      "area": "Workflow",
+      "description": "Create",
+      "high_level_requirement": "nan",
+      "detailed_requirement": "Ability for the User to associate multiple Client cases to a task.",
+      "comments": "nan"
+    },
+    {
+      "id": "W8.3",
+      "area": "Workflow",
+      "description": "Create",
+      "high_level_requirement": "nan",
+      "detailed_requirement": "Ability for the User to associate a KMT page to a task.",
+      "comments": "E.G For a content update task, there should be an association or relationship between the pages being updated and the task. So a User will see the pages affected in the task and the pages will have a link back to the task. This should also work for sections on a page"
+    },
+    {
+      "id": "W8.4",
+      "area": "Workflow",
+      "description": "Create",
+      "high_level_requirement": "nan",
+      "detailed_requirement": "Ability for the User to associate multiple KMT pages to a task.",
+      "comments": "nan"
+    },
+    {
+      "id": "W8.5",
+      "area": "Workflow",
+      "description": "Create",
+      "high_level_requirement": "nan",
+      "detailed_requirement": "Ability for the User to CRUD associations for tasks.",
+      "comments": "nan"
+    },
+    {
+      "id": "W9",
+      "area": "Workflow",
+      "description": "Create",
+      "high_level_requirement": "Ability for the System to bundle two or more tasks.",
+      "detailed_requirement": "nan",
+      "comments": "nan"
+    },
+    {
+      "id": "W10",
+      "area": "Workflow",
+      "description": "Templates",
+      "high_level_requirement": "Ability for the User to create tasks using a template.",
+      "detailed_requirement": "nan",
+      "comments": "nan"
+    },
+    {
+      "id": "W11",
+      "area": "Workflow",
+      "description": "Templates",
+      "high_level_requirement": "Ability for the Administrative User to CRUD task templates.",
+      "detailed_requirement": "nan",
+      "comments": "nan"
+    },
+    {
+      "id": "W12",
+      "area": "Workflow",
+      "description": "Templates",
+      "high_level_requirement": "Ability for the User to tag task templates with metadata.",
+      "detailed_requirement": "nan",
+      "comments": "nan"
+    },
+    {
+      "id": "W13",
+      "area": "Workflow",
+      "description": "Templates",
+      "high_level_requirement": "Ability for the Administrative User to CRUD metadata for task templates.",
+      "detailed_requirement": "nan",
+      "comments": "nan"
+    },
+    {
+      "id": "W14",
+      "area": "Workflow",
+      "description": "Migrate",
+      "high_level_requirement": "Ability for the System to migrate tasks, based on configured parameters.",
+      "detailed_requirement": "nan",
+      "comments": "Example of configured parameters:  Status, Dates, Type of task Business line, Metadata"
+    },
+    {
+      "id": "W15",
+      "area": "Workflow",
+      "description": "Migrate",
+      "high_level_requirement": "Ability for the System to delete tasks, based on configured parameters.",
+      "detailed_requirement": "nan",
+      "comments": "Examples of configured parameters: Date, End of life, Type of task"
+    },
+    {
+      "id": "W16",
+      "area": "Workflow",
+      "description": "Migrate",
+      "high_level_requirement": "Ability for the Administrative User to configure the parameters of task migration.",
+      "detailed_requirement": "nan",
+      "comments": "nan"
+    },
+    {
+      "id": "W17",
+      "area": "Workflow",
+      "description": "Migrate",
+      "high_level_requirement": "Ability for the Administrative User to configure the parameters of task deletion.",
+      "detailed_requirement": "nan",
+      "comments": "nan"
+    },
+    {
+      "id": "W18",
+      "area": "Workflow",
+      "description": "Information",
+      "high_level_requirement": "Ability for the System to record the information for tasks according to configured parameters.",
+      "detailed_requirement": "nan",
+      "comments": "Information - administrative details about the task (i.e. user details, topic, type of task, possibly metadata)"
+    },
+    {
+      "id": "W19",
+      "area": "Workflow",
+      "description": "Information",
+      "high_level_requirement": "Ability for a User to record the information for tasks according to configured parameters.",
+      "detailed_requirement": "nan",
+      "comments": "nan"
+    },
+    {
+      "id": "W20",
+      "area": "Workflow",
+      "description": "Information",
+      "high_level_requirement": "Ability for the System to CRUD information for tasks according to configured parameters.",
+      "detailed_requirement": "nan",
+      "comments": "nan"
+    },
+    {
+      "id": "W21",
+      "area": "Workflow",
+      "description": "Information",
+      "high_level_requirement": "Ability for a User to CRUD information for tasks according to configured parameters.",
+      "detailed_requirement": "",
+      "comments": "Information - administrative details about the task (i.e. user details, topic, type of task, importance (for research), possibly the same as metadata"
+    },
+    {
+      "id": "W22",
+      "area": "Workflow",
+      "description": "Information",
+      "high_level_requirement": "Ability for the System to populate the relevant information for tasks according to configured parameters.",
+      "detailed_requirement": "nan",
+      "comments": "nan"
+    },
+    {
+      "id": "W23",
+      "area": "Workflow",
+      "description": "Information",
+      "high_level_requirement": "Ability for the System to update information related to tasks in real time based on System and User actions and information changes.",
+      "detailed_requirement": "nan",
+      "comments": "nan"
+    },
+    {
+      "id": "W24",
+      "area": "Workflow",
+      "description": "Information",
+      "high_level_requirement": "Ability for the Administrative User to configure the parameters information.",
+      "detailed_requirement": "nan",
+      "comments": "nan"
+    },
+    {
+      "id": "W24.1",
+      "area": "Workflow",
+      "description": "Information",
+      "high_level_requirement": "nan",
+      "detailed_requirement": "Ability for the Administrative User to configure the parameters for recording information.",
+      "comments": "nan"
+    },
+    {
+      "id": "W24.2",
+      "area": "Workflow",
+      "description": "Information",
+      "high_level_requirement": "nan",
+      "detailed_requirement": "Ability for the Administrative User to configure the parameters for CRUDing information.",
+      "comments": "nan"
+    },
+    {
+      "id": "W24.3",
+      "area": "Workflow",
+      "description": "Information",
+      "high_level_requirement": "nan",
+      "detailed_requirement": "Ability for the Administrative User to configure the parameters fro populating information.",
+      "comments": "nan"
+    },
+    {
+      "id": "W25",
+      "area": "Workflow",
+      "description": "Notes",
+      "high_level_requirement": "Ability for the User to CRUD notes.",
+      "detailed_requirement": "nan",
+      "comments": "Notes - the details of what is required (e.g. the question, the feedback, details of why the content must be updated, why the new content is needed), and what has been done (e.g. the answer). Notes can also include communication between Users."
+    },
+    {
+      "id": "W26",
+      "area": "Workflow",
+      "description": "Notes",
+      "high_level_requirement": "Ability for the User to save their notes as a draft .",
+      "detailed_requirement": "nan",
+      "comments": "nan"
+    },
+    {
+      "id": "W27",
+      "area": "Workflow",
+      "description": "Notes",
+      "high_level_requirement": "Ability for an Administrative User to configure notes.",
+      "detailed_requirement": "nan",
+      "comments": "nan"
+    },
+    {
+      "id": "W27.1",
+      "area": "Workflow",
+      "description": "Notes",
+      "high_level_requirement": "nan",
+      "detailed_requirement": "Ability for an Administrative User to configure the format of notes.",
+      "comments": "nan"
+    },
+    {
+      "id": "W27.2",
+      "area": "Workflow",
+      "description": "Notes",
+      "high_level_requirement": "nan",
+      "detailed_requirement": "Ability for an Administrative User to configure the parameters of displaying notes.",
+      "comments": "nan"
+    },
+    {
+      "id": "W28",
+      "area": "Workflow",
+      "description": "Status",
+      "high_level_requirement": "Ability for the System to CRUD task status according to configured parameters.",
+      "detailed_requirement": "nan",
+      "comments": "nan"
+    },
+    {
+      "id": "W28.1",
+      "area": "Workflow",
+      "description": "Status",
+      "high_level_requirement": "nan",
+      "detailed_requirement": "Ability for the System to CRUD multiple statuses for tasks.",
+      "comments": "A task can have more that one status - i.e. \"New\" and \"Urgent\" or \"Completed\" and \"Important\""
+    },
+    {
+      "id": "W29",
+      "area": "Workflow",
+      "description": "Status",
+      "high_level_requirement": "Ability for the Administrative User to configure the parameters of status CRUDing for tasks.",
+      "detailed_requirement": "nan",
+      "comments": "nan"
+    },
+    {
+      "id": "W30",
+      "area": "Workflow",
+      "description": "Status",
+      "high_level_requirement": "Ability for the User to view the status.",
+      "detailed_requirement": "nan",
+      "comments": "nan"
+    },
+    {
+      "id": "W30.1",
+      "area": "Workflow",
+      "description": "Status",
+      "high_level_requirement": "nan",
+      "detailed_requirement": "Ability for the User to view the current status of tasks.",
+      "comments": "nan"
+    },
+    {
+      "id": "W31",
+      "area": "Workflow",
+      "description": "Status",
+      "high_level_requirement": "Ability for a User to view the history of the status .",
+      "detailed_requirement": "nan",
+      "comments": "nan"
+    },
+    {
+      "id": "W31.1",
+      "area": "Workflow",
+      "description": "Status",
+      "high_level_requirement": "nan",
+      "detailed_requirement": "Ability for a User to view the status history.",
+      "comments": "nan"
+    },
+    {
+      "id": "W32",
+      "area": "Workflow",
+      "description": "Status",
+      "high_level_requirement": "Ability for a User to view the assignment status of tasks.",
+      "detailed_requirement": "nan",
+      "comments": "nan"
+    },
+    {
+      "id": "W32.1",
+      "area": "Workflow",
+      "description": "Status",
+      "high_level_requirement": "nan",
+      "detailed_requirement": "Ability for a User to view the current assignment status of tasks.",
+      "comments": "nan"
+    },
+    {
+      "id": "W32.2",
+      "area": "Workflow",
+      "description": "Status",
+      "high_level_requirement": "nan",
+      "detailed_requirement": "Ability for a User to view the history of the assignment status of tasks.",
+      "comments": "nan"
+    },
+    {
+      "id": "W33",
+      "area": "Workflow",
+      "description": "Assign",
+      "high_level_requirement": "Ability for the System to assign tasks",
+      "detailed_requirement": "nan",
+      "comments": "NOTE: 1) Assign includes reassign 2) Configured parameters would include status. E.G. If the status of a task is New, the tasks is assigned to a specific queue for action."
+    },
+    {
+      "id": "W33.1",
+      "area": "Workflow",
+      "description": "Assign",
+      "high_level_requirement": "nan",
+      "detailed_requirement": "Ability for the System to assign tasks to the System according to configured parameters.",
+      "comments": "nan"
+    },
+    {
+      "id": "W33.2",
+      "area": "Workflow",
+      "description": "Assign",
+      "high_level_requirement": "nan",
+      "detailed_requirement": "Ability for the System to assign tasks to a User according to configured parameters.",
+      "comments": "nan"
+    },
+    {
+      "id": "W33.3",
+      "area": "Workflow",
+      "description": "Assign",
+      "high_level_requirement": "nan",
+      "detailed_requirement": "Ability for the System to assign tasks to a queue according to configured parameters.",
+      "comments": "nan"
+    },
+    {
+      "id": "W33.4",
+      "area": "Workflow",
+      "description": "Assign",
+      "high_level_requirement": "nan",
+      "detailed_requirement": "Ability for the System to assign a bundle of tasks to the System according to configured parameters.",
+      "comments": "nan"
+    },
+    {
+      "id": "W33.5",
+      "area": "Workflow",
+      "description": "Assign",
+      "high_level_requirement": "nan",
+      "detailed_requirement": "Ability for the System to assign a bundle of tasks to a User according to configured parameters.",
+      "comments": "nan"
+    },
+    {
+      "id": "W33.6",
+      "area": "Workflow",
+      "description": "Assign",
+      "high_level_requirement": "nan",
+      "detailed_requirement": "Ability for the System to assign a bundle of tasks to a queue according to configured parameters.",
+      "comments": "nan"
+    },
+    {
+      "id": "W33.7",
+      "area": "Workflow",
+      "description": "Assign",
+      "high_level_requirement": "nan",
+      "detailed_requirement": "Ability for the Sytem to use User information when assigning tasks",
+      "comments": "nan"
+    },
+    {
+      "id": "W34",
+      "area": "Workflow",
+      "description": "Assign",
+      "high_level_requirement": "Ability for a User to assign tasks",
+      "detailed_requirement": "nan",
+      "comments": "NOTES: 1) Assign includes reassign 2) Configured parameters would include status. E.G. If the status of a content update task is \"New\" a User could assign the task to a specific User for action. 3) Includes Users assiging a task to themselves"
+    },
+    {
+      "id": "W34.1",
+      "area": "Workflow",
+      "description": "Assign",
+      "high_level_requirement": "nan",
+      "detailed_requirement": "Ability for a User to assign tasks to the System according to configured parameters.",
+      "comments": "nan"
+    },
+    {
+      "id": "W34.2",
+      "area": "Workflow",
+      "description": "Assign",
+      "high_level_requirement": "nan",
+      "detailed_requirement": "Ability for a User to assign tasks to a User according to configured parameters.",
+      "comments": "nan"
+    },
+    {
+      "id": "W34.3",
+      "area": "Workflow",
+      "description": "Assign",
+      "high_level_requirement": "nan",
+      "detailed_requirement": "Ability for a User to assign tasks to a queue according to configured parameters.",
+      "comments": "nan"
+    },
+    {
+      "id": "W34.4",
+      "area": "Workflow",
+      "description": "Assign",
+      "high_level_requirement": "nan",
+      "detailed_requirement": "Ability for a User to assign a bundle of tasks to the System according to configured parameters.",
+      "comments": "nan"
+    },
+    {
+      "id": "W34.5",
+      "area": "Workflow",
+      "description": "Assign",
+      "high_level_requirement": "nan",
+      "detailed_requirement": "Ability for a User to assign a bundle of tasks to a User according to configured parameters.",
+      "comments": "nan"
+    },
+    {
+      "id": "W34.6",
+      "area": "Workflow",
+      "description": "Assign",
+      "high_level_requirement": "nan",
+      "detailed_requirement": "Ability for a User to assign a bundle of tasks to a queue according to configured parameters.",
+      "comments": "nan"
+    },
+    {
+      "id": "W35",
+      "area": "Workflow",
+      "description": "Assign",
+      "high_level_requirement": "Ability for a User to capture the reason a task was assigned.",
+      "detailed_requirement": "nan",
+      "comments": "NOTE: Assign includes reassign"
+    },
+    {
+      "id": "W36",
+      "area": "Workflow",
+      "description": "Assign",
+      "high_level_requirement": "Ability for the Administrative User to configure the parameters of task assignment.",
+      "detailed_requirement": "nan",
+      "comments": "NOTE: Assign includes reassign"
+    },
+    {
+      "id": "W37",
+      "area": "Workflow",
+      "description": "Assign",
+      "high_level_requirement": "Ability for the System to track the length of time that a task is waiting to be assigned.",
+      "detailed_requirement": "nan",
+      "comments": "nan"
+    },
+    {
+      "id": "W37.1",
+      "area": "Workflow",
+      "description": "Assign",
+      "high_level_requirement": "nan",
+      "detailed_requirement": "Ability for the System to track the length of time that a task is waiting to be assigned from the date that task is created in the System.",
+      "comments": "nan"
+    },
+    {
+      "id": "W38",
+      "area": "Workflow",
+      "description": "Assign",
+      "high_level_requirement": "Ability for the System to track the length of time that a task is assigned to a User.",
+      "detailed_requirement": "nan",
+      "comments": "nan"
+    },
+    {
+      "id": "W38.1",
+      "area": "Workflow",
+      "description": "Assign",
+      "high_level_requirement": "nan",
+      "detailed_requirement": "Ability for the System to track the length of time that a task is assigned to an individual User.",
+      "comments": "nan"
+    },
+    {
+      "id": "W38.2",
+      "area": "Workflow",
+      "description": "Assign",
+      "high_level_requirement": "nan",
+      "detailed_requirement": "Ability for the System to track the length of time that a task is assigned to a queue.",
+      "comments": "nan"
+    },
+    {
+      "id": "W38.3",
+      "area": "Workflow",
+      "description": "Assign",
+      "high_level_requirement": "nan",
+      "detailed_requirement": "Ability for the System to track the total length of time that a task is assigned to all Users and queues.",
+      "comments": "nan"
+    },
+    {
+      "id": "W39",
+      "area": "Workflow",
+      "description": "Assign",
+      "high_level_requirement": "Ability for the System to provide assignment history for tasks.",
+      "detailed_requirement": "nan",
+      "comments": "NOTE: Assignment includes reassignment"
+    },
+    {
+      "id": "W39.1",
+      "area": "Workflow",
+      "description": "Assign",
+      "high_level_requirement": "nan",
+      "detailed_requirement": "Ability for the System to display assignment history for tasks.",
+      "comments": "nan"
+    },
+    {
+      "id": "W39.2",
+      "area": "Workflow",
+      "description": "Assign",
+      "high_level_requirement": "nan",
+      "detailed_requirement": "Ability for the System to display the time stamp in the task assignment history.",
+      "comments": "nan"
+    },
+    {
+      "id": "W39.3",
+      "area": "Workflow",
+      "description": "Assign",
+      "high_level_requirement": "nan",
+      "detailed_requirement": "Ability for the System to display who assigned the task in the task assignment history.",
+      "comments": "nan"
+    },
+    {
+      "id": "W39.4",
+      "area": "Workflow",
+      "description": "Assign",
+      "high_level_requirement": "nan",
+      "detailed_requirement": "Ability for the System to display who the tasks is assigned to in the task assignment history",
+      "comments": "nan"
+    },
+    {
+      "id": "W40",
+      "area": "Workflow",
+      "description": "Assign",
+      "high_level_requirement": "Ability for the System to capture the reason a task was assigned.",
+      "detailed_requirement": "nan",
+      "comments": "nan"
+    },
+    {
+      "id": "W41",
+      "area": "Workflow",
+      "description": "View",
+      "high_level_requirement": "Ability for a User to view tasks.",
+      "detailed_requirement": "nan",
+      "comments": "nan"
+    },
+    {
+      "id": "W41.1",
+      "area": "Workflow",
+      "description": "View",
+      "high_level_requirement": "nan",
+      "detailed_requirement": "Ability for a User to view their tasks.",
+      "comments": "nan"
+    },
+    {
+      "id": "W41.2",
+      "area": "Workflow",
+      "description": "View",
+      "high_level_requirement": "nan",
+      "detailed_requirement": "Ability for a User to view other tasks according to configured parameters.",
+      "comments": "nan"
+    },
+    {
+      "id": "W41.3",
+      "area": "Workflow",
+      "description": "View",
+      "high_level_requirement": "nan",
+      "detailed_requirement": "Ability for a User to view tasks queues according to configured parameters.",
+      "comments": "nan"
+    },
+    {
+      "id": "W42",
+      "area": "Workflow",
+      "description": "View",
+      "high_level_requirement": "Ability for the Administrative User to configure the parameters what a User can view",
+      "detailed_requirement": "nan",
+      "comments": "EG.: Only their own tasks, all tasks, significant responses (as reference material), tasks for a specific topic, a specific type of task\nNOTE: Includes which queues a User can view"
+    },
+    {
+      "id": "W43",
+      "area": "Workflow",
+      "description": "Workload",
+      "high_level_requirement": "Ability for the System to alert a User when a task in their workload has been updated.",
+      "detailed_requirement": "",
+      "comments": "nan"
+    },
+    {
+      "id": "W43.1",
+      "area": "Workflow",
+      "description": "Workload",
+      "high_level_requirement": "",
+      "detailed_requirement": "Ability for the System to alert a User of the date and time a task in their workload has been updated.",
+      "comments": "nan"
+    },
+    {
+      "id": "W43.2",
+      "area": "Workflow",
+      "description": "Workload",
+      "high_level_requirement": "",
+      "detailed_requirement": "Ability for the System to alert a User which User updated a task in their workload.",
+      "comments": "nan"
+    },
+    {
+      "id": "W43.3",
+      "area": "Workflow",
+      "description": "Workload",
+      "high_level_requirement": "",
+      "detailed_requirement": "Ability for the System to alert a User that the System has updated a task in their workload.",
+      "comments": "nan"
+    },
+    {
+      "id": "W43.4",
+      "area": "Workflow",
+      "description": "Workload",
+      "high_level_requirement": "",
+      "detailed_requirement": "Ability for the System to alert a User of the reason a task in their workload has been updated.",
+      "comments": "nan"
+    },
+    {
+      "id": "W44",
+      "area": "Workflow",
+      "description": "Workload",
+      "high_level_requirement": "Ability for the Sytem to alert a User if there is a new task in their workload.",
+      "detailed_requirement": "nan",
+      "comments": "nan"
+    },
+    {
+      "id": "W45",
+      "area": "Workflow",
+      "description": "Workload",
+      "high_level_requirement": "Ability for the System to track workload volumes according to configured parameters",
+      "detailed_requirement": "nan",
+      "comments": "E.g. number of completed content updates for a specified period."
+    },
+    {
+      "id": "W46",
+      "area": "Workflow",
+      "description": "Workload",
+      "high_level_requirement": "Ability for the User to view workload volumes according to configured parameters.",
+      "detailed_requirement": "nan",
+      "comments": "nan"
+    },
+    {
+      "id": "W47",
+      "area": "Workflow",
+      "description": "Workload",
+      "high_level_requirement": "Ability for the Administrative User to configure the parameters of workload tracking.",
+      "detailed_requirement": "nan",
+      "comments": "E.g. show workload assigned to a specific user, or relating to a specific task or topic,"
+    },
+    {
+      "id": "W48",
+      "area": "Workflow",
+      "description": "Due date",
+      "high_level_requirement": "Ability for the System to generate an alert when tasks are due based on a defined due date.",
+      "detailed_requirement": "nan",
+      "comments": "nan"
+    },
+    {
+      "id": "W48.1",
+      "area": "Workflow",
+      "description": "Due date",
+      "high_level_requirement": "nan",
+      "detailed_requirement": "Ability for the System to alert a User when tasks are due, based on a defined due date.",
+      "comments": "nan"
+    },
+    {
+      "id": "W48.2",
+      "area": "Workflow",
+      "description": "Due date",
+      "high_level_requirement": "nan",
+      "detailed_requirement": "Ability for the System to alert a User whe tasks are  close to being due, based on a defined due date.",
+      "comments": "nan"
+    },
+    {
+      "id": "W49",
+      "area": "Workflow",
+      "description": "Due date",
+      "high_level_requirement": "Ability for the System to alert a User when tasks are overdue, based on a defined due date.",
+      "detailed_requirement": "nan",
+      "comments": "nan"
+    },
+    {
+      "id": "W50",
+      "area": "Workflow",
+      "description": "Due date",
+      "high_level_requirement": "Ability for the User to define the due date for tasks according to configured parameters",
+      "detailed_requirement": "nan",
+      "comments": "nan"
+    },
+    {
+      "id": "W51",
+      "area": "Workflow",
+      "description": "Due date",
+      "high_level_requirement": "Ability for the Administrative User to configure the parameters of due dates",
+      "detailed_requirement": "nan",
+      "comments": "nan"
+    },
+    {
+      "id": "W52",
+      "area": "Workflow",
+      "description": "Search",
+      "high_level_requirement": "Ability for the User to search all tasks.",
+      "detailed_requirement": "nan",
+      "comments": "NOTE: Search for tasks, incuding, completed, active etc."
+    },
+    {
+      "id": "W53",
+      "area": "Workflow",
+      "description": "Search",
+      "high_level_requirement": "Ability for the User to search their tasks.",
+      "detailed_requirement": "nan",
+      "comments": "nan"
+    },
+    {
+      "id": "W54",
+      "area": "Workflow",
+      "description": "Search",
+      "high_level_requirement": "Ability for the User to refine task search results.",
+      "detailed_requirement": "",
+      "comments": "nan"
+    },
+    {
+      "id": "W54.1",
+      "area": "Workflow",
+      "description": "Search",
+      "high_level_requirement": "",
+      "detailed_requirement": "Ability for the User to modify the number of search results displayed on a page.",
+      "comments": "nan"
+    },
+    {
+      "id": "W54.2",
+      "area": "Workflow",
+      "description": "Search",
+      "high_level_requirement": "",
+      "detailed_requirement": "Ability for the User to perform a search using wildcards.",
+      "comments": "nan"
+    },
+    {
+      "id": "W54.3",
+      "area": "Workflow",
+      "description": "Search",
+      "high_level_requirement": "",
+      "detailed_requirement": "Ability for the User to perform a search using operand.",
+      "comments": "nan"
+    },
+    {
+      "id": "W54.4",
+      "area": "Workflow",
+      "description": "Search",
+      "high_level_requirement": "",
+      "detailed_requirement": "Ability for the User to perform a search using Boolean operators.",
+      "comments": "nan"
+    },
+    {
+      "id": "W54.5",
+      "area": "Workflow",
+      "description": "Search",
+      "high_level_requirement": "",
+      "detailed_requirement": "Ability for the User to filter search results based on configured parameters.",
+      "comments": "nan"
+    },
+    {
+      "id": "W54.6",
+      "area": "Workflow",
+      "description": "Search",
+      "high_level_requirement": "",
+      "detailed_requirement": "Ability for the User to sort search results.",
+      "comments": "nan"
+    },
+    {
+      "id": "W55",
+      "area": "Workflow",
+      "description": "Privacy",
+      "high_level_requirement": "Ability for the System to scan tasks and notes for personal information,according to configured parameters.",
+      "detailed_requirement": "nan",
+      "comments": "E.G.  Same as our Outlook does now - you get an alert if you try and email a SIN."
+    },
+    {
+      "id": "W55.1",
+      "area": "Workflow",
+      "description": "Privacy",
+      "high_level_requirement": "nan",
+      "detailed_requirement": "Ability for the System to scan tasks for personal information,according to configured parameters.",
+      "comments": "nan"
+    },
+    {
+      "id": "W55.2",
+      "area": "Workflow",
+      "description": "Privacy",
+      "high_level_requirement": "nan",
+      "detailed_requirement": "Ability for the System to scan notes for personal information,according to configured parameters.",
+      "comments": "nan"
+    },
+    {
+      "id": "W56",
+      "area": "Workflow",
+      "description": "Privacy",
+      "high_level_requirement": "Ability for the Administrative User to configure the parameters of scanning for personal information.",
+      "detailed_requirement": "nan",
+      "comments": "nan"
+    },
+    {
+      "id": "W57",
+      "area": "Workflow",
+      "description": "Privacy",
+      "high_level_requirement": "Ability for the System to prevent the User from creating a task when personal information has been detected.",
+      "detailed_requirement": "nan",
+      "comments": "nan"
+    },
+    {
+      "id": "W58",
+      "area": "Workflow",
+      "description": "Privacy",
+      "high_level_requirement": "Ability for the System to prevent the User from creating notes when personal information has been detected.",
+      "detailed_requirement": "nan",
+      "comments": "nan"
+    },
+    {
+      "id": "W59",
+      "area": "Workflow",
+      "description": "Privacy",
+      "high_level_requirement": "Ability for the System to notify the User when personal information has been detected.",
+      "detailed_requirement": "nan",
+      "comments": "nan"
+    },
+    {
+      "id": "W60",
+      "area": "Workflow",
+      "description": "Privacy",
+      "high_level_requirement": "Ability for the System to highlight personal information that is detected.",
+      "detailed_requirement": "nan",
+      "comments": "nan"
+    },
+    {
+      "id": "A1",
+      "area": "Access control",
+      "description": "Sign-in",
+      "high_level_requirement": "Ability for the System to support desktop sign-in",
+      "detailed_requirement": "nan",
+      "comments": "nan"
+    },
+    {
+      "id": "A1.1",
+      "area": "Access control",
+      "description": "Sign-in",
+      "high_level_requirement": "nan",
+      "detailed_requirement": "Ability for the System to verify User access via the ESDC authentication for desktop",
+      "comments": "nan"
+    },
+    {
+      "id": "A2",
+      "area": "Access control",
+      "description": "Role",
+      "high_level_requirement": "Ability for the Administrative User to CRUD roles",
+      "detailed_requirement": "nan",
+      "comments": "nan"
+    },
+    {
+      "id": "A2.1",
+      "area": "Access control",
+      "description": "Role",
+      "high_level_requirement": "nan",
+      "detailed_requirement": "Ability for Administrative User to assign permissions to a role",
+      "comments": "nan"
+    },
+    {
+      "id": "A3",
+      "area": "Access control",
+      "description": "Role",
+      "high_level_requirement": "Ability for the User to assign roles",
+      "detailed_requirement": "nan",
+      "comments": "nan"
+    },
+    {
+      "id": "A3.1",
+      "area": "Access control",
+      "description": "Role",
+      "high_level_requirement": "nan",
+      "detailed_requirement": "Ability for the User to have multiple roles.",
+      "comments": "nan"
+    },
+    {
+      "id": "A3.2",
+      "area": "Access control",
+      "description": "Role",
+      "high_level_requirement": "nan",
+      "detailed_requirement": "Ability for the User to assign a role to a User Group",
+      "comments": "nan"
+    },
+    {
+      "id": "A3.3",
+      "area": "Access control",
+      "description": "Role",
+      "high_level_requirement": "nan",
+      "detailed_requirement": "Ability for the User to remove a role from a User Group",
+      "comments": "nan"
+    },
+    {
+      "id": "A3.4",
+      "area": "Access control",
+      "description": "Role",
+      "high_level_requirement": "nan",
+      "detailed_requirement": "Ability for the User to assign a role to a User",
+      "comments": "nan"
+    },
+    {
+      "id": "A3.5",
+      "area": "Access control",
+      "description": "Role",
+      "high_level_requirement": "nan",
+      "detailed_requirement": "Ability for the User to remove a role from a User",
+      "comments": "nan"
+    },
+    {
+      "id": "A4",
+      "area": "Access control",
+      "description": "User Group",
+      "high_level_requirement": "Ability for the User to CRUD User Groups",
+      "detailed_requirement": "nan",
+      "comments": "nan"
+    },
+    {
+      "id": "A4.1",
+      "area": "Access control",
+      "description": "User Group",
+      "high_level_requirement": "nan",
+      "detailed_requirement": "Ability for the User to assign User Groups to workflows",
+      "comments": "nan"
+    },
+    {
+      "id": "A4.2",
+      "area": "Access control",
+      "description": "User Group",
+      "high_level_requirement": "nan",
+      "detailed_requirement": "Ability for the User to unassign User Groups from workflows",
+      "comments": "nan"
+    },
+    {
+      "id": "A4.3",
+      "area": "Access control",
+      "description": "User Group",
+      "high_level_requirement": "nan",
+      "detailed_requirement": "Ability for the User to reassign workflows to other User Groups",
+      "comments": "nan"
+    },
+    {
+      "id": "A4.4",
+      "area": "Access control",
+      "description": "User Group",
+      "high_level_requirement": "nan",
+      "detailed_requirement": "Ability for the User to assign Users to User Groups",
+      "comments": "nan"
+    },
+    {
+      "id": "A4.5",
+      "area": "Access control",
+      "description": "User Group",
+      "high_level_requirement": "nan",
+      "detailed_requirement": "Ability for the User to remove Users from User Groups",
+      "comments": "nan"
+    },
+    {
+      "id": "A4.6",
+      "area": "Access control",
+      "description": "User Group",
+      "high_level_requirement": "nan",
+      "detailed_requirement": "Ability for the User to assign User Groups to other User Groups",
+      "comments": "nan"
+    },
+    {
+      "id": "A4.7",
+      "area": "Access control",
+      "description": "User Group",
+      "high_level_requirement": "nan",
+      "detailed_requirement": "Ability for the User to remove Users Groups from other User Groups",
+      "comments": "nan"
+    },
+    {
+      "id": "C1",
+      "area": "CMS",
+      "description": "Templates",
+      "high_level_requirement": "Ability for the Administrative User to CRUD content templates.",
+      "detailed_requirement": "",
+      "comments": ""
+    },
+    {
+      "id": "C2",
+      "area": "CMS",
+      "description": "Metadata",
+      "high_level_requirement": "Ability for the User to CRUD metadata",
+      "detailed_requirement": "",
+      "comments": ""
+    },
+    {
+      "id": "C2.1",
+      "area": "CMS",
+      "description": "Metadata",
+      "high_level_requirement": "",
+      "detailed_requirement": "Ability for the User to CRUD metadata categories",
+      "comments": "nan"
+    },
+    {
+      "id": "C2.2",
+      "area": "CMS",
+      "description": "Metadata",
+      "high_level_requirement": "",
+      "detailed_requirement": "Ability for the User to CRUD metadata values",
+      "comments": "nan"
+    },
+    {
+      "id": "C3",
+      "area": "CMS",
+      "description": "Metadata",
+      "high_level_requirement": "Ability for the User to tag content with metadata",
+      "detailed_requirement": "",
+      "comments": "nan"
+    },
+    {
+      "id": "C4",
+      "area": "CMS",
+      "description": "Metadata",
+      "high_level_requirement": "Ability for the User to tag content templates with metadata",
+      "detailed_requirement": "",
+      "comments": "nan"
+    },
+    {
+      "id": "C5",
+      "area": "CMS",
+      "description": "Metadata",
+      "high_level_requirement": "Ability for the Administrative User to configure the parameters of metadata tagging",
+      "detailed_requirement": "",
+      "comments": "nan"
+    },
+    {
+      "id": "C6",
+      "area": "CMS",
+      "description": "Content development",
+      "high_level_requirement": "Ability for User to CRUD content, based on configured parameters",
+      "detailed_requirement": "",
+      "comments": ""
+    },
+    {
+      "id": "C6.1",
+      "area": "CMS",
+      "description": "Content development",
+      "high_level_requirement": "",
+      "detailed_requirement": "Ability for the User to CRUD content in English",
+      "comments": ""
+    },
+    {
+      "id": "C6.2",
+      "area": "CMS",
+      "description": "Content development",
+      "high_level_requirement": "",
+      "detailed_requirement": "Ability for the User to CRUD content in French",
+      "comments": ""
+    },
+    {
+      "id": "C6.3",
+      "area": "CMS",
+      "description": "Content development",
+      "high_level_requirement": "",
+      "detailed_requirement": "Ability for the User to select content template to use",
+      "comments": ""
+    },
+    {
+      "id": "C6.4",
+      "area": "CMS",
+      "description": "Content development",
+      "high_level_requirement": "",
+      "detailed_requirement": "Ability for the User to CRUD accessible  markup elements using a WYSIWYG",
+      "comments": "Example:\nUser should be able to CRUD HTML elements using a user-friendly intuitive tool to create elements on a page rather than coding it manually"
+    },
+    {
+      "id": "C6.5",
+      "area": "CMS",
+      "description": "Content development",
+      "high_level_requirement": "",
+      "detailed_requirement": "Ability for the User to CRUD markup",
+      "comments": ""
+    },
+    {
+      "id": "C7",
+      "area": "CMS",
+      "description": "Content development",
+      "high_level_requirement": "Ability for the Administrative User to configure the parameters of content CRUDing",
+      "detailed_requirement": "",
+      "comments": "Example:\nThe admin User can configure:\n- styles available\n- enforce CSS and restrict specific styles to specific elements\n- disable/enable manual CRUD of HTML markup"
+    },
+    {
+      "id": "C7.1",
+      "area": "CMS",
+      "description": "Content development",
+      "high_level_requirement": "Ability for the User to lock content",
+      "detailed_requirement": "",
+      "comments": ""
+    },
+    {
+      "id": "C7.2",
+      "area": "CMS",
+      "description": "Content development",
+      "high_level_requirement": "Ability for the User to unlock content",
+      "detailed_requirement": "",
+      "comments": ""
+    },
+    {
+      "id": "C8",
+      "area": "CMS",
+      "description": "Content reuse",
+      "high_level_requirement": "Ability for the System to reuse content, based on configured parameters",
+      "detailed_requirement": "",
+      "comments": "Example of content reuse:\n- General step by step instructions that may be needed in multiple pages. The singular piece of content can be reused in multiple places"
+    },
+    {
+      "id": "C9",
+      "area": "CMS",
+      "description": "Content reuse",
+      "high_level_requirement": "Ability for the User to tag content as reusable content",
+      "detailed_requirement": "",
+      "comments": "Example of content reuse:\n- General step by step instructions that may be needed in multiple pages. The singular piece of content can be reused in multiple places"
+    },
+    {
+      "id": "C10",
+      "area": "CMS",
+      "description": "Content reuse",
+      "high_level_requirement": "Ability for the User to search for reusable content",
+      "detailed_requirement": "",
+      "comments": "Example:\nWhen a User creates or updates content, they should be able to search for reusable content from an inventory of previously created reusable content for the purpose of importing through various means, some potential examples: metadata (categories, values), text search, title search, regex search, program search"
+    },
+    {
+      "id": "C11",
+      "area": "CMS",
+      "description": "Content reuse",
+      "high_level_requirement": "Ability for the User to import reusable content into other content",
+      "detailed_requirement": "",
+      "comments": "Example:\nWhen a User creates or updates content, they should have the ability to select the reusable content from an inventory of previously created reusable content and import it to the current content they are CRUDing."
+    },
+    {
+      "id": "C12",
+      "area": "CMS",
+      "description": "Content reuse",
+      "high_level_requirement": "Ability for the Administrative User to configure parameters for content reuse",
+      "detailed_requirement": "",
+      "comments": ""
+    },
+    {
+      "id": "C13",
+      "area": "CMS",
+      "description": "Batch update",
+      "high_level_requirement": "Ability for the User to perform batch updates to content",
+      "detailed_requirement": "",
+      "comments": ""
+    },
+    {
+      "id": "C13.1",
+      "area": "CMS",
+      "description": "Batch update",
+      "high_level_requirement": "",
+      "detailed_requirement": "Ability for the User to perform a search and replace on multiple pieces of content",
+      "comments": ""
+    },
+    {
+      "id": "C14",
+      "area": "CMS",
+      "description": "Batch update",
+      "high_level_requirement": "Ability for the Administrative User to configure parameters of batch updates",
+      "detailed_requirement": "",
+      "comments": ""
+    },
+    {
+      "id": "C15",
+      "area": "CMS",
+      "description": "Collaboration",
+      "high_level_requirement": "Ability for the System to incorporate collaborative editing capabilities to update the same piece of content, based on configured parameters",
+      "detailed_requirement": "",
+      "comments": "Note:\nSystem to incorporate a mechiasm that allows for collabortive editing between Users give them the ability to make simultaneous updates on a single piece of content and publish them concurrently."
+    },
+    {
+      "id": "C16",
+      "area": "CMS",
+      "description": "Collaboration",
+      "high_level_requirement": "Ability for the System to sync multiple concurrent edits by Users editing the same content",
+      "detailed_requirement": "nan",
+      "comments": "Note:\nChanges made to the same piece of content should be synced. The System should be able to detect conflicts between User updates and resolve the conflicts and allow the User to act upon them.\n\nOne example, the System to prompt User to resolve conflict by either consolidating the change/merge/overight/ignore and save/publish;)\n\nExample:\n-System should display all writers who are editing the page.\n-User can lock document to prevent others from making simultaneous updates.\n-Users can also unlock a document.\n\nExample:\n-Writer A needs to make an update to the document and beginning working on it.\n- On another day, Writer B starts editing the same page that is currently editing.\n- Writer A continues to make changes, at this point Writer B's updates are out of date and not synchronized. With the changes Writer A made.\n- When Writer B saves, the System should check for conflicts between the versions from both Writers and display them to be resolved. (some options could be to merge, overright, manually resolve, publish without incorporating other users change, discard changes)"
+    },
+    {
+      "id": "C16.1",
+      "area": "CMS",
+      "description": "Collaboration",
+      "high_level_requirement": "",
+      "detailed_requirement": "Ability for the System to identify conflicts between simulataneous edits of content",
+      "comments": ""
+    },
+    {
+      "id": "C16.2",
+      "area": "CMS",
+      "description": "Collaboration",
+      "high_level_requirement": "",
+      "detailed_requirement": "Ability for the System to resolve conflicts between simulataneous edits of content",
+      "comments": ""
+    },
+    {
+      "id": "C17",
+      "area": "CMS",
+      "description": "Collaboration",
+      "high_level_requirement": "Ability for multiple Users to simultaneously edit the same piece of content, based on configured parameters",
+      "detailed_requirement": "nan",
+      "comments": ""
+    },
+    {
+      "id": "C17.1",
+      "area": "CMS",
+      "description": "Collaboration",
+      "high_level_requirement": "",
+      "detailed_requirement": "Ability for multiple Users to concurrently publish their own updates independently",
+      "comments": ""
+    },
+    {
+      "id": "C18",
+      "area": "CMS",
+      "description": "Collaboration",
+      "high_level_requirement": "Ability for the User to resolve conflicts between simultaneous updates, based on configured parameters",
+      "detailed_requirement": "nan",
+      "comments": "Note:\nChanges made to the same piece of content should be synced. The System should be able to detect conflicts between User updates and resolve the conflicts and allow the User to act upon them.\n\nOne example, the System to prompt User to resolve conflict by either consolidating the change/merge/overight/ignore and save/publish;)"
+    },
+    {
+      "id": "C19",
+      "area": "CMS",
+      "description": "Collaboration",
+      "high_level_requirement": "Ability for the Administrative User to configure parameters of simultaneous updates of content",
+      "detailed_requirement": "",
+      "comments": ""
+    },
+    {
+      "id": "C20",
+      "area": "CMS",
+      "description": "Media",
+      "high_level_requirement": "Ability for the User to upload files",
+      "detailed_requirement": "",
+      "comments": "Example:\n- Ability for the User to upload the following file formats: doc, docx, xls, xlsx, ppt, pptx, pdf, html, htm, txt, rtf, jpeg, jpg, gif, png, tiff, tif, mp4, avi, mov, m4a, mp3, wav, flv, eps, svg."
+    },
+    {
+      "id": "C21",
+      "area": "CMS",
+      "description": "Media",
+      "high_level_requirement": "Ability for the User to import files into content",
+      "detailed_requirement": "",
+      "comments": "Example:\nWhen CRUDing content, a User can import uploaded content into content"
+    },
+    {
+      "id": "C22",
+      "area": "CMS",
+      "description": "Media",
+      "high_level_requirement": "Ability for the Administrative User to configure which file formats are allowed",
+      "detailed_requirement": "",
+      "comments": "Example:\nThe admin can blacklist or whitelist what file a user can upload"
+    },
+    {
+      "id": "C23",
+      "area": "CMS",
+      "description": "Publishing",
+      "high_level_requirement": "Ability for the User to document the reason for content change, based on configured parameters",
+      "detailed_requirement": "",
+      "comments": ""
+    },
+    {
+      "id": "C24",
+      "area": "CMS",
+      "description": "Publishing",
+      "high_level_requirement": "Ability for the Administrative User to configure the parameters of documentation changes for content",
+      "detailed_requirement": "",
+      "comments": "Example:\nPotential parameters potentially can be anything from:\n- character limitations,\n- whether a User has the ability to include attachments,\n- there could be prompts when a User documents their changes\n- Configure the User prompts"
+    },
+    {
+      "id": "C25",
+      "area": "CMS",
+      "description": "Version Control",
+      "high_level_requirement": "Ability for the System to incorporate version control capabilities",
+      "detailed_requirement": "",
+      "comments": ""
+    },
+    {
+      "id": "C25.1",
+      "area": "CMS",
+      "description": "Version Control",
+      "high_level_requirement": "",
+      "detailed_requirement": "Ability for the System to save previous version when a new version is published.",
+      "comments": ""
+    },
+    {
+      "id": "C25.2",
+      "area": "CMS",
+      "description": "Version Control",
+      "high_level_requirement": "",
+      "detailed_requirement": "Ability for the System to prevent changes to previous version",
+      "comments": "Example:\nOnce the current version is published, the previous version cannot be modified for retention purposes. However, a User can still revert to a previous version and update as newer version."
+    },
+    {
+      "id": "C25.3",
+      "area": "CMS",
+      "description": "Version Control",
+      "high_level_requirement": "",
+      "detailed_requirement": "Ability for the System to incorporate version comparison between any versions of content",
+      "comments": ""
+    },
+    {
+      "id": "C25.4",
+      "area": "CMS",
+      "description": "Version Control",
+      "high_level_requirement": "",
+      "detailed_requirement": "Ability for the System to display the differences between versions of content to a User",
+      "comments": ""
+    },
+    {
+      "id": "C26",
+      "area": "CMS",
+      "description": "Version Control",
+      "high_level_requirement": "Ability for the Administrative User to configure the parameters of versioning",
+      "detailed_requirement": "",
+      "comments": ""
+    },
+    {
+      "id": "C27",
+      "area": "CMS",
+      "description": "Version Control",
+      "high_level_requirement": "Ability for the User to view the previous version, based on configured parameters",
+      "detailed_requirement": "",
+      "comments": ""
+    },
+    {
+      "id": "C28",
+      "area": "CMS",
+      "description": "Version Control",
+      "high_level_requirement": "Ability for the Administrative User to configure the parameters of previous version list",
+      "detailed_requirement": "",
+      "comments": ""
+    },
+    {
+      "id": "C29",
+      "area": "CMS",
+      "description": "Version Control",
+      "high_level_requirement": "Ability for the User to toggle if a previous version of content is viewable by the end User, based on configured parameters",
+      "detailed_requirement": "",
+      "comments": "Examples of configured parameters\n- User to view list\n- User can view some pages from the list\n- User can view all pages from the list\n\n- Sort and filter list\n- time\n\n- minor updates such typo corrections or changes should not be viewable (Major or minor updates)"
+    },
+    {
+      "id": "C30",
+      "area": "CMS",
+      "description": "Version Control",
+      "high_level_requirement": "Ability for the User to compare versions of content",
+      "detailed_requirement": "",
+      "comments": ""
+    },
+    {
+      "id": "C31",
+      "area": "CMS",
+      "description": "Version Control",
+      "high_level_requirement": "Ability for the User to revert content to a previous version of content",
+      "detailed_requirement": "",
+      "comments": ""
+    },
+    {
+      "id": "C32",
+      "area": "CMS",
+      "description": "Version Control",
+      "high_level_requirement": "Ability for the System to migrate files, based on configured parameters",
+      "detailed_requirement": "",
+      "comments": "Example of configured parameters:\n- Business value, non-business value\n- Dates\n- Type of content\n- Business line\n- Metadata"
+    },
+    {
+      "id": "C33",
+      "area": "CMS",
+      "description": "Version Control",
+      "high_level_requirement": "Ability for the System to delete files, based on configured parameters",
+      "detailed_requirement": "",
+      "comments": "Examples of configured parameters:\n- date\n- end of life of content\n- transitory"
+    },
+    {
+      "id": "C34",
+      "area": "User",
+      "description": "Role",
+      "high_level_requirement": "Ability for the System to show a User a list of their available role(s)",
+      "detailed_requirement": "",
+      "comments": "Example:\nThe system has a list of all the users profiles for them to select. The profile they select will display the relevant content for that profile.\n\nPeople from different program are using the same tool, for example, someone working call center vs in person.\n\nAnother example, someone working in CPP calculation doesn;t want to see content for EI calculation."
+    },
+    {
+      "id": "C35",
+      "area": "User",
+      "description": "Role",
+      "high_level_requirement": "Ability for the User to choose a role",
+      "detailed_requirement": "nan",
+      "comments": "Example:\nThe User role defines the parameters for what content to display.\n\nMultiple roles implies end User can be working on multiple programs or channels.\n\nfor example: Level 1 contact, Level 2 contact, Call center for OAS, Call center for EI, Processing claims,"
+    },
+    {
+      "id": "C36",
+      "area": "Content",
+      "description": "Tailored content",
+      "high_level_requirement": "Ability for the System to display content to a User, based on configured parameters",
+      "detailed_requirement": "",
+      "comments": "User profile"
+    },
+    {
+      "id": "C37",
+      "area": "Content",
+      "description": "Tailored content",
+      "high_level_requirement": "",
+      "detailed_requirement": "Ability for the System to display relevant content, based on the User's role",
+      "comments": "Example:\nDisplay content only relevant to a User's job/role. The system is determining what is displayed. User may belong to multuiple roles\n\nEI call center officer only see content relevant to EI call center information"
+    },
+    {
+      "id": "C38",
+      "area": "Content",
+      "description": "Tailored content",
+      "high_level_requirement": "Ability for the Administrative User to configure the parameters of displayed content",
+      "detailed_requirement": "",
+      "comments": ""
+    },
+    {
+      "id": "C39",
+      "area": "Content",
+      "description": "Content sharing",
+      "high_level_requirement": "Ability for the User to share content, based on configured parameters",
+      "detailed_requirement": "",
+      "comments": ""
+    },
+    {
+      "id": "C39.1",
+      "area": "Content",
+      "description": "Content sharing",
+      "high_level_requirement": "",
+      "detailed_requirement": "Ability for the User to share content with other Users",
+      "comments": ""
+    },
+    {
+      "id": "C39.2",
+      "area": "Content",
+      "description": "Content sharing",
+      "high_level_requirement": "",
+      "detailed_requirement": "Ability for the User to print content for a Client",
+      "comments": ""
+    },
+    {
+      "id": "C39.3",
+      "area": "Content",
+      "description": "Content sharing",
+      "high_level_requirement": "",
+      "detailed_requirement": "Ability for the User to e-mail content to a Client",
+      "comments": ""
+    },
+    {
+      "id": "C40",
+      "area": "Content",
+      "description": "Content sharing",
+      "high_level_requirement": "Ability for the Administrative User to configure the parameters for content sharing",
+      "detailed_requirement": "",
+      "comments": ""
+    },
+    {
+      "id": "C41",
+      "area": "Content",
+      "description": "Content rating",
+      "high_level_requirement": "Ability for the User to rate content, based on configured parameters",
+      "detailed_requirement": "",
+      "comments": "nan"
+    },
+    {
+      "id": "C42",
+      "area": "Content",
+      "description": "Content rating",
+      "high_level_requirement": "Ability for the Administrative User to configure parameters for rating content",
+      "detailed_requirement": "",
+      "comments": ""
+    },
+    {
+      "id": "C43",
+      "area": "CMS",
+      "description": "Navigation",
+      "high_level_requirement": "Ability for the Administrative User to CRUD navigation components",
+      "detailed_requirement": "",
+      "comments": "Example of navigation components:\n- tailored content list (top 10 procedures, trending procedures)\n- Navigation menus (left navs and top navs)\n- Footer navigation\n- Overlays navigations (if applicable)"
+    },
+    {
+      "id": "C44",
+      "area": "UI",
+      "description": "Navigation",
+      "high_level_requirement": "Ability for the System to auto populate navigation components with content, based on configured parameters",
+      "detailed_requirement": "",
+      "comments": ""
+    },
+    {
+      "id": "C45",
+      "area": "UI",
+      "description": "Navigation",
+      "high_level_requirement": "Ability for the Administrative User to configure the parameters of navigation components",
+      "detailed_requirement": "",
+      "comments": ""
+    },
+    {
+      "id": "C46",
+      "area": "UI",
+      "description": "Navigation",
+      "high_level_requirement": "Ability for the System to display multiple navigation components to a User",
+      "detailed_requirement": "",
+      "comments": "Example:\n- Breadcrumbs\n- Footer\n- sub navigation components (Left navs, in content navigation)"
+    },
+    {
+      "id": "C47",
+      "area": "UI",
+      "description": "Navigation",
+      "high_level_requirement": "Ability for the System to display visual indicator to the User as to where you are in the site",
+      "detailed_requirement": "",
+      "comments": "Example:\n- Breadcrumbs or something similar"
+    },
+    {
+      "id": "C47.1",
+      "area": "UI",
+      "description": "Navigation",
+      "high_level_requirement": "",
+      "detailed_requirement": "Ability for the System to display breadcrumb path for pages in the knowledge repository",
+      "comments": ""
+    },
+    {
+      "id": "C48",
+      "area": "UI",
+      "description": "Navigation",
+      "high_level_requirement": "Ability for the System to give a User visual indicator of the content type, based on configured parameters",
+      "detailed_requirement": "",
+      "comments": "Example:\n-In person vs OCan\n-metadata"
+    },
+    {
+      "id": "C48.1",
+      "area": "UI",
+      "description": "Navigation",
+      "high_level_requirement": "Ability for the Adminstrative User to configure the pramters of visual indicators",
+      "detailed_requirement": "",
+      "comments": ""
+    },
+    {
+      "id": "C49",
+      "area": "UI",
+      "description": "Navigation",
+      "high_level_requirement": "Ability for the System to generate a table of content of a page to the User, based on configured parameters",
+      "detailed_requirement": "",
+      "comments": "Example:\nWhen a user lands on a page, the System generates a list of headings as a table of content for the User to use to navigate the page."
+    },
+    {
+      "id": "C50",
+      "area": "UI",
+      "description": "Navigation",
+      "high_level_requirement": "Ability for the User to display the table of contents for a page",
+      "detailed_requirement": "",
+      "comments": "Example:\nThe user can toggle (hide/unhide) the table of contents to show."
+    },
+    {
+      "id": "C51",
+      "area": "UI",
+      "description": "Navigation",
+      "high_level_requirement": "Ability for the User to use the table of contents to navigate the page",
+      "detailed_requirement": "",
+      "comments": ""
+    },
+    {
+      "id": "C52",
+      "area": "UI",
+      "description": "Navigation",
+      "high_level_requirement": "Ability for the Administrative User to configure the parameters of table of contents",
+      "detailed_requirement": "",
+      "comments": "nan"
+    },
+    {
+      "id": "C53",
+      "area": "UI",
+      "description": "Personal landing page",
+      "high_level_requirement": "Ability for the User to reset their landing page to default view",
+      "detailed_requirement": "",
+      "comments": ""
+    },
+    {
+      "id": "C54",
+      "area": "UI",
+      "description": "Personal landing page",
+      "high_level_requirement": "Ability for the User to customize their personal landing page",
+      "detailed_requirement": "",
+      "comments": ""
+    },
+    {
+      "id": "C55",
+      "area": "UI",
+      "description": "Personal landing page",
+      "high_level_requirement": "Ability for the Administrative User to configure the parameters of customized User landing pages",
+      "detailed_requirement": "",
+      "comments": ""
+    },
+    {
+      "id": "C56",
+      "area": "Content",
+      "description": "Content access",
+      "high_level_requirement": "Ability for the System to restrict access to content",
+      "detailed_requirement": "nan",
+      "comments": "nan"
+    },
+    {
+      "id": "C57",
+      "area": "Content",
+      "description": "Style guide",
+      "high_level_requirement": "Ability for the System to incorporate content style guides, based on configure parameters",
+      "detailed_requirement": "",
+      "comments": "nan"
+    },
+    {
+      "id": "C58",
+      "area": "Content",
+      "description": "Style guide",
+      "high_level_requirement": "Ability for the System to incorporate word list, based on configure parameters",
+      "detailed_requirement": "",
+      "comments": "Add example for word list\nAdd to glossary"
+    },
+    {
+      "id": "C59",
+      "area": "Content",
+      "description": "Style guide",
+      "high_level_requirement": "Ability for the User to CRUD style guides, based on configured parameters.",
+      "detailed_requirement": "",
+      "comments": "nan"
+    },
+    {
+      "id": "C60",
+      "area": "Content",
+      "description": "Style guide",
+      "high_level_requirement": "Ability for the User to CRUD word list, based on configured parameters.",
+      "detailed_requirement": "",
+      "comments": "nan"
+    },
+    {
+      "id": "C61",
+      "area": "Content",
+      "description": "Style guide",
+      "high_level_requirement": "Ability for the Administrative User to configure the parameters of content style guides",
+      "detailed_requirement": "",
+      "comments": ""
+    },
+    {
+      "id": "C62",
+      "area": "Content",
+      "description": "Style guide",
+      "high_level_requirement": "Ability for the Administrative User to configure the parameters of the word list",
+      "detailed_requirement": "",
+      "comments": "Example of parameters:\nAdmin user to determine what the User can do within the word list"
+    },
+    {
+      "id": "S1",
+      "area": "Search",
+      "description": "AI",
+      "high_level_requirement": "Ability for the System to integrate artificial intelligence into search functions, based on configured parameters",
+      "detailed_requirement": "",
+      "comments": "Utilize AI technologies in search to ingest, understand, organize, and query digital content from multiple sources. \n\nRecognize and understand Users search intent, even when non-standardized vocabulary* is used and produce relevant tailored results that are specific to ESDC.\n\n*Non-standardized vocabulary may be terms that are not used within the tool.  For instance, the non-standardized term \"\"quit\"\" is used in a search, however the term \"\"quit\"\" is not used anywhere in the tool. The standardized term for \"\"quit\"\" is \"\"voluntary leaving\"\". The System can either find the results for \"\"Voluntary leaving\"\" when they type in \"\"quit\" or give them the option to search for the term voluntary leaving."
+    },
+    {
+      "id": "S1.1",
+      "area": "Search",
+      "description": "AI",
+      "high_level_requirement": "",
+      "detailed_requirement": "Ability for the System to integrate machine learning into search functions to improve User search results",
+      "comments": "Develop insights on User search behaviors and their search patterns to improve overall end user experience and reduce time spent to find information."
+    },
+    {
+      "id": "S1.2",
+      "area": "Search",
+      "description": "AI",
+      "high_level_requirement": "",
+      "detailed_requirement": "Ability for the System to integrate natural language processing abilities into search functions to better understand the context of the User`s search",
+      "comments": "Understand the Users search query context and User intent."
+    },
+    {
+      "id": "S2",
+      "area": "Search",
+      "description": "General",
+      "high_level_requirement": "Ability for the User to a perform search",
+      "detailed_requirement": "",
+      "comments": "Search applies to content, enquiries, feedback, chat history"
+    },
+    {
+      "id": "S3",
+      "area": "Search",
+      "description": "General",
+      "high_level_requirement": "Ability for the User to search internal ESDC repositories",
+      "detailed_requirement": "",
+      "comments": ""
+    },
+    {
+      "id": "S4",
+      "area": "Search",
+      "description": "General",
+      "high_level_requirement": "Ability for the User to search external ESDC repositories",
+      "detailed_requirement": "",
+      "comments": ""
+    },
+    {
+      "id": "S5",
+      "area": "Search",
+      "description": "Results",
+      "high_level_requirement": "Ability for the System to tailor search results, based on User role",
+      "detailed_requirement": "",
+      "comments": ""
+    },
+    {
+      "id": "S6",
+      "area": "Search",
+      "description": "Results",
+      "high_level_requirement": "Ability for the System to display additional information about each search result, based on configured parameters",
+      "detailed_requirement": "",
+      "comments": "Some examples of the parameters for displayed information:\n- published date\n- summary of the page\n- title\n- timestamps\n - modified date\n - publish date\n- metadata associated with content"
+    },
+    {
+      "id": "S7",
+      "area": "Search",
+      "description": "Results",
+      "high_level_requirement": "Ability for the User to refine search results",
+      "detailed_requirement": "",
+      "comments": ""
+    },
+    {
+      "id": "S7.1",
+      "area": "Search",
+      "description": "Results",
+      "high_level_requirement": "",
+      "detailed_requirement": "Ability for the User to modify the number of search results displayed on a page",
+      "comments": ""
+    },
+    {
+      "id": "S7.2",
+      "area": "Search",
+      "description": "Results",
+      "high_level_requirement": "",
+      "detailed_requirement": "Ability for the User to perform a search using wildcards",
+      "comments": ""
+    },
+    {
+      "id": "S7.3",
+      "area": "Search",
+      "description": "Results",
+      "high_level_requirement": "",
+      "detailed_requirement": "Ability for the User to perform a search using operand",
+      "comments": ""
+    },
+    {
+      "id": "S7.4",
+      "area": "Search",
+      "description": "Results",
+      "high_level_requirement": "",
+      "detailed_requirement": "Ability for the User to perform a search using Boolean operators",
+      "comments": ""
+    },
+    {
+      "id": "S7.5",
+      "area": "Search",
+      "description": "Results",
+      "high_level_requirement": "",
+      "detailed_requirement": "Ability for the User to filter search results based on configured parameters",
+      "comments": "Some filtering examples:\n- filter by content type\n- filter by topic\n- filter by metadata\n- filter by publish date\n- filter by date ranges\n- filter by channel\n- filter by internal / external sources\n- filter by program\n- filter by roles\n- filter by training"
+    },
+    {
+      "id": "S7.6",
+      "area": "Search",
+      "description": "Results",
+      "high_level_requirement": "",
+      "detailed_requirement": "Ability for the User to sort search results",
+      "comments": ""
+    },
+    {
+      "id": "S8",
+      "area": "Search",
+      "description": "Options",
+      "high_level_requirement": "Ability for the Administrative User to configure the parameters of User search options",
+      "detailed_requirement": "",
+      "comments": ""
+    },
+    {
+      "id": "S9",
+      "area": "Search",
+      "description": "UI",
+      "high_level_requirement": "Ability for the System to highlight the search terms used by a User when performing a search, within the displayed search results",
+      "detailed_requirement": "",
+      "comments": ""
+    },
+    {
+      "id": "S10",
+      "area": "Search",
+      "description": "UI",
+      "high_level_requirement": "Ability for the System to highlight the search terms used by a User on the destination page, based on configured parameters",
+      "detailed_requirement": "",
+      "comments": "Example:\n- When a User performs a search, when they click on the search result, the destination page"
+    },
+    {
+      "id": "S11",
+      "area": "Search",
+      "description": "UI",
+      "high_level_requirement": "Ability for the User to hide the highlighted search term",
+      "detailed_requirement": "",
+      "comments": "Example: \nWhen a User perfoms a search, after they navigate to the destination page, the search term is highlighted. The search term that is highlighted can be hidden by the User."
+    },
+    {
+      "id": "S12",
+      "area": "Search",
+      "description": "UI",
+      "high_level_requirement": "Ability for the Administrative User to configure the parameters of highlighting",
+      "detailed_requirement": "",
+      "comments": "nan"
+    },
+    {
+      "id": "S13",
+      "area": "Search",
+      "description": "Suggestion",
+      "high_level_requirement": "Ability for the System to suggest proper spelling for incorrect spelling in User input",
+      "detailed_requirement": "",
+      "comments": "English and French"
+    },
+    {
+      "id": "S14",
+      "area": "Search",
+      "description": "Suggestion",
+      "high_level_requirement": "Ability for the System to display auto complete predictions to a User, when a User is inputting a search enquiry",
+      "detailed_requirement": "",
+      "comments": ""
+    },
+    {
+      "id": "",
+      "area": "",
+      "description": "",
+      "high_level_requirement": "nan",
+      "detailed_requirement": "nan",
+      "comments": "nan"
+    },
+    {
+      "id": "",
+      "area": "",
+      "description": "",
+      "high_level_requirement": "nan",
+      "detailed_requirement": "nan",
+      "comments": "nan"
+    },
+    {
+      "id": "",
+      "area": "",
+      "description": "",
+      "high_level_requirement": "nan",
+      "detailed_requirement": "nan",
+      "comments": "nan"
+    },
+    {
+      "id": "",
+      "area": "",
+      "description": "",
+      "high_level_requirement": "nan",
+      "detailed_requirement": "nan",
+      "comments": "nan"
+    },
+    {
+      "id": "",
+      "area": "",
+      "description": "",
+      "high_level_requirement": "nan",
+      "detailed_requirement": "nan",
+      "comments": "nan"
+    },
+    {
+      "id": "",
+      "area": "",
+      "description": "",
+      "high_level_requirement": "nan",
+      "detailed_requirement": "nan",
+      "comments": "nan"
+    },
+    {
+      "id": "",
+      "area": "",
+      "description": "",
+      "high_level_requirement": "nan",
+      "detailed_requirement": "nan",
+      "comments": "nan"
+    },
+    {
+      "id": "",
+      "area": "",
+      "description": "",
+      "high_level_requirement": "nan",
+      "detailed_requirement": "nan",
+      "comments": "nan"
+    },
+    {
+      "id": "",
+      "area": "",
+      "description": "",
+      "high_level_requirement": "nan",
+      "detailed_requirement": "nan",
+      "comments": "nan"
+    },
+    {
+      "id": "",
+      "area": "",
+      "description": "",
+      "high_level_requirement": "nan",
+      "detailed_requirement": "nan",
+      "comments": "nan"
+    },
+    {
+      "id": "",
+      "area": "",
+      "description": "",
+      "high_level_requirement": "nan",
+      "detailed_requirement": "nan",
+      "comments": "nan"
+    },
+    {
+      "id": "",
+      "area": "",
+      "description": "",
+      "high_level_requirement": "nan",
+      "detailed_requirement": "nan",
+      "comments": "nan"
+    },
+    {
+      "id": "",
+      "area": "",
+      "description": "",
+      "high_level_requirement": "nan",
+      "detailed_requirement": "nan",
+      "comments": "nan"
+    },
+    {
+      "id": "",
+      "area": "",
+      "description": "",
+      "high_level_requirement": "nan",
+      "detailed_requirement": "nan",
+      "comments": "nan"
+    },
+    {
+      "id": "",
+      "area": "",
+      "description": "",
+      "high_level_requirement": "nan",
+      "detailed_requirement": "nan",
+      "comments": "nan"
+    },
+    {
+      "id": "",
+      "area": "",
+      "description": "",
+      "high_level_requirement": "nan",
+      "detailed_requirement": "nan",
+      "comments": "nan"
+    },
+    {
+      "id": "",
+      "area": "",
+      "description": "",
+      "high_level_requirement": "nan",
+      "detailed_requirement": "nan",
+      "comments": "nan"
+    },
+    {
+      "id": "",
+      "area": "",
+      "description": "",
+      "high_level_requirement": "nan",
+      "detailed_requirement": "nan",
+      "comments": "nan"
+    },
+    {
+      "id": "",
+      "area": "",
+      "description": "",
+      "high_level_requirement": "nan",
+      "detailed_requirement": "nan",
+      "comments": "nan"
+    },
+    {
+      "id": "",
+      "area": "",
+      "description": "",
+      "high_level_requirement": "nan",
+      "detailed_requirement": "nan",
+      "comments": "nan"
+    },
+    {
+      "id": "",
+      "area": "",
+      "description": "",
+      "high_level_requirement": "nan",
+      "detailed_requirement": "nan",
+      "comments": "nan"
+    },
+    {
+      "id": "N3",
+      "area": "Notification",
+      "description": "Create",
+      "high_level_requirement": "Ability for the User to CRUD content for notification messages.",
+      "detailed_requirement": "",
+      "comments": ""
+    },
+    {
+      "id": "N3.1",
+      "area": "Notification",
+      "description": "Create",
+      "high_level_requirement": "",
+      "detailed_requirement": "Ability for the User to specify user groups to receive the notification message",
+      "comments": "There may be notification updates that are only applicable to a specific User groups. For example, EI Level 1 Processing agents, notifications."
+    },
+    {
+      "id": "N3.2",
+      "area": "Notification",
+      "description": "Create",
+      "high_level_requirement": "",
+      "detailed_requirement": "Ability for the User to broadcast a notification message to all users regardless of their subscription",
+      "comments": ""
+    },
+    {
+      "id": "N3.3",
+      "area": "Notification",
+      "description": "Create",
+      "high_level_requirement": "",
+      "detailed_requirement": "Ability for the User to schedule when notification messages are sent",
+      "comments": ""
+    },
+    {
+      "id": "N3.4",
+      "area": "Notification",
+      "description": "Create",
+      "high_level_requirement": "",
+      "detailed_requirement": "Ability for the User to recall notification messages",
+      "comments": ""
+    },
+    {
+      "id": "N1",
+      "area": "Notification",
+      "description": "General",
+      "high_level_requirement": "Ability for the System to send notifications to Users, based on configured parameters",
+      "detailed_requirement": "",
+      "comments": "Notification triggers can come from System events such as:\n- content updates and changes\n- broadcast messages to all users"
+    },
+    {
+      "id": "N2",
+      "area": "Notification",
+      "description": "General",
+      "high_level_requirement": "Ability for the Administrative User to configure the parameters of notifications",
+      "detailed_requirement": "",
+      "comments": ""
+    },
+    {
+      "id": "N4",
+      "area": "Notification",
+      "description": "General",
+      "high_level_requirement": "Ability for the Administrative User to configure the parameters of notifications for changes to content",
+      "detailed_requirement": "",
+      "comments": ""
+    },
+    {
+      "id": "N5",
+      "area": "Notification",
+      "description": "Saving",
+      "high_level_requirement": "Ability for the System to save notifications based on configured parameters",
+      "detailed_requirement": "",
+      "comments": ""
+    },
+    {
+      "id": "N6",
+      "area": "Notification",
+      "description": "Status",
+      "high_level_requirement": "Ability for the System to display notifications to Users, based on configured parameters",
+      "detailed_requirement": "",
+      "comments": ""
+    },
+    {
+      "id": "N7",
+      "area": "Notification",
+      "description": "Status",
+      "high_level_requirement": "Ability for the User to mark if a notification has been read",
+      "detailed_requirement": "nan",
+      "comments": "nan"
+    },
+    {
+      "id": "N7.1",
+      "area": "Notification",
+      "description": "Status",
+      "high_level_requirement": "nan",
+      "detailed_requirement": "Ability for the System to display to a User if a notification has been read/unread",
+      "comments": "nan"
+    },
+    {
+      "id": "N7.2",
+      "area": "Notification",
+      "description": "Status",
+      "high_level_requirement": "Ability for the User to mark a notification as unread",
+      "detailed_requirement": "",
+      "comments": ""
+    },
+    {
+      "id": "N11",
+      "area": "Notification",
+      "description": "Subscribe",
+      "high_level_requirement": "Ability for the User to subscribe to notifications for content changes for specific content.",
+      "detailed_requirement": "",
+      "comments": ""
+    },
+    {
+      "id": "N12",
+      "area": "Notification",
+      "description": "Subscribe",
+      "high_level_requirement": "Ability for the User to unsubscribe to notifications for content changes for specific content.",
+      "detailed_requirement": "",
+      "comments": ""
+    },
+    {
+      "id": "N8",
+      "area": "Notification",
+      "description": "UI",
+      "high_level_requirement": "",
+      "detailed_requirement": "Ability for the Administrative User to choose what information is available in the global notification dashboard.",
+      "comments": ""
+    },
+    {
+      "id": "nan",
+      "area": "Notification",
+      "description": "UI",
+      "high_level_requirement": "",
+      "detailed_requirement": "Ability for the Administrative User to configure the layout of the global notification dashboard.",
+      "comments": ""
+    },
+    {
+      "id": "N9",
+      "area": "Notification",
+      "description": "UI",
+      "high_level_requirement": "Ability for the User to customize their notification dashboard",
+      "detailed_requirement": "",
+      "comments": ""
+    },
+    {
+      "id": "N9.1",
+      "area": "Notification",
+      "description": "UI",
+      "high_level_requirement": "",
+      "detailed_requirement": "Ability for the User to choose their notification method(s)",
+      "comments": ""
+    },
+    {
+      "id": "N9.2",
+      "area": "Notification",
+      "description": "UI",
+      "high_level_requirement": "",
+      "detailed_requirement": "Ability for the User to sort their notifications",
+      "comments": ""
+    },
+    {
+      "id": "N10",
+      "area": "Notification",
+      "description": "UI",
+      "high_level_requirement": "Ability for the Administrative User to configure the parameters of the global notification dashboard.",
+      "detailed_requirement": "",
+      "comments": ""
+    },
+    {
+      "id": "D1",
+      "area": "Data",
+      "description": "Analytics",
+      "high_level_requirement": "Ability for the System to capture data",
+      "detailed_requirement": "",
+      "comments": ""
+    },
+    {
+      "id": "D1.1",
+      "area": "Data",
+      "description": "Analytics",
+      "high_level_requirement": "",
+      "detailed_requirement": "Ability for the System to capture analytics data for User role",
+      "comments": ""
+    },
+    {
+      "id": "D1.2",
+      "area": "Data",
+      "description": "Analytics",
+      "high_level_requirement": "",
+      "detailed_requirement": "Ability for the System to capture analytics data for Roles",
+      "comments": ""
+    },
+    {
+      "id": "D1.3",
+      "area": "Data",
+      "description": "Analytics",
+      "high_level_requirement": "",
+      "detailed_requirement": "Ability for the System to capture analytics data for enquiries",
+      "comments": ""
+    },
+    {
+      "id": "D1.4",
+      "area": "Data",
+      "description": "Analytics",
+      "high_level_requirement": "",
+      "detailed_requirement": "Ability for the System to capture analytics data for enquiry responses",
+      "comments": ""
+    },
+    {
+      "id": "D1.5",
+      "area": "Data",
+      "description": "Analytics",
+      "high_level_requirement": "",
+      "detailed_requirement": "Ability for the System to capture analytics data for feedback",
+      "comments": "Contributions encompass the original contribution and responses"
+    },
+    {
+      "id": "D1.6",
+      "area": "Data",
+      "description": "Analytics",
+      "high_level_requirement": "",
+      "detailed_requirement": "Ability for the System to capture analytics data for search",
+      "comments": "Some examples:\n- Click-through rate\n- Zero click rate\n- Zero search results rate\n- Top queries"
+    },
+    {
+      "id": "D1.7",
+      "area": "Data",
+      "description": "Analytics",
+      "high_level_requirement": "",
+      "detailed_requirement": "Ability for the System to capture analytics data for web traffic",
+      "comments": "nan"
+    },
+    {
+      "id": "D1.8",
+      "area": "Data",
+      "description": "Analytics",
+      "high_level_requirement": "",
+      "detailed_requirement": "Ability for the System to capture analytics data for statuses",
+      "comments": ""
+    },
+    {
+      "id": "D1.9",
+      "area": "Data",
+      "description": "Analytics",
+      "high_level_requirement": "",
+      "detailed_requirement": "Ability for the System to capture analytics data for workflows",
+      "comments": "nan"
+    },
+    {
+      "id": "D1.10",
+      "area": "Data",
+      "description": "Analytics",
+      "high_level_requirement": "",
+      "detailed_requirement": "Ability for the System to capture analytics data for notifications",
+      "comments": ""
+    },
+    {
+      "id": "D1.11",
+      "area": "Data",
+      "description": "Analytics",
+      "high_level_requirement": "",
+      "detailed_requirement": "Ability for the System to capture analytics data for chat",
+      "comments": ""
+    },
+    {
+      "id": "D2",
+      "area": "Data",
+      "description": "Audit Trail",
+      "high_level_requirement": "Ability for the System to capture audit trail",
+      "detailed_requirement": "",
+      "comments": ""
+    },
+    {
+      "id": "D2.1",
+      "area": "Data",
+      "description": "Audit Trail",
+      "high_level_requirement": "",
+      "detailed_requirement": "Ability for the system to capture an audit trail for workflows",
+      "comments": "nan"
+    },
+    {
+      "id": "D2.2",
+      "area": "Data",
+      "description": "Audit Trail",
+      "high_level_requirement": "",
+      "detailed_requirement": "Ability for the System to capture an audit trail for all CMS actions",
+      "comments": "audit trail of all versioning/migration actions (manual and automated) including date, time, actor, action, reason)"
+    },
+    {
+      "id": "D2.3",
+      "area": "Data",
+      "description": "Audit Trail",
+      "high_level_requirement": "nan",
+      "detailed_requirement": "nan",
+      "comments": "all CRUD events"
+    },
+    {
+      "id": "D2.4",
+      "area": "Data",
+      "description": "Audit Trail",
+      "high_level_requirement": "nan",
+      "detailed_requirement": "nan",
+      "comments": "all publishing and content development workflow events"
+    },
+    {
+      "id": "D2.5",
+      "area": "Data",
+      "description": "Audit Trail",
+      "high_level_requirement": "",
+      "detailed_requirement": "Ability for the System to capture an audit trail for chat",
+      "comments": ""
+    },
+    {
+      "id": "D2.6",
+      "area": "Data",
+      "description": "Audit Trail",
+      "high_level_requirement": "",
+      "detailed_requirement": "Ability for the System to capture an audit trail for enquiries and responses",
+      "comments": ""
+    },
+    {
+      "id": "D2.7",
+      "area": "Data",
+      "description": "Audit Trail",
+      "high_level_requirement": "",
+      "detailed_requirement": "Ability for the System to capture an audit trail for contributions",
+      "comments": ""
+    },
+    {
+      "id": "D2.8",
+      "area": "Data",
+      "description": "Audit Trail",
+      "high_level_requirement": "",
+      "detailed_requirement": "Ability for the system to capture an audit trail for system changes",
+      "comments": ""
+    },
+    {
+      "id": "D3",
+      "area": "Data",
+      "description": "Export",
+      "high_level_requirement": "Ability for the System to export analytics data",
+      "detailed_requirement": "",
+      "comments": ""
+    },
+    {
+      "id": "D4",
+      "area": "Data",
+      "description": "Export",
+      "high_level_requirement": "Ability for the System to export audit trail data",
+      "detailed_requirement": "",
+      "comments": ""
+    },
+    {
+      "id": "CH1",
+      "area": "Chat",
+      "description": "AI",
+      "high_level_requirement": "Ability for the System to incorporate an AI conversational chatbot based on configured parameters",
+      "detailed_requirement": "",
+      "comments": "Utilize AI in chatbot to generate tailored human like responses in real-time and understand User intent and context."
+    },
+    {
+      "id": "CH1.1",
+      "area": "Chat",
+      "description": "AI",
+      "high_level_requirement": "",
+      "detailed_requirement": "Ability for the System to use chatbot machine learning based on configured parameters",
+      "comments": "Notes:\nUtilize modern approach for machine learning to improve chatbot function."
+    },
+    {
+      "id": "CH1.2",
+      "area": "Chat",
+      "description": "AI",
+      "high_level_requirement": "",
+      "detailed_requirement": "Ability for the System to use chatbot natural language processing abilities based on configured parameters",
+      "comments": "Notes:\nutilize AI natural language processing to better understand user intent and context"
+    },
+    {
+      "id": "CH2",
+      "area": "Chat",
+      "description": "Response",
+      "high_level_requirement": "Ability for the System to respond to Users with responses that are tailored to the User's role, based on configured parameters",
+      "detailed_requirement": "",
+      "comments": "Example:\nBased on a User's selected role, the chatbot would respond accordingly and providing relevant information based on that User's profile.\n\nA user may have multiple roles."
+    },
+    {
+      "id": "CH3",
+      "area": "Chat",
+      "description": "Speech Synthesis",
+      "high_level_requirement": "Ability for the System to use text-to-speech for chatbot responses",
+      "detailed_requirement": "",
+      "comments": ""
+    },
+    {
+      "id": "CH4",
+      "area": "Chat",
+      "description": "Dictation",
+      "high_level_requirement": "Ability for the User to use speech-to-text to query chatbot",
+      "detailed_requirement": "",
+      "comments": ""
+    },
+    {
+      "id": "CH5",
+      "area": "Chat",
+      "description": "Chatbot",
+      "high_level_requirement": "Ability for the Administrative User to configure the parameters of the chatbot",
+      "detailed_requirement": "",
+      "comments": ""
+    },
+    {
+      "id": "CH6",
+      "area": "Chat",
+      "description": "Enquiry",
+      "high_level_requirement": "Ability for the System to populate an enquiry with chat information, based on configured parameters",
+      "detailed_requirement": "",
+      "comments": "Populate enquiry work item - see workflow"
+    },
+    {
+      "id": "CH7",
+      "area": "Chat",
+      "description": "Triage",
+      "high_level_requirement": "Ability for the User to redirect chats to a task",
+      "detailed_requirement": "",
+      "comments": "Create enquiry work item - see workflow"
+    },
+    {
+      "id": "CH8",
+      "area": "Chat",
+      "description": "Logs",
+      "high_level_requirement": "Ability for the System to record all chat logs",
+      "detailed_requirement": "",
+      "comments": ""
+    },
+    {
+      "id": "CH9",
+      "area": "Chat",
+      "description": "Logs",
+      "high_level_requirement": "Ability for the User to view chat logs based on configured parameters",
+      "detailed_requirement": "",
+      "comments": ""
+    },
+    {
+      "id": "CH10",
+      "area": "Chat",
+      "description": "Live-chat",
+      "high_level_requirement": "Ability for the System to incorporate live-chat",
+      "detailed_requirement": "",
+      "comments": ""
+    },
+    {
+      "id": "CH10.1",
+      "area": "",
+      "description": "",
+      "high_level_requirement": "",
+      "detailed_requirement": "Ability for the System to triage live-chat based on configured parameters",
+      "comments": ""
+    },
+    {
+      "id": "CH10.2",
+      "area": "",
+      "description": "",
+      "high_level_requirement": "",
+      "detailed_requirement": "Ability for the System to display a live-chat dashboard to the User",
+      "comments": ""
+    },
+    {
+      "id": "CH10.3",
+      "area": "",
+      "description": "",
+      "high_level_requirement": "",
+      "detailed_requirement": "Ability for the System to route live-chats to Users with a skill profile that matches the issue pertaining to the live-chat",
+      "comments": ""
+    },
+    {
+      "id": "CH11",
+      "area": "Chat",
+      "description": "Live-chat",
+      "high_level_requirement": "Ability for the System to handover a live-chat to a User, based on configured parameters",
+      "detailed_requirement": "",
+      "comments": ""
+    },
+    {
+      "id": "CH12",
+      "area": "Live chat",
+      "description": "Live-chat",
+      "high_level_requirement": "Ability the User to view live-chat dashboard",
+      "detailed_requirement": "",
+      "comments": ""
+    },
+    {
+      "id": "CH12.1",
+      "area": "",
+      "description": "",
+      "high_level_requirement": "",
+      "detailed_requirement": "Ability for the User assign live-chat to another User",
+      "comments": ""
+    },
+    {
+      "id": "CH13",
+      "area": "Chat",
+      "description": "Live-chat",
+      "high_level_requirement": "Ability for the Administrative User to configure the parameters of live chat",
+      "detailed_requirement": "",
+      "comments": ""
+    },
+    {
+      "id": "R1",
+      "area": "Reporting",
+      "description": "Create",
+      "high_level_requirement": "Ability for the System to generate reports, based on configured parameters",
+      "detailed_requirement": "",
+      "comments": "nan"
+    },
+    {
+      "id": "R1.1",
+      "area": "Reporting",
+      "description": "Create",
+      "high_level_requirement": "",
+      "detailed_requirement": "Ability for the System to generate reports from User role data",
+      "comments": ""
+    },
+    {
+      "id": "R1.2",
+      "area": "Reporting",
+      "description": "Create",
+      "high_level_requirement": "nan",
+      "detailed_requirement": "Ability for the System to generate reports from role data",
+      "comments": "User roles"
+    },
+    {
+      "id": "R1.3",
+      "area": "Reporting",
+      "description": "Create",
+      "high_level_requirement": "",
+      "detailed_requirement": "Ability for the System to generate reports from enquiry data",
+      "comments": ""
+    },
+    {
+      "id": "R1.4",
+      "area": "Reporting",
+      "description": "Create",
+      "high_level_requirement": "",
+      "detailed_requirement": "Ability for the System to generate reports from enquiry responses data",
+      "comments": ""
+    },
+    {
+      "id": "R1.5",
+      "area": "Reporting",
+      "description": "Create",
+      "high_level_requirement": "",
+      "detailed_requirement": "Ability for the System to generate reports from feedback data",
+      "comments": ""
+    },
+    {
+      "id": "R1.6",
+      "area": "Reporting",
+      "description": "Create",
+      "high_level_requirement": "",
+      "detailed_requirement": "Ability for the System to generate reports from search data",
+      "comments": ""
+    },
+    {
+      "id": "R1.7",
+      "area": "Reporting",
+      "description": "Create",
+      "high_level_requirement": "",
+      "detailed_requirement": "Ability for the System to generate reports from web traffic data",
+      "comments": ""
+    },
+    {
+      "id": "R1.8",
+      "area": "Reporting",
+      "description": "Create",
+      "high_level_requirement": "",
+      "detailed_requirement": "Ability for the System to generate reports from status data",
+      "comments": ""
+    },
+    {
+      "id": "R1.9",
+      "area": "Reporting",
+      "description": "Create",
+      "high_level_requirement": "",
+      "detailed_requirement": "Ability for the System to generate reports from workflow data",
+      "comments": ""
+    },
+    {
+      "id": "R1.10",
+      "area": "Reporting",
+      "description": "Create",
+      "high_level_requirement": "",
+      "detailed_requirement": "Ability for the System to generate reports from notification data",
+      "comments": ""
+    },
+    {
+      "id": "R1.11",
+      "area": "Reporting",
+      "description": "Create",
+      "high_level_requirement": "",
+      "detailed_requirement": "Ability for the System to generate reports from chat data",
+      "comments": ""
+    },
+    {
+      "id": "R1.12",
+      "area": "Reporting",
+      "description": "Create",
+      "high_level_requirement": "",
+      "detailed_requirement": "Ability for System to generate reports from metadata",
+      "comments": "Example:\n\n- User to review content to be deleted based on metadata (Ability for the System to create reports of content based on the migrated metadata)"
+    },
+    {
+      "id": "R2",
+      "area": "Reporting",
+      "description": "Create",
+      "high_level_requirement": "Ability for the User to CRUD reports",
+      "detailed_requirement": "nan",
+      "comments": ""
+    },
+    {
+      "id": "R2.1",
+      "area": "Reporting",
+      "description": "Create",
+      "high_level_requirement": "",
+      "detailed_requirement": "Ability for the User to CRUD reports from User role data",
+      "comments": "nan"
+    },
+    {
+      "id": "R2.2",
+      "area": "Reporting",
+      "description": "Create",
+      "high_level_requirement": "nan",
+      "detailed_requirement": "Ability for the User to CRUD reports from role data",
+      "comments": "nan"
+    },
+    {
+      "id": "R2.3",
+      "area": "Reporting",
+      "description": "Create",
+      "high_level_requirement": "",
+      "detailed_requirement": "Ability for the User to CRUD reports from enquiry data",
+      "comments": ""
+    },
+    {
+      "id": "R2.4",
+      "area": "Reporting",
+      "description": "Create",
+      "high_level_requirement": "",
+      "detailed_requirement": "Ability for the User to CRUD reports from enquiry responses data",
+      "comments": ""
+    },
+    {
+      "id": "R2.5",
+      "area": "Reporting",
+      "description": "Create",
+      "high_level_requirement": "",
+      "detailed_requirement": "Ability for the User to CRUD reports from feedback data",
+      "comments": ""
+    },
+    {
+      "id": "R2.6",
+      "area": "Reporting",
+      "description": "Create",
+      "high_level_requirement": "",
+      "detailed_requirement": "Ability for the User to CRUD reports from search data",
+      "comments": ""
+    },
+    {
+      "id": "R2.7",
+      "area": "Reporting",
+      "description": "Create",
+      "high_level_requirement": "",
+      "detailed_requirement": "Ability for the User to CRUD reports from web traffic data",
+      "comments": ""
+    },
+    {
+      "id": "R2.8",
+      "area": "Reporting",
+      "description": "Create",
+      "high_level_requirement": "",
+      "detailed_requirement": "Ability for the User to CRUD reports from status data",
+      "comments": ""
+    },
+    {
+      "id": "R2.9",
+      "area": "Reporting",
+      "description": "Create",
+      "high_level_requirement": "",
+      "detailed_requirement": "Ability for the User to CRUD reports from workflow data",
+      "comments": ""
+    },
+    {
+      "id": "R2.10",
+      "area": "Reporting",
+      "description": "Create",
+      "high_level_requirement": "",
+      "detailed_requirement": "Ability for the User to CRUD reports from notification data",
+      "comments": ""
+    },
+    {
+      "id": "R2.11",
+      "area": "Reporting",
+      "description": "Create",
+      "high_level_requirement": "",
+      "detailed_requirement": "Ability for the User to CRUD reports from chat data",
+      "comments": ""
+    },
+    {
+      "id": "R2.12",
+      "area": "Reporting",
+      "description": "Create",
+      "high_level_requirement": "",
+      "detailed_requirement": "Ability for User to CRUD reports from metadata",
+      "comments": ""
+    },
+    {
+      "id": "R3",
+      "area": "Reporting",
+      "description": "Search",
+      "high_level_requirement": "Ability for the User to Search for reports",
+      "detailed_requirement": "",
+      "comments": "Examples:\n\nSearch for report by date, by topic, program, channel"
+    },
+    {
+      "id": "R4",
+      "area": "Reporting",
+      "description": "Search",
+      "high_level_requirement": "Ability for the User to refine report search results",
+      "detailed_requirement": "",
+      "comments": ""
+    },
+    {
+      "id": "R4.1",
+      "area": "Reporting",
+      "description": "Search",
+      "high_level_requirement": "",
+      "detailed_requirement": "Ability for the User to modify the number of report search results displayed on a page",
+      "comments": ""
+    },
+    {
+      "id": "R4.2",
+      "area": "Reporting",
+      "description": "Search",
+      "high_level_requirement": "",
+      "detailed_requirement": "Ability for the User to perform a search reports using wildcards",
+      "comments": ""
+    },
+    {
+      "id": "R4.3",
+      "area": "Reporting",
+      "description": "Search",
+      "high_level_requirement": "",
+      "detailed_requirement": "Ability for the User to perform a search reports using operand",
+      "comments": ""
+    },
+    {
+      "id": "R4.4",
+      "area": "Reporting",
+      "description": "Search",
+      "high_level_requirement": "",
+      "detailed_requirement": "Ability for the User to perform a search reports using Boolean operators",
+      "comments": ""
+    },
+    {
+      "id": "R4.5",
+      "area": "Reporting",
+      "description": "Search",
+      "high_level_requirement": "",
+      "detailed_requirement": "Ability for the User to filter report search results based on configured parameters",
+      "comments": "Some filtering examples:\n- filter by report type\n- filter by topic\n- filter by metadata\n- filter by creation date\n- filter by date ranges\n- filter by channel"
+    },
+    {
+      "id": "R4.6",
+      "area": "Reporting",
+      "description": "Search",
+      "high_level_requirement": "",
+      "detailed_requirement": "Ability for the User to sort report search results",
+      "comments": ""
+    },
+    {
+      "id": "R5",
+      "area": "Reporting",
+      "description": "Share",
+      "high_level_requirement": "Ability for the System to distribute reports via email",
+      "detailed_requirement": "",
+      "comments": "Reports are automatically system and sent via email"
+    },
+    {
+      "id": "R6",
+      "area": "Reporting",
+      "description": "Share",
+      "high_level_requirement": "Ability for the User to distribute reports",
+      "detailed_requirement": "",
+      "comments": ""
+    },
+    {
+      "id": "R6.1",
+      "area": "Reporting",
+      "description": "Share",
+      "high_level_requirement": "",
+      "detailed_requirement": "Ability for the User to print reports",
+      "comments": ""
+    },
+    {
+      "id": "R6.2",
+      "area": "Reporting",
+      "description": "Share",
+      "high_level_requirement": "",
+      "detailed_requirement": "Ability for the User to distribute report via email",
+      "comments": ""
+    },
+    {
+      "id": "R7",
+      "area": "Reporting",
+      "description": "Export",
+      "high_level_requirement": "Ability for the User to export reports.",
+      "detailed_requirement": "",
+      "comments": "Examples of file format for reports: excel, CSV, PDF, word"
+    },
+    {
+      "id": "R8",
+      "area": "Reporting",
+      "description": "Schedule reports",
+      "high_level_requirement": "Ability for the User to CRUD reports according to a configured schedule",
+      "detailed_requirement": "",
+      "comments": ""
+    },
+    {
+      "id": "R9",
+      "area": "Reporting",
+      "description": "Dashboard",
+      "high_level_requirement": "Ability for the System to display a dashboard view of reports to a User, based on role",
+      "detailed_requirement": "",
+      "comments": ""
+    },
+    {
+      "id": "R9.1",
+      "area": "Reporting",
+      "description": "Dashboard",
+      "high_level_requirement": "",
+      "detailed_requirement": "Ability for the System to display different dashboard views to Users, based on configured parameters",
+      "comments": ""
+    },
+    {
+      "id": "R10",
+      "area": "Reporting",
+      "description": "Dashboard",
+      "high_level_requirement": "Ability for an Administrative User to configure the parameters of metrics available in the User dashboard view",
+      "detailed_requirement": "",
+      "comments": ""
+    },
+    {
+      "id": "R11",
+      "area": "Reporting",
+      "description": "Dashboard",
+      "high_level_requirement": "Ability for an Administrative User to configure the parameters of the view of the User dashboard",
+      "detailed_requirement": "",
+      "comments": ""
+    },
+    {
+      "id": "R12",
+      "area": "Reporting",
+      "description": "Canned reports",
+      "high_level_requirement": "Ability for the User to CRUD canned reports.",
+      "detailed_requirement": "",
+      "comments": ""
+    },
+    {
+      "id": "R12.1",
+      "area": "nan",
+      "description": "nan",
+      "high_level_requirement": "",
+      "detailed_requirement": "Ability for the User to select a canned report when generating reports",
+      "comments": ""
+    },
+    {
+      "id": "R13",
+      "area": "Reporting",
+      "description": "Canned reports",
+      "high_level_requirement": "Ability for an User to configure the parameters of canned reports",
+      "detailed_requirement": "",
+      "comments": ""
+    },
+    {
+      "id": "R14",
+      "area": "Reporting",
+      "description": "Ad-hoc reports",
+      "high_level_requirement": "Ability for the User to CRUD ad-hoc reports",
+      "detailed_requirement": "",
+      "comments": ""
+    },
+    {
+      "id": "R15",
+      "area": "Reporting",
+      "description": "Ad-hoc reports",
+      "high_level_requirement": "Ability for an Administrative User to configure the parameters of ad-hoc reports",
+      "detailed_requirement": "",
+      "comments": ""
+    },
+    {
+      "id": "I1",
+      "area": "Interoperability",
+      "description": "ESDC Systems",
+      "high_level_requirement": "Ability for the System to interoperate with other ESDC systems",
+      "detailed_requirement": "The System must interoperate with current and future ESDC systems. Ensure other evolving technologies within ESDC are able to interoperate with the KMS, and its data is accessible through industry standard data exchange format and interfaces.",
+      "comments": "nan"
+    }
+  ],
+  "non_functional_requirements": [
+    {
+      "area": "General",
+      "description": "Framework Agreement",
+      "high_level_requirement": "Ability for the System to follow all guidelines pertaining to the Framework Agreement.",
+      "detailed_requirement": "",
+      "notes": "Flagging cells yellow that contain what are functional requirements in a non-functional requirements set, and all cells purple that are contactual stipulations. Functional requirements should not be included in NFR sets, and contractual statements should not be written as requirements. Just because a function is technical in nature, doesn't mean it's NFR. This tab has not been reviewed or edited for content, format etc. Only highlighting these potential issues as a courtesy. All NFRs that reference external policy guidelines seem to be contractual. Referencing an external policy isn't really a functional requirement or a non-functional requirement. \n\nDefinitions of FR and NFR FYI: \n\nFunctional requirements describe the capabilities that a solution must have in terms of the behaviour and information that the solution will manage. They answer the question, “what does the solution need to do?” Functional requirements must not specify how the solution should be designed to perform these functions.\n\nNon-Functional requirements do not relate directly to the behaviour or functionality of the solution, but rather describe conditions under which a solution must remain effective or qualities that a solution must have. The failure to identify non-functional requirements can result in a solution that is not fit for purpose because it takes too long, is too difficult to use or cannot operate under required conditions."
+    },
+    {
+      "area": "General",
+      "description": "Framework Agreement",
+      "high_level_requirement": "Ability for the System to be hosted on one of the 8 pre-approved cloud solutions.",
+      "detailed_requirement": "",
+      "notes": "nan"
+    },
+    {
+      "area": "General",
+      "description": "Framework Agreement",
+      "high_level_requirement": "Ability of the System to host the KM system in Canada including data center and its support",
+      "detailed_requirement": "nan",
+      "notes": "nan"
+    },
+    {
+      "area": "General",
+      "description": "Framework Agreement",
+      "high_level_requirement": "The system must be able to provide technical support resource(s)",
+      "detailed_requirement": "nan",
+      "notes": "Surely this is a contract stipulation e.g. provide me with 2 full time staff, 24/7 that can provide technical support."
+    },
+    {
+      "area": "nan",
+      "description": "nan",
+      "high_level_requirement": "nan",
+      "detailed_requirement": "The KM system must have the capability to provide and engage technical support resources such as but not limited to technical support library, support ticketing system, subject matter expert, etc. in an event of technical issues",
+      "notes": "nan"
+    },
+    {
+      "area": "nan",
+      "description": "nan",
+      "high_level_requirement": "nan",
+      "detailed_requirement": "The KM system must have the ability to respond to a technical support issue in less than 1 hour in an issue impacting production environment",
+      "notes": "It won't be the System responding, it will be the vendor's employees. This does not seem like a non-functional requirement, rather a contract stipulation."
+    },
+    {
+      "area": "Accessibility & Usability",
+      "description": "Accessibility",
+      "high_level_requirement": "Ability for the System to provide custom application crash messages.",
+      "detailed_requirement": "",
+      "notes": "nan"
+    },
+    {
+      "area": "Accessibility & Usability",
+      "description": "Accessibility",
+      "high_level_requirement": "Ability for the System to comply with ESDC web accessibility, usability and interoperability standards. \n**Government of Canada Standard on Web Accessibility -  https://accessible.canada.ca/ \n**ICT Accessibility Standard - https://www.gcpedia.gc.ca/wiki/Service_and_digital_-_Consultations_-_ICT_Accessibility_-_Standard \n**WCAG 2.1 Standard on metadata\nhttps://www.tbs-sct.canada.ca/pol/doc-eng.aspx?id=18909\nInteroperability\nhttps://www.tbs-sct.canada.ca/pol/doc-eng.aspx?id=25875\nUsability\nhttps://www.tbs-sct.canada.ca/pol/doc-eng.aspx?id=24227\n Service and Digital\nhttps://www.tbs-sct.canada.ca/pol/doc-eng.aspx?id=32603\nWeb Standards https://esdc.prv/en/iitb/es/ts/wscoe/standards/index-eng.shtml",
+      "detailed_requirement": "",
+      "notes": "Complying is a state of being, not necessarily a function or non function."
+    },
+    {
+      "area": "Accessibility & Usability",
+      "description": "Accessibility",
+      "high_level_requirement": "Vendor must provide a third party assessment to demonstrate their level of accessibility compliance.",
+      "detailed_requirement": "",
+      "notes": "nan"
+    },
+    {
+      "area": "Accessibility & Usability",
+      "description": "Style Guide",
+      "high_level_requirement": "Ability for the System to comply with the Government of Canada Content Style Guide\nhttps://design.canada.ca/style-guide/",
+      "detailed_requirement": "",
+      "notes": "nan"
+    },
+    {
+      "area": "Accessibility & Usability",
+      "description": "Usability",
+      "high_level_requirement": "Ability for the System to provide web based content management user experience",
+      "detailed_requirement": "nan",
+      "notes": "nan"
+    },
+    {
+      "area": "nan",
+      "description": "nan",
+      "high_level_requirement": "nan",
+      "detailed_requirement": "Ability for the System to accept pasted data/text copied over from other applications.",
+      "notes": "nan"
+    },
+    {
+      "area": "nan",
+      "description": "nan",
+      "high_level_requirement": "nan",
+      "detailed_requirement": "Ability for the System to accept pasted data/text copied over from other sources.",
+      "notes": "nan"
+    },
+    {
+      "area": "Accessibility & Usability",
+      "description": "Usability",
+      "high_level_requirement": "Ability for the System  to work with one all of the GoC approved browsers. (Edge, Firefox, Chrome)",
+      "detailed_requirement": "",
+      "notes": "nan"
+    },
+    {
+      "area": "Accessibility & Usability",
+      "description": "Content",
+      "high_level_requirement": "Ability for the System to host content from different Programs and business lines.",
+      "detailed_requirement": "nan",
+      "notes": "nan"
+    },
+    {
+      "area": "nan",
+      "description": "nan",
+      "high_level_requirement": "nan",
+      "detailed_requirement": "Ability for the System to be expandable to allow for the inclusion of additional Programs",
+      "notes": "nan"
+    },
+    {
+      "area": "nan",
+      "description": "nan",
+      "high_level_requirement": "nan",
+      "detailed_requirement": "Ability for the System to be expandable to allow for the inclusion of additional Business Lines",
+      "notes": "nan"
+    },
+    {
+      "area": "nan",
+      "description": "nan",
+      "high_level_requirement": "nan",
+      "detailed_requirement": "Ability for the System to distinguish content between different Programs",
+      "notes": "nan"
+    },
+    {
+      "area": "nan",
+      "description": "nan",
+      "high_level_requirement": "nan",
+      "detailed_requirement": "Ability for the System to distinguish content between different Business Lines",
+      "notes": "nan"
+    },
+    {
+      "area": "Accessibility & Usability",
+      "description": "System Administration",
+      "high_level_requirement": "Ability for the System to comply with the latest version of the accessibility requirements of the Government of Canada at the time of the solution going live.",
+      "detailed_requirement": "",
+      "notes": "nan"
+    },
+    {
+      "area": "nan",
+      "description": "nan",
+      "high_level_requirement": "",
+      "detailed_requirement": "Ability for the System to be compliant with WCAG 2.2 (A and AA).",
+      "notes": "nan"
+    },
+    {
+      "area": "nan",
+      "description": "nan",
+      "high_level_requirement": "",
+      "detailed_requirement": "Ability for the System to meet the Guideline on Making Information Technology Usable by All.\n**Reference: Government of Canada Guideline on Making Information Technology Usable by All https://www.tbs-sct.gc.ca/pol/doc-eng.aspx?id=32620\n(FR): https://www.tbs-sct.gc.ca/pol/doc-fra.aspx?id=32620",
+      "notes": "nan"
+    },
+    {
+      "area": "nan",
+      "description": "nan",
+      "high_level_requirement": "",
+      "detailed_requirement": "Ability for the System to meet the Standard on Web Accessibility.\n**Reference: Government of Canada Standard on Web Usability http://www.tbs-sct.gc.ca/pol/doc-eng.aspx?id=24227 \n(FR): https://www.tbs-sct.gc.ca/pol/doc-fra.aspx?id=24227",
+      "notes": "nan"
+    },
+    {
+      "area": "nan",
+      "description": "nan",
+      "high_level_requirement": "",
+      "detailed_requirement": "Ability for the System to meet EN 301 549 (v2.1.2).                  - Reference: European Telecommunications Standards Institute (ETSI)’s EU EN 301 549 https://www.etsi.org/deliver/etsi_en/301500_301599/301549/02.01.02_60/en_301549v020102p.pdf",
+      "notes": "nan"
+    },
+    {
+      "area": "Accessibility & Usability",
+      "description": "Official Languages",
+      "high_level_requirement": "Ability for the System to support multiple languages.",
+      "detailed_requirement": "nan",
+      "notes": "nan"
+    },
+    {
+      "area": "nan",
+      "description": "nan",
+      "high_level_requirement": "nan",
+      "detailed_requirement": "Ability for the System to support content in English.",
+      "notes": "nan"
+    },
+    {
+      "area": "nan",
+      "description": "nan",
+      "high_level_requirement": "nan",
+      "detailed_requirement": "Ability for the System to support content in French.",
+      "notes": "nan"
+    },
+    {
+      "area": "nan",
+      "description": "nan",
+      "high_level_requirement": "nan",
+      "detailed_requirement": "Ability for the User to toggle between English and French, without requiring the User to log-out",
+      "notes": "nan"
+    },
+    {
+      "area": "Accessibility & Usability",
+      "description": "Official Languages",
+      "high_level_requirement": "Ability for the System to meet Canada Policy on Official Languages and Directive on Official Languages for Communications and Services.\nReferences: \n**Policy on Official Languages https://www.tbs-sct.gc.ca/pol/doc-eng.aspx?id=26160 \n(FR): https://www.tbs-sct.gc.ca/pol/doc-fra.aspx?id=26160\n**Directive on Official Languages for Communications and Services https://www.tbs-sct.gc.ca/pol/doc-eng.aspx?id=26164 \n(FR): https://www.tbs-sct.gc.ca/pol/doc-fra.aspx?id=26164",
+      "detailed_requirement": "",
+      "notes": "nan"
+    },
+    {
+      "area": "Availability & Reliability",
+      "description": "Operational Recovery",
+      "high_level_requirement": "Ability for the System to be recoverable to a previous point in time, via backup restore, including component integrity, configuration and all coding.",
+      "detailed_requirement": "",
+      "notes": "nan"
+    },
+    {
+      "area": "Availability & Reliability",
+      "description": "Performance",
+      "high_level_requirement": "Ability for the System to be available during core business hours. Ability for the System to be available to User 24/7 outside of planned outages or maintenance.",
+      "detailed_requirement": "",
+      "notes": "nan"
+    },
+    {
+      "area": "nan",
+      "description": "nan",
+      "high_level_requirement": "",
+      "detailed_requirement": "Ability for the System to deploy releases only during specified hours.",
+      "notes": "nan"
+    },
+    {
+      "area": "Availability & Reliability",
+      "description": "Performance",
+      "high_level_requirement": "Ability for the System to function and interoperate in an operational environment with 99.95% availability",
+      "detailed_requirement": "",
+      "notes": "nan"
+    },
+    {
+      "area": "Availability & Reliability",
+      "description": "Performance",
+      "high_level_requirement": "Ability for the System to provide response to a User within 5 seconds 95% of the time.",
+      "detailed_requirement": "",
+      "notes": "nan"
+    },
+    {
+      "area": "Availability & Reliability",
+      "description": "Scalability",
+      "high_level_requirement": "Ability for the System to provide additional capacity automatically within 24 hours of the special events to last for a limited period of time equal to the duration of the special event, and to be released when the event is over.",
+      "detailed_requirement": "",
+      "notes": "nan"
+    },
+    {
+      "area": "Availability & Reliability",
+      "description": "Performance",
+      "high_level_requirement": "Ability for the System to not exceed a maximum acceptable latency for page loading",
+      "detailed_requirement": "nan",
+      "notes": "nan"
+    },
+    {
+      "area": "nan",
+      "description": "nan",
+      "high_level_requirement": "nan",
+      "detailed_requirement": "Ability in the KM system's page load time have a maximum acceptable latency of 1 second",
+      "notes": "nan"
+    },
+    {
+      "area": "Compliance",
+      "description": "Personal Data",
+      "high_level_requirement": "Ability for the System to be restricted to Canadian data centres.",
+      "detailed_requirement": "",
+      "notes": "nan"
+    },
+    {
+      "area": "Data Integrity",
+      "description": "Data Integrity",
+      "high_level_requirement": "Ability for the System to produce automated backups that must reside in Canada",
+      "detailed_requirement": "",
+      "notes": "nan"
+    },
+    {
+      "area": "Data Integrity",
+      "description": "Data Integrity",
+      "high_level_requirement": "Ability for the System to create automated backups, according to configured parameters",
+      "detailed_requirement": "",
+      "notes": "nan"
+    },
+    {
+      "area": "Data Integrity",
+      "description": "Data Quality Control",
+      "high_level_requirement": "Ability for the System to validate data",
+      "detailed_requirement": "",
+      "notes": "nan"
+    },
+    {
+      "area": "nan",
+      "description": "nan",
+      "high_level_requirement": "",
+      "detailed_requirement": "Ability for the System to validate data upon user entry, including value and data type constraints",
+      "notes": "nan"
+    },
+    {
+      "area": "nan",
+      "description": "nan",
+      "high_level_requirement": "",
+      "detailed_requirement": "Ability for the System to validate data against an external data source",
+      "notes": "nan"
+    },
+    {
+      "area": "Maintainability",
+      "description": "Release Notes",
+      "high_level_requirement": "Ability for the System to provide the Government of Canada with release notes",
+      "detailed_requirement": "",
+      "notes": "I think you're asking for the vendor to supply release notes, not the System. If it's the vendor, it's contractual. If you expect the System to generate release notes, it's functional, not NFR."
+    },
+    {
+      "area": "nan",
+      "description": "nan",
+      "high_level_requirement": "",
+      "detailed_requirement": "Ability for the System to provide release notes for all modifications to the KM solution.",
+      "notes": "nan"
+    },
+    {
+      "area": "nan",
+      "description": "nan",
+      "high_level_requirement": "",
+      "detailed_requirement": "Ability for the System to produce release notes that follow a semantic versioning model to ensure breaking changes are not introduced without advanced notification or pending release",
+      "notes": "nan"
+    },
+    {
+      "area": "Operability",
+      "description": "Availability",
+      "high_level_requirement": "Ability for the System to incorporate a progressive web application",
+      "detailed_requirement": "",
+      "notes": "nan"
+    },
+    {
+      "area": "Monitoring & Logging",
+      "description": "Monitoring and Logging",
+      "high_level_requirement": "Ability for the System to be compatible with correlation IDs received from subsystems.",
+      "detailed_requirement": "",
+      "notes": "nan"
+    },
+    {
+      "area": "nan",
+      "description": "nan",
+      "high_level_requirement": "",
+      "detailed_requirement": "Ability for the System to log correlation IDs received from subsystems.",
+      "notes": "nan"
+    },
+    {
+      "area": "Monitoring & Logging",
+      "description": "Monitoring and Logging",
+      "high_level_requirement": "Ability for the System to be compatible with correlation IDs received from API calls.",
+      "detailed_requirement": "",
+      "notes": "nan"
+    },
+    {
+      "area": "nan",
+      "description": "nan",
+      "high_level_requirement": "",
+      "detailed_requirement": "Ability for the System to log correlation IDs received from API calls.",
+      "notes": "nan"
+    },
+    {
+      "area": "Monitoring & Logging",
+      "description": "Monitoring and Logging",
+      "high_level_requirement": "Ability for the User to export data logged in relation to auditable events.",
+      "detailed_requirement": "",
+      "notes": "nan"
+    },
+    {
+      "area": "Monitoring & Logging",
+      "description": "Monitoring and Logging",
+      "high_level_requirement": "",
+      "detailed_requirement": "Ability for the User to view the exported data in a separate tool.",
+      "notes": "nan"
+    },
+    {
+      "area": "Monitoring & Logging",
+      "description": "Monitoring and Logging",
+      "high_level_requirement": "Ability for the System to provide change controls.",
+      "detailed_requirement": "",
+      "notes": "nan"
+    },
+    {
+      "area": "Monitoring & Logging",
+      "description": "Monitoring and Logging",
+      "high_level_requirement": "Ability for the Administrative User to customize security configuration.",
+      "detailed_requirement": "",
+      "notes": "nan"
+    },
+    {
+      "area": "Monitoring & Logging",
+      "description": "Monitoring and Logging",
+      "high_level_requirement": "Ability for the System to log all auditable events",
+      "detailed_requirement": "nan",
+      "notes": "nan"
+    },
+    {
+      "area": "Monitoring & Logging",
+      "description": "Monitoring and Logging",
+      "high_level_requirement": "Ability for the System to log auditable events within the hosting infrastructure at all times.",
+      "detailed_requirement": "nan",
+      "notes": "nan"
+    },
+    {
+      "area": "Operability",
+      "description": "Data Archiving",
+      "high_level_requirement": "Ability for the System to support retention and disposal rules.",
+      "detailed_requirement": "nan",
+      "notes": "nan"
+    },
+    {
+      "area": "Operability",
+      "description": "Data Archiving",
+      "high_level_requirement": "nan",
+      "detailed_requirement": "Ability for the User to set retention rules for content/data.",
+      "notes": "User requirements cannot be NFR by their very nature. NFR is always in relation to the qualities that a System must have, it can't pertain to a person."
+    },
+    {
+      "area": "Operability",
+      "description": "Data Archiving",
+      "high_level_requirement": "nan",
+      "detailed_requirement": "Ability for the User to set disposal rules for content/data.",
+      "notes": "nan"
+    },
+    {
+      "area": "Operability",
+      "description": "Data Archiving",
+      "high_level_requirement": "nan",
+      "detailed_requirement": "Ability for the System to apply retention rules to content/data.",
+      "notes": "nan"
+    },
+    {
+      "area": "Operability",
+      "description": "Data Archiving",
+      "high_level_requirement": "nan",
+      "detailed_requirement": "Ability for the System to apply disposal rules to content/data.",
+      "notes": "nan"
+    },
+    {
+      "area": "Operability",
+      "description": "Data Archiving",
+      "high_level_requirement": "",
+      "detailed_requirement": "Ability for the System to restore data from back-ups in the event of a complete data loss outage.",
+      "notes": "nan"
+    },
+    {
+      "area": "Operability",
+      "description": "Data Archiving",
+      "high_level_requirement": "Ability for the System to restore older versions.",
+      "detailed_requirement": "nan",
+      "notes": "nan"
+    },
+    {
+      "area": "nan",
+      "description": "nan",
+      "high_level_requirement": "nan",
+      "detailed_requirement": "Ability for Administrative Users to view and restore older versions of content based on ESDC records retention polices.",
+      "notes": "nan"
+    },
+    {
+      "area": "nan",
+      "description": "nan",
+      "high_level_requirement": "nan",
+      "detailed_requirement": "Ability for Administrative Users to view and restore older versions of content based on ESDC records retention polices.",
+      "notes": "nan"
+    },
+    {
+      "area": "nan",
+      "description": "nan",
+      "high_level_requirement": "nan",
+      "detailed_requirement": "Ability for Administrative Users to restore back through to the oldest version.",
+      "notes": "nan"
+    },
+    {
+      "area": "Operability",
+      "description": "Data Archiving",
+      "high_level_requirement": "Ability for the System to migrate data",
+      "detailed_requirement": "",
+      "notes": "nan"
+    },
+    {
+      "area": "nan",
+      "description": "nan",
+      "high_level_requirement": "",
+      "detailed_requirement": "Ability for the System to migrate data automatically, according to configured parameters",
+      "notes": "nan"
+    },
+    {
+      "area": "Operability",
+      "description": "Integration",
+      "high_level_requirement": "Ability for the System to integrate via API.",
+      "detailed_requirement": "",
+      "notes": "nan"
+    },
+    {
+      "area": "Operability",
+      "description": "Scalability",
+      "high_level_requirement": "Ability for the System to handle growth per year in data volume and in users",
+      "detailed_requirement": "",
+      "notes": "nan"
+    },
+    {
+      "area": "Operability",
+      "description": "Scalability",
+      "high_level_requirement": "Ability for the System to provide dynamic allocation of its resources",
+      "detailed_requirement": "",
+      "notes": "nan"
+    },
+    {
+      "area": "Operability",
+      "description": "Chatbot",
+      "high_level_requirement": "Ability of the System to support a conversation interface.",
+      "detailed_requirement": "nan",
+      "notes": "nan"
+    },
+    {
+      "area": "nan",
+      "description": "nan",
+      "high_level_requirement": "nan",
+      "detailed_requirement": "Ability to support conversational AI (ML and NLP)",
+      "notes": "nan"
+    },
+    {
+      "area": "nan",
+      "description": "nan",
+      "high_level_requirement": "nan",
+      "detailed_requirement": "Ability to configure chatbot",
+      "notes": "nan"
+    },
+    {
+      "area": "nan",
+      "description": "nan",
+      "high_level_requirement": "nan",
+      "detailed_requirement": "Ability for the System to support a single conversational interface to get consolidated and centralized information from the Knowledge Management sources.",
+      "notes": "nan"
+    },
+    {
+      "area": "nan",
+      "description": "nan",
+      "high_level_requirement": "nan",
+      "detailed_requirement": "Ability for the System to support a single conversational interface to get consolidated and centralized information from multiple external sources.",
+      "notes": "nan"
+    },
+    {
+      "area": "nan",
+      "description": "nan",
+      "high_level_requirement": "nan",
+      "detailed_requirement": "Ability for the System to support a single conversational interface to get consolidated and centralized information from multiple internal sources.",
+      "notes": "nan"
+    },
+    {
+      "area": "Performance",
+      "description": "Concurrency",
+      "high_level_requirement": "Ability for the System to be used at any given time by at least 45,000 concurrent users, without degradation of performance",
+      "detailed_requirement": "",
+      "notes": "nan"
+    },
+    {
+      "area": "Performance",
+      "description": "Reporting Times",
+      "high_level_requirement": "Ability in the KM system to generate reports  to not exceed acceptable time limit of more than 3 seconds",
+      "detailed_requirement": "nan",
+      "notes": "nan"
+    },
+    {
+      "area": "Testability",
+      "description": "Testing",
+      "high_level_requirement": "Ability for the System to include non-production instances",
+      "detailed_requirement": "",
+      "notes": "nan"
+    },
+    {
+      "area": "nan",
+      "description": "nan",
+      "high_level_requirement": "",
+      "detailed_requirement": "Ability for the System to include development, integration testing, user acceptance testing, and training instances",
+      "notes": "nan"
+    },
+    {
+      "area": "Security & Privacy",
+      "description": "Application Access Control",
+      "high_level_requirement": "Ability for the System to provide access to Users.",
+      "detailed_requirement": "nan",
+      "notes": "nan"
+    },
+    {
+      "area": "nan",
+      "description": "nan",
+      "high_level_requirement": "nan",
+      "detailed_requirement": "Ability for the System to provide relevant access to users to utilize the system. based on user roles.",
+      "notes": "nan"
+    },
+    {
+      "area": "nan",
+      "description": "nan",
+      "high_level_requirement": "nan",
+      "detailed_requirement": "Ability for the System to provide relevant access to users to utilize the system based on user groups.",
+      "notes": "nan"
+    },
+    {
+      "area": "Security & Privacy",
+      "description": "Security - Access Controls",
+      "high_level_requirement": "Ability for the System to provide segregation of duties between users from different groups.",
+      "detailed_requirement": "nan",
+      "notes": "nan"
+    },
+    {
+      "area": "nan",
+      "description": "nan",
+      "high_level_requirement": "nan",
+      "detailed_requirement": "Ability for the System to provide segregation of duties between users from different groups to facilitate evolving requirements over time (e.g., changing benefits, business lines, supervisors versus officers).",
+      "notes": "nan"
+    },
+    {
+      "area": "Security & Privacy",
+      "description": "Application Access Control",
+      "high_level_requirement": "Ability for the System to support Azure Active Directory (AD) and/or Lightweight Directory Access Protocol (LDAP) using single sign-on.",
+      "detailed_requirement": "",
+      "notes": "nan"
+    },
+    {
+      "area": "Security & Privacy",
+      "description": "Application Access Control",
+      "high_level_requirement": "Ability for the System to support Azure Active Directory (AD) and/or Lightweight Directory Access Protocol (LDAP) using Active Directory.",
+      "detailed_requirement": "",
+      "notes": "nan"
+    },
+    {
+      "area": "Security & Privacy",
+      "description": "Application Access Control",
+      "high_level_requirement": "Ability for the System to support multi-factor authentication.",
+      "detailed_requirement": "",
+      "notes": "nan"
+    },
+    {
+      "area": "Security & Privacy",
+      "description": "Application Access Control",
+      "high_level_requirement": "Ability for the System to support OAuth 2.0 and above Authentication.",
+      "detailed_requirement": "",
+      "notes": "nan"
+    },
+    {
+      "area": "Security & Privacy",
+      "description": "Application Access Control",
+      "high_level_requirement": "Ability for the System to support Open ID Connect 1.0 and above.",
+      "detailed_requirement": "",
+      "notes": "nan"
+    },
+    {
+      "area": "Security & Privacy",
+      "description": "Destruction of Information",
+      "high_level_requirement": "Ability for the System to manage the destruction of data and encryption keys once they are no longer needed.",
+      "detailed_requirement": "",
+      "notes": "nan"
+    },
+    {
+      "area": "nan",
+      "description": "nan",
+      "high_level_requirement": "",
+      "detailed_requirement": "Ability for the System to meet the Government of Canada's safe destruction guidelines.",
+      "notes": "nan"
+    },
+    {
+      "area": "nan",
+      "description": "nan",
+      "high_level_requirement": "",
+      "detailed_requirement": "Ability for the System to restrict deletion based on permissions.",
+      "notes": "nan"
+    },
+    {
+      "area": "nan",
+      "description": "nan",
+      "high_level_requirement": "",
+      "detailed_requirement": "Ability for the System to have an auditable log of the destruction of data and encryption keys.",
+      "notes": "nan"
+    },
+    {
+      "area": "Security & Privacy",
+      "description": "Encryption",
+      "high_level_requirement": "Ability for the System to support AES-256 SSL/TLS Encryption.",
+      "detailed_requirement": "",
+      "notes": "nan"
+    },
+    {
+      "area": "Security & Privacy",
+      "description": "Encryption",
+      "high_level_requirement": "Ability for the System to support W3C XML Encryption and Signatures.",
+      "detailed_requirement": "nan",
+      "notes": "nan"
+    },
+    {
+      "area": "Security & Privacy",
+      "description": "Encryption",
+      "high_level_requirement": "Ability for the System to support the encryption of data at rest, as required, based on information sensitivity and location of data using approved the following CSE cryptography.\nReferences:\n**ITSP.40.111: https://www.cyber.gc.ca/en/guidance/cryptographic-algorithms-unclassified-protected-and-protected-b-information-itsp40111\n(FR): https://www.cyber.gc.ca/fr/orientation/algorithmes-cryptographiques-pour-linformation-non-classifie-protege-et-protege-b",
+      "detailed_requirement": "",
+      "notes": "nan"
+    },
+    {
+      "area": "Security & Privacy",
+      "description": "Encryption",
+      "high_level_requirement": "The KM Solution must support the encryption of data in motion, as required, based on information sensitivity and network zoning (i.e. segregation) using approved CSE cryptography. \nReferences:\n ***ITSP.40.111: https://www.cyber.gc.ca/en/guidance/cryptographic-algorithms-unclassified-protected-and-protected-b-information-itsp40111 \n(FR): https://www.cyber.gc.ca/fr/orientation/algorithmes-cryptographiques-pour-linformation-non-classifie-protege-et-protege-b-\n*** ITSP.40.062: https://www.cyber.gc.ca/en/guidance/guidance-securely-configuring-network-protocols-itsp40062\n(FR): https://www.cyber.gc.ca/fr/orientation/conseils-sur-la-configuration-securisee-des-protocoles-reseau-itsp40062-\n*** TBS HTTPS Technology Policy Implementation Notice (ITPIN): https://www.canada.ca/en/government/system/digital-government/modern-emerging-technologies/policy-implementation-notices/implementing-https-secure-web-connections-itpin.html \n(FR): https://www.canada.ca/fr/gouvernement/systeme/gouvernement-numerique/technologiques-modernes-nouveaux/avis-mise-oeuvre-politique/mise-oeuvre-https-connexions-web-securisees-ampti.html",
+      "detailed_requirement": "",
+      "notes": "nan"
+    },
+    {
+      "area": "Security & Privacy",
+      "description": "Encryption",
+      "high_level_requirement": "Ability for the System to use cryptographic keys centrally managed by ESDC for encryption purposes.",
+      "detailed_requirement": "",
+      "notes": "nan"
+    },
+    {
+      "area": "Security & Privacy",
+      "description": "Encryption",
+      "high_level_requirement": "Ability for the System to use native keys/certificates that adhere to the Cryptographic Algorithms for PROTECTED B Information (ITSP.40.111).\nReference:\n*** ITSP.40.111: https://www.cyber.gc.ca/en/guidance/cryptographic-algorithms-unclassified-protected-and-protected-b-information-itsp40111 \n(FR): https://www.cyber.gc.ca/fr/orientation/algorithmes-cryptographiques-pour-linformation-non-classifie-protege-et-protege-b",
+      "detailed_requirement": "",
+      "notes": "nan"
+    },
+    {
+      "area": "Security & Privacy",
+      "description": "Error Handling",
+      "high_level_requirement": "Ability for the System to handle errors.\nReference:\n***ITSG-33 Annex 3A. Section: SI-11: https://cyber.gc.ca/en/guidance/annex-3a-security-control-catalogue-itsg-33 \n(FR): https://cyber.gc.ca/fr/orientation/annexe-3a-catalogue-des-controles-de-securite-itsg-33",
+      "detailed_requirement": "",
+      "notes": "nan"
+    },
+    {
+      "area": "nan",
+      "description": "nan",
+      "high_level_requirement": "",
+      "detailed_requirement": "Ability for the System to intercept all unhandled exceptions.",
+      "notes": "nan"
+    },
+    {
+      "area": "nan",
+      "description": "nan",
+      "high_level_requirement": "",
+      "detailed_requirement": "Ability for the System to log all unhandled exceptions.",
+      "notes": "nan"
+    },
+    {
+      "area": "nan",
+      "description": "nan",
+      "high_level_requirement": "",
+      "detailed_requirement": "Ability for the System to log generic error messages and not use sensitive information.",
+      "notes": "nan"
+    },
+    {
+      "area": "Security & Privacy",
+      "description": "Information Security",
+      "high_level_requirement": "Ability for the System to perform security prevention of security events.",
+      "detailed_requirement": "",
+      "notes": "nan"
+    },
+    {
+      "area": "Security & Privacy",
+      "description": "Information Security",
+      "high_level_requirement": "Ability for the System to perform detection of security events",
+      "detailed_requirement": "",
+      "notes": "nan"
+    },
+    {
+      "area": "Security & Privacy",
+      "description": "Information Security",
+      "high_level_requirement": "Ability for the System to perform auditing of security events.",
+      "detailed_requirement": "",
+      "notes": "nan"
+    },
+    {
+      "area": "Security & Privacy",
+      "description": "Information Security",
+      "high_level_requirement": "Ability for the System to support SAML 2.0 Token Authentication or later version.",
+      "detailed_requirement": "",
+      "notes": "nan"
+    },
+    {
+      "area": "Security & Privacy",
+      "description": "Information Security",
+      "high_level_requirement": "Ability for the System to support the unique identification of Users when attempting to access the System.",
+      "detailed_requirement": "",
+      "notes": "nan"
+    },
+    {
+      "area": "Security & Privacy",
+      "description": "Information Security",
+      "high_level_requirement": "Ability for the System to support the authentication of Users when attempting to access the System.",
+      "detailed_requirement": "",
+      "notes": "nan"
+    },
+    {
+      "area": "Security & Privacy",
+      "description": "Information Security",
+      "high_level_requirement": "Ability for the System to use a minimum TLS 1.2 protocol, or later versions.",
+      "detailed_requirement": "",
+      "notes": "nan"
+    },
+    {
+      "area": "Security & Privacy",
+      "description": "Integration",
+      "high_level_requirement": "Ability for the System to enable push notifications (email, app, etc.).",
+      "detailed_requirement": "",
+      "notes": "nan"
+    },
+    {
+      "area": "nan",
+      "description": "nan",
+      "high_level_requirement": "nan",
+      "detailed_requirement": "Ability for the System to support logging on the notifications system.",
+      "notes": "nan"
+    },
+    {
+      "area": "Security & Privacy",
+      "description": "Integration",
+      "high_level_requirement": "Ability for the System to provide a configurable password strength setup policy.",
+      "detailed_requirement": "",
+      "notes": "nan"
+    },
+    {
+      "area": "Security & Privacy",
+      "description": "Integration",
+      "high_level_requirement": "Ability for the System to have a configurable logic to lock a user after a set number of failed login attempts.",
+      "detailed_requirement": "",
+      "notes": "nan"
+    },
+    {
+      "area": "Security & Privacy",
+      "description": "Integration",
+      "high_level_requirement": "Ability for the System to lock an account after a configurable number of days of inactivity.",
+      "detailed_requirement": "",
+      "notes": "nan"
+    },
+    {
+      "area": "Security & Privacy",
+      "description": "Integration",
+      "high_level_requirement": "Ability for the System to log out an account after a configurable period of inactivity (application time out).",
+      "detailed_requirement": "",
+      "notes": "nan"
+    },
+    {
+      "area": "Security & Privacy",
+      "description": "Integration",
+      "high_level_requirement": "Ability for the System to set password expiration after a configurable number of days.",
+      "detailed_requirement": "",
+      "notes": "nan"
+    },
+    {
+      "area": "Security & Privacy",
+      "description": "Integration",
+      "high_level_requirement": "Ability for the System to allow a User to unlock a locked account based on role access rights.",
+      "detailed_requirement": "",
+      "notes": "nan"
+    },
+    {
+      "area": "Security & Privacy",
+      "description": "Network",
+      "high_level_requirement": "Ability for the System to protect the service from unauthorized access through the network channel.",
+      "detailed_requirement": "",
+      "notes": "nan"
+    },
+    {
+      "area": "nan",
+      "description": "nan",
+      "high_level_requirement": "",
+      "detailed_requirement": "Ability for the System to protect unauthorized access to the System through SSO.",
+      "notes": "nan"
+    },
+    {
+      "area": "nan",
+      "description": "nan",
+      "high_level_requirement": "",
+      "detailed_requirement": "Ability for the System to protect unauthorized access to the System through MFA.",
+      "notes": "nan"
+    },
+    {
+      "area": "Security & Privacy",
+      "description": "Protection of Data",
+      "high_level_requirement": "Ability for the System to protect data",
+      "detailed_requirement": "",
+      "notes": "nan"
+    },
+    {
+      "area": "nan",
+      "description": "nan",
+      "high_level_requirement": "nan",
+      "detailed_requirement": "Ability for the System to encrypt all Personally Identifiable Information (PII) per the Government of Canada's Security Standards. \nReference: ***https://www.cyber.gc.ca/en/guidance/cryptographic-algorithms-unclassified-protected-and-protected-b-information-itsp40111#a3 \n(FR): https://www.cyber.gc.ca/fr/orientation/algorithmes-cryptographiques-pour-linformation-non-classifie-protege-et-protege-b",
+      "notes": "nan"
+    },
+    {
+      "area": "nan",
+      "description": "nan",
+      "high_level_requirement": "nan",
+      "detailed_requirement": "Ability for the System to automatically mark Protected A outputs by automatically marking outputs that contain sensitive data (e.g., files, print out, emails) as outlined in \n***ITSG-33 Annex 3A, sections: AC-15, AC-16: \nhttps://cyber.gc.ca/en/guidance/annex-3a-security-control-catalogue-itsg-33.",
+      "notes": "nan"
+    }
+  ],
+  "glossary": {
+    "Administrative User": "Restricted access Users that are able to make changes to the System that will affect other Users or Clients.\nThere are many specializations of the Administrative User role based on the privileges required.\nFor example, Administrative Users may change security settings, install software and hardware, configure various components of the System, and make changes to other Users or Clients.",
+    "Analytics data": "Captured raw information from System components that are processed and organized to create meaningful information.",
+    "Artificial intelligence (AI)": "Computer actions that mimic human decision making based on learned experiences and data",
+    "Audit trail": "Chronological records of events and activities that have taken place within the System. Provides detailed history of User/System actions, interactions and changes to the System.",
+    "Boolean": "A logical operator that is used to connect or modify the relationships between keywords or expressions in a search query.",
+    "Broadcast notification": "Communication sent to multiple recipients within the System",
+    "Channel": "The medium in which Users/Client can interact with ESDC. It enables the User/Client experience and allows for flows of information, services and interactions between an organization and User/Clients through their journey.\nChannel examples include digital, contact centre and in-person.",
+    "Chat logs": "Text based record of written conversations exchanged between Users to User, or User to System.",
+    "Chat bot": "System designed to simulate conversation with human users through text or voice input",
+    "CMS": "Content Management System (CMS) provides an interface for Users to CRUD, Publish content without much in-depth technical knowledge. The CMS functions for content CRUDing, version control, workflow management and publishing capabilities.",
+    "Content": "Refers to the various types of data and information that are created, stored and accessed within the System. Content can encompass text, images, audio, video, and other multimedia elements.",
+    "Content template": "Predesigned structure for content creation",
+    "Contribution": "Refers to the act of adding, enhancing, modifying the System.",
+    "CRUD": "Create, Read, Update and Delete. This acronym covers related functions for view, edit, modify etc.",
+    "CSS": "Cascading Style Sheets is a stylesheet language used to describe the presentation and defines the visual formatting and appearance of a document written in HTML or XML",
+    "Dashboard": "A display of data indicating an overview of key performance indicators. A collection of statistics measuring performance aggregated for viewing to identify insights.",
+    "ESDC": "Employment and Social Development Canada",
+    "ESDC repositories (external)": "Repositories on the internet",
+    "ESDC repositories (internal)": "Repositories on the ESDC intranet",
+    "Feedback": "Process of providing input and comments on the System for the purposes of improvement",
+    "HTML": "HyperText Markup Language is the standard language used for the creation and structuring of web pages and web applications.",
+    "Interoperability": "The ability of different types of electronic devices, networks, operating systems, and applications to work together effectively, without prior communication, to exchange information in a useful and meaningful manner.",
+    "Live chat": "Real-time communication that allows Users/Client to engage in text or voice based communication to ask and answer questions within the System",
+    "Machine Learning (ML)": "Processes that allow computers to derive conclusions from data. ML is a subset of AI that enables the ability for computers to learn outside of their programming",
+    "Markup": "refer to HTML",
+    "Metadata": "Descriptive information about data, resources, or content within the System that provides details about context, characteristics, structure of the primary data it is describing.",
+    "Natural Language Processing (NLP)": "Branch of Artificial intelligence and computational linguistics focused on enabling computers to understand and interpret context and generate human language.",
+    "Notification": "Message or alert that is delivered to users to inform them about updates or activities within the System.",
+    "Official Languages": "A language defined under the Official Languages Act as an official language of Canada, namely English or French.",
+    "Omnichannel": "The capacity for service offerings to be delivered through in-person, phone and e-service channels",
+    "Operand": "The data or value that is operated on by an operator within an expression.",
+    "Retrieval-Augmented Generation (RAG)": "RAG is the process of optimizing the output of a LLM, so it references an authoritative knowledge base outside of its training data sources before generating a response. RAG extends the capability of LLMs to specific domains or an organization’s internal knowledge base.",
+    "Role-based Access Control (RBAC)": "Provides a method of restricting access based on a Users' role within the System",
+    "Reusable content": "Reusable asset that is designed and structured for reuse across the System",
+    "System": "System refers to the Knowledge Management Solution or any other solution used at ESDC.",
+    "Task": "measurable unit of work",
+    "User": "A User is an employee of ESDC that interfaces with the Knowledge Management solution.",
+    "User Groups": "Logical grouping of Users that share certain permissions within the System for the purposes of access control",
+    "User Profile": "Set of information about the user, preferences, skill tags. The User profile determines what the User can view within the System",
+    "Role": "Predefined set of permissions and access rights that are assigned to individuals based on their responsibilities and function within ESDC",
+    "web traffic": "Interactions between the User and the System",
+    "Wildcard": "Character or sequence of characters that serves as a placeholder to represent one or more other characters",
+    "Workflow": "Refers to the series of activities, tasks and operations within the System",
+    "WYSIWYG": "Stands for \"What you see is what you get\" and refers to the interfaces and editors that allow Users to directly manipulate the content in a manner that closely resembles the final output"
+  }
+}

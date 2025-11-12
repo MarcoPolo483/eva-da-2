@@ -519,29 +519,28 @@ class DatabaseService {
     } as UserModelParameters;
   }
 
-  // User Personalization API
+  // User Personalization API (for accessibility and theme preferences)
   async getUserPersonalization(userId: string): Promise<any> {
     await this.delay(200);
+    
+    // Mock user personalization data
+    // In real implementation, this would fetch from Cosmos DB
     return {
       userId,
-      displayName: 'Demo User',
-      preferences: {
-        fontSize: 'medium',
-        colorScheme: 'auto',
-        theme: {
-          primaryColor: '#667eea',
-          accentColor: '#764ba2'
-        }
-      },
-      quickActions: ['chat', 'files', 'settings'],
-      favoriteProjects: ['canadaLife'],
-      recentActivity: []
+      displayName: 'John Doe',
+      preferences: null, // Will use defaults from accessibilityService
+      quickActions: ['chat', 'recent-files', 'quick-questions'],
+      favoriteProjects: ['canadaLife', 'jurisprudence'],
+      recentActivity: [],
+      customShortcuts: {}
     };
   }
 
   async updateUserPersonalization(userId: string, updates: any): Promise<void> {
     await this.delay(300);
-    console.log(`Updated personalization for user ${userId}:`, updates);
+    
+    // Mock update - in real app, this would save to Cosmos DB
+    console.log(`[DatabaseService] Updated personalization for user ${userId}:`, updates);
   }
 
   // Global Settings API
