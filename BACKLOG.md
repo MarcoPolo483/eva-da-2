@@ -486,3 +486,4 @@ class MockAzureAD {
 - [ ] **Responsive design** for mobile and tablet support
 
 ...existing backlog content...
+
